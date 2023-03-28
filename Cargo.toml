@@ -5,16 +5,16 @@ edition = "2021"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.2", features = ["json", "secrets"] }
-# serde = "1.0.136"
+serde = "1.0.136"
 # serde_json = "1.0.94"
 # chrono = "0.4"
-# urlencoding = "2.1.2"
-# validator = { version = "0.15", features = ["derive"] }
-# sqlx = "*"
-# argon2 = "0.4.1"
+urlencoding = "2.1.2"
+validator = { version = "0.15", features = ["derive"] }
+sqlx = { version = "0.6.3", features = ["decimal"] }
+argon2 = "0.4.1"
 # dotenvy = "0.15.6"
 # rand = "0.8.5"
-# time = { version = "^0.3", features = ["serde"] }
+time = { version = "^0.3", features = ["serde"] }
 
 [dependencies.rocket_db_pools]
 version = "0.1.0-rc.2"
