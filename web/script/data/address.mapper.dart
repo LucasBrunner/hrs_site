@@ -26,7 +26,7 @@ class AddressMapper extends ClassMapperBase<Address> {
   static int _$id(Address v) => v.id;
   static String _$street(Address v) => v.street;
   static String _$city(Address v) => v.city;
-  static String _$region(Address v) => v.region;
+  static String _$state(Address v) => v.state;
   static String _$zip(Address v) => v.zip;
 
   @override
@@ -34,13 +34,13 @@ class AddressMapper extends ClassMapperBase<Address> {
     #id: Field<Address, int>('id', _$id),
     #street: Field<Address, String>('street', _$street),
     #city: Field<Address, String>('city', _$city),
-    #region: Field<Address, String>('region', _$region),
+    #state: Field<Address, String>('state', _$state),
     #zip: Field<Address, String>('zip', _$zip),
   };
 
   static Address _instantiate(DecodingData data) {
     return Address(data.get(#id), data.get(#street), data.get(#city),
-        data.get(#region), data.get(#zip));
+        data.get(#state), data.get(#zip));
   }
 
   @override
@@ -94,7 +94,7 @@ typedef AddressCopyWithBound = Address;
 
 abstract class AddressCopyWith<$R, $In extends Address, $Out extends Address>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? id, String? street, String? city, String? region, String? zip});
+  $R call({int? id, String? street, String? city, String? state, String? zip});
   AddressCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2 extends Address>(
       Then<Address, $Out2> t, Then<$Out2, $R2> t2);
 }
@@ -112,13 +112,13 @@ class _AddressCopyWithImpl<$R, $Out extends Address>
           {int? id,
           String? street,
           String? city,
-          String? region,
+          String? state,
           String? zip}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
         if (street != null) #street: street,
         if (city != null) #city: city,
-        if (region != null) #region: region,
+        if (state != null) #state: state,
         if (zip != null) #zip: zip
       }));
   @override
@@ -126,7 +126,7 @@ class _AddressCopyWithImpl<$R, $Out extends Address>
       data.get(#id, or: $value.id),
       data.get(#street, or: $value.street),
       data.get(#city, or: $value.city),
-      data.get(#region, or: $value.region),
+      data.get(#state, or: $value.state),
       data.get(#zip, or: $value.zip));
 
   @override

@@ -11,22 +11,27 @@ class PhoneType with PhoneTypeMappable {
     this.id,
     this.name,
   );
+
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 @MappableClass()
 class Phone with PhoneMappable {
   int id;
   String number;
-  PhoneType type;
+  PhoneType phoneType;
 
   Phone(
     this.id,
     this.number,
-    this.type,
+    this.phoneType,
   );
 
   @override
   String toString() {
-    return '$type: $number';
+    return '$phoneType: $number';
   }
 }

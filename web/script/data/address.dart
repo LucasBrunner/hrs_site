@@ -7,19 +7,19 @@ class Address with AddressMappable {
   int id;
   String street;
   String city;
-  String region;
+  String state;
   String zip;
 
   Address(
     this.id,
     this.street,
     this.city,
-    this.region,
+    this.state,
     this.zip,
   );
 
   @override
   String toString() {
-    return '$street, $city, $region $zip';
+    return '$street, $city, $state $zip';
   }
 }

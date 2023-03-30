@@ -1,9 +1,10 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PhoneType {
-  id: u64,
-  name: String,
+  pub id: u64,
+  pub name: String,
 }
 
 pub struct DbPhone {
@@ -13,8 +14,9 @@ pub struct DbPhone {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Phone {
-  id: u64,
-  phone_type: PhoneType,
-  number: String,
+  pub id: u64,
+  pub phone_type: PhoneType,
+  pub number: String,
 }

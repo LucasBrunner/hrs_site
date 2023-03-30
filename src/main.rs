@@ -37,6 +37,7 @@ async fn public_fs(path: PathBuf) -> Option<NamedFile> {
 fn launch() -> _ {
   rocket::build()
     .attach(Db::init())
+    .mount("/data/employee", authentication::empoyee::employee_data_routes())
     .mount("/", routes![signin, signup])
     .mount("/", routes![authentication::employee_fs])
     .mount("/", routes![public_fs])

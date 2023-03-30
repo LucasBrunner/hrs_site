@@ -134,17 +134,17 @@ class PhoneMapper extends ClassMapperBase<Phone> {
 
   static int _$id(Phone v) => v.id;
   static String _$number(Phone v) => v.number;
-  static PhoneType _$type(Phone v) => v.type;
+  static PhoneType _$phoneType(Phone v) => v.phoneType;
 
   @override
   final Map<Symbol, Field<Phone, dynamic>> fields = const {
     #id: Field<Phone, int>('id', _$id),
     #number: Field<Phone, String>('number', _$number),
-    #type: Field<Phone, PhoneType>('type', _$type),
+    #phoneType: Field<Phone, PhoneType>('phoneType', _$phoneType),
   };
 
   static Phone _instantiate(DecodingData data) {
-    return Phone(data.get(#id), data.get(#number), data.get(#type));
+    return Phone(data.get(#id), data.get(#number), data.get(#phoneType));
   }
 
   @override
@@ -198,8 +198,8 @@ typedef PhoneCopyWithBound = Phone;
 
 abstract class PhoneCopyWith<$R, $In extends Phone, $Out extends Phone>
     implements ClassCopyWith<$R, $In, $Out> {
-  PhoneTypeCopyWith<$R, PhoneType, PhoneType> get type;
-  $R call({int? id, String? number, PhoneType? type});
+  PhoneTypeCopyWith<$R, PhoneType, PhoneType> get phoneType;
+  $R call({int? id, String? number, PhoneType? phoneType});
   PhoneCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2 extends Phone>(
       Then<Phone, $Out2> t, Then<$Out2, $R2> t2);
 }
@@ -212,18 +212,20 @@ class _PhoneCopyWithImpl<$R, $Out extends Phone>
   @override
   late final ClassMapperBase<Phone> $mapper = PhoneMapper.ensureInitialized();
   @override
-  PhoneTypeCopyWith<$R, PhoneType, PhoneType> get type =>
-      $value.type.copyWith.$chain($identity, (v) => call(type: v));
+  PhoneTypeCopyWith<$R, PhoneType, PhoneType> get phoneType =>
+      $value.phoneType.copyWith.$chain($identity, (v) => call(phoneType: v));
   @override
-  $R call({int? id, String? number, PhoneType? type}) =>
+  $R call({int? id, String? number, PhoneType? phoneType}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
         if (number != null) #number: number,
-        if (type != null) #type: type
+        if (phoneType != null) #phoneType: phoneType
       }));
   @override
-  Phone $make(CopyWithData data) => Phone(data.get(#id, or: $value.id),
-      data.get(#number, or: $value.number), data.get(#type, or: $value.type));
+  Phone $make(CopyWithData data) => Phone(
+      data.get(#id, or: $value.id),
+      data.get(#number, or: $value.number),
+      data.get(#phoneType, or: $value.phoneType));
 
   @override
   PhoneCopyWith<$R2, Phone, $Out2> $chain<$R2, $Out2 extends Phone>(

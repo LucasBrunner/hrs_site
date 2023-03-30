@@ -8,10 +8,11 @@ use rocket::{
 };
 use rocket_db_pools::Connection;
 
-use crate::{database::Db, session::LoginSesion};
+use crate::{database::Db, session::LoginSesion, authentication::empoyee::AuthAccountEmployee};
 
 pub mod signin;
 pub mod signup;
+pub mod empoyee;
 
 pub mod prelude {
   pub use super::signin::signin;
@@ -71,31 +72,6 @@ impl<'r> FromRequest<'r> for AuthSession {
     
     if LoginSesion::get_session_if_valid(&mut db, req.cookies()).await.is_ok() {
       Outcome::Success(AuthSession())
-    } else {
-      Outcome::Failure((Status::Forbidden, ()))
-    }
-  }
-}
-
-pub struct AuthAccountEmployee ();
-
-#[rocket::async_trait]
-impl<'r> FromRequest<'r> for AuthAccountEmployee {
-  type Error = ();
-
-  async fn from_request(req: &'r Request<'_>) -> Outcome<Self, Self::Error> {
-    let mut db = match req.guard::<Connection<Db>>().await {
-      rocket::outcome::Outcome::Success(db) => db,
-      rocket::outcome::Outcome::Failure(_) => return Outcome::Failure((Status::NotFound, ())),
-      rocket::outcome::Outcome::Forward(_) => return Outcome::Failure((Status::NotFound, ())),
-    };
-
-    let Ok(session) = LoginSesion::get_session_if_valid(&mut db, req.cookies()).await else {
-      return Outcome::Failure((Status::Forbidden, ()));
-    };
-
-    if is_account_employee(session.account_id, &mut db).await {
-      Outcome::Success(AuthAccountEmployee())
     } else {
       Outcome::Failure((Status::Forbidden, ()))
     }
