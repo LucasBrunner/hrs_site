@@ -21,14 +21,14 @@ pub mod prelude {
 pub async fn is_account_employee(account_id: u64, db: &mut Connection<Db>) -> bool {
   let query = sqlx::query!(
     r#"
-      SELECT `Account`.`id`
+      SELECT `Account`.`account_id`
       FROM 
         `Account`
-        INNER JOIN `AccountTypeRecord` ON (`Account`.`id` = `AccountTypeRecord`.`account_id`)
-        INNER JOIN `AccountType` ON (`AccountType`.`id` = `AccountTypeRecord`.`account_type_id`)
+        INNER JOIN `AccountTypeRecord` USING(`account_id`)
+        INNER JOIN `AccountType` USING(`account_type_id`)
       WHERE
         `AccountType`.`name` = "employee"
-        AND `Account`.`id` = ?;
+        AND `Account`.`account_id` = ?;
     "#,
     account_id,
   )
@@ -94,23 +94,7 @@ impl<'r> FromRequest<'r> for AuthAccountEmployee {
       return Outcome::Failure((Status::Forbidden, ()));
     };
 
-    let query = sqlx::query!(
-      r#"
-        SELECT `Account`.`id`
-        FROM
-          `Account`
-          INNER JOIN `AccountTypeRecord` ON (`Account`.`id` = `AccountTypeRecord`.`account_id`)
-          INNER JOIN `AccountType` ON (`AccountTypeRecord`.`account_type_id` = `AccountType`.`id`)
-        WHERE 
-          `Account`.`id` = ?
-          AND `AccountType`.`name` = "employee"
-      "#,
-      session.account_id,
-    )
-    .fetch_one(&mut *db)
-    .await;
-
-    if query.is_ok() {
+    if is_account_employee(session.account_id, &mut db).await {
       Outcome::Success(AuthAccountEmployee())
     } else {
       Outcome::Failure((Status::Forbidden, ()))

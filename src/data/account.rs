@@ -1,5 +1,5 @@
 pub struct Account {
-  id: u64,
+  account_id: u64,
   email: String,
   preferred_name: String,
   legal_name: String,

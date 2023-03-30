@@ -5,7 +5,7 @@ use super::{
 };
 
 pub struct DbWarehouseOrder {
-  id: u64,
+  warehouse_order_id: u64,
   warehouse_id: u64,
   account_id: u64,
   supplier: u64,
@@ -14,8 +14,8 @@ pub struct DbWarehouseOrder {
 }
 
 pub struct DbWarehouseOrderItem {
-  order_id: u64,
-  item_id: u64,
+  warehouse_order_id: u64,
+  inventory_item_id: u64,
   amount: u32,
   current_cost: Decimal,
 }

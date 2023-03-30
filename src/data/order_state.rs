@@ -1,4 +1,4 @@
 pub struct OrderState {
-  id: u64,
+  order_state_id: u64,
   name: String,
 }

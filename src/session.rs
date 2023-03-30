@@ -102,7 +102,7 @@ impl LoginSesion {
       r#"
         SELECT `experation_timestamp`
         FROM `Session`
-        WHERE `Session`.`id` = ?;
+        WHERE `Session`.`session_id` = ?;
         "#,
       self.session_id
     )

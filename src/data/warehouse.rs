@@ -11,7 +11,7 @@ use crate::{
 use super::{address::Address, inventory_item::InventoryItem, phone::Phone, DataError};
 
 pub struct DbWarehouse {
-  id: u64,
+  warehouse_id: u64,
   name: String,
   address: u64,
   phone_id: u64,
@@ -26,7 +26,7 @@ pub struct Warehouse {
 }
 
 pub struct DbWarehouseItem {
-  warehouse_id: u64,
+  warehouse_item_id: u64,
   item_id: u64,
   amount: u32,
 }

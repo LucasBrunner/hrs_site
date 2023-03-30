@@ -7,8 +7,8 @@ pub struct PhoneType {
 }
 
 pub struct DbPhone {
-  id: u64,
-  type_id: u64,
+  phone_id: u64,
+  phone_type_id: u64,
   number: String,
 }
 

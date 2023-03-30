@@ -66,7 +66,7 @@ impl SignupRequest {
     };
 
     let does_email_exist =
-      sqlx::query!("SELECT `id` FROM `Account` WHERE `email` = ?;", self.email)
+      sqlx::query!("SELECT `account_id` FROM `Account` WHERE `email` = ?;", self.email)
         .fetch_all(&mut **db)
         .await;
 
