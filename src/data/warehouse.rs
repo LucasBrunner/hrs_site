@@ -1,41 +1,26 @@
 use rocket::serde::json::Json;
 use rocket_db_pools::Connection;
 use serde::Serialize;
+use sqlx::types::Decimal;
 
 use crate::{
   authentication::{AuthSession, empoyee::AuthAccountEmployee},
   database::Db,
-  data::phone::PhoneType,
 };
 
-use super::{address::Address, inventory_item::InventoryItem, phone::Phone, DataError};
-
-pub struct DbWarehouse {
-  warehouse_id: u64,
-  name: String,
-  address: u64,
-  phone_id: u64,
-}
+use super::{DataError, string_option_internally_tagged};
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Warehouse {
   pub id: u64,
   pub name: String,
-  pub address: Address,
-  pub phone: Phone,
-}
-
-pub struct DbWarehouseItem {
-  warehouse_item_id: u64,
-  item_id: u64,
-  amount: u32,
-}
-
-pub struct WarehouseItem {
-  warehouse: Warehouse,
-  item: InventoryItem,
-  amount: u32,
+  pub phone_type: String,
+  pub phone_number: String,
+  pub address_street: String,
+  pub address_city: String,
+  pub address_state: String,
+  pub address_zip: String,
 }
 
 #[derive(Serialize)]
@@ -53,20 +38,18 @@ pub async fn warehouses(
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
 ) -> Json<WarehouseResult> {
-  let query = sqlx::query!(
+  let query = sqlx::query_as!(
+    Warehouse,
     r#"
       SELECT
-        `Warehouse`.`warehouse_id`,
-        `Warehouse`.`name`AS "warehouse_name",
-        `Phone`.`phone_id`,
-        `Phone`.`phone_type_id`,
-        `Phone`.`number`,
-        `PhoneType`.`name` AS "phone_type_name",
-        `Address`.`address_id`,
-        `Address`.`street`,
-        `Address`.`city`,
-        `Address`.`state`,
-        `Address`.`zip`
+        `Warehouse`.`warehouse_id` as "id",
+        `Warehouse`.`name`,
+        `Phone`.`number` as "phone_number",
+        `PhoneType`.`name` AS "phone_type",
+        `Address`.`street` AS "address_street",
+        `Address`.`city` AS "address_city",
+        `Address`.`state` AS "address_state",
+        `Address`.`zip` AS "address_zip"
       FROM 
         `Warehouse`
         INNER JOIN `Phone` USING(`phone_id`)
@@ -77,34 +60,74 @@ pub async fn warehouses(
   .fetch_all(&mut **db)
   .await;
 
-  let Ok(result) = query else {
+  let Ok(warehouses) = query else {
     return Json(WarehouseResult::Err { err: DataError::DatabaseFailure });
   };
 
-  let warehouses: Vec<_> = result.iter()
-    .map(|result| {
-      Warehouse {
-        id: result.warehouse_id,
-        name: result.warehouse_name.clone(),
-        address: Address {
-          id: result.address_id,
-          street: result.street.clone(),
-          city: result.city.clone(),
-          state: result.state.clone(),
-          zip: result.zip.clone(),
-        },
-        phone: Phone {
-          id: result.phone_id,
-          phone_type: PhoneType {
-            id: result.phone_type_id,
-            name: result.phone_type_name.clone(),
-          },
-          number: result.number.clone(),
-        },
-      }
-    })
-    .collect();
-
-  println!("{}", serde_json::to_string(&warehouses).unwrap());
   Json(WarehouseResult::Ok { warehouses })
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WarehouseInventoryItem {
+  warehouse_id: u64,
+  inventory_item_id: u64,
+  cost: Decimal,
+  list_price: Decimal,
+  brand_id: u64,
+  brand_name: String,
+  model: String,
+  #[serde(serialize_with = "string_option_internally_tagged")]
+  serial: Option<String>,
+  #[serde(serialize_with = "string_option_internally_tagged")]
+  description: Option<String>,
+  amount: u32,
+}
+
+#[derive(Serialize)]
+#[serde(tag = "Type")]
+pub enum WarehouseInventoryResult {
+  #[serde(rename_all = "camelCase")]
+  Err { err: DataError },
+  #[serde(rename_all = "camelCase")]
+  Ok { items: Vec<WarehouseInventoryItem> },
+}
+
+#[get("/warehouse/<id>/inventory", format = "json")]
+pub async fn warehouse_inventory(
+  mut db: Connection<Db>,
+  id: u64,
+  _auth_session: AuthSession,
+  _auth_employee: AuthAccountEmployee,
+) -> Json<WarehouseInventoryResult> {
+  let query = sqlx::query_as!(
+    WarehouseInventoryItem,
+    r#"
+      SELECT
+        `warehouse_id`,
+        `inventory_item_id`,
+        `cost`,
+        `list_price`,
+        `brand_id`,
+        `Brand`.`name` AS "brand_name",
+        `model`,
+        `serial`,
+        `description`,
+        `amount`
+      FROM 
+        `WarehouseItem`
+        INNER JOIN `InventoryItem` USING(`inventory_item_id`)
+        INNER JOIN `Brand` USING(`brand_id`)
+      WHERE `WarehouseItem`.`warehouse_id` = ?;
+    "#,
+    id,
+  )
+  .fetch_all(&mut **db)
+  .await;
+
+  let Ok(items) = query else {
+    return Json(WarehouseInventoryResult::Err { err: DataError::DatabaseFailure });
+  };
+
+  Json(WarehouseInventoryResult::Ok { items })
 }

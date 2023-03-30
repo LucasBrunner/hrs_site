@@ -23,3 +23,12 @@ class DataError with _$DataError {
   @MappableClass(discriminatorValue: 'SessionError')
   const factory DataError.sessionError(SessionError sessionError) = _SessionError;
 }
+
+@freezed
+@MappableClass(discriminatorKey: 'Type')
+class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
+  @MappableClass(discriminatorValue: 'None')
+  const factory StringOptionInternallyTagged.none() = _None;
+  @MappableClass(discriminatorValue: 'Some')
+  const factory StringOptionInternallyTagged.some(String data) = _Some;
+}

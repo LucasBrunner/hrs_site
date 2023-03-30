@@ -407,3 +407,189 @@ extension _SessionErrorMapperExtension on _SessionError {
     return _SessionErrorMapper._guard((c) => c.toMap(this));
   }
 }
+
+class StringOptionInternallyTaggedMapper
+    extends ClassMapperBase<StringOptionInternallyTagged> {
+  StringOptionInternallyTaggedMapper._();
+  static StringOptionInternallyTaggedMapper? _instance;
+  static StringOptionInternallyTaggedMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals
+          .use(_instance = StringOptionInternallyTaggedMapper._());
+      _NoneMapper.ensureInitialized();
+      _SomeMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = 'StringOptionInternallyTagged';
+
+  @override
+  final Map<Symbol, Field<StringOptionInternallyTagged, dynamic>> fields =
+      const {};
+
+  static StringOptionInternallyTagged _instantiate(DecodingData data) {
+    throw MapperException.missingSubclass(
+        'StringOptionInternallyTagged', 'Type', '${data.value['Type']}');
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static StringOptionInternallyTagged fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<StringOptionInternallyTagged>(map));
+  }
+
+  static StringOptionInternallyTagged fromJson(String json) {
+    return _guard((c) => c.fromJson<StringOptionInternallyTagged>(json));
+  }
+}
+
+extension StringOptionInternallyTaggedMapperExtension
+    on StringOptionInternallyTagged {
+  String toJson() {
+    return StringOptionInternallyTaggedMapper._guard((c) => c.toJson(this));
+  }
+
+  Map<String, dynamic> toMap() {
+    return StringOptionInternallyTaggedMapper._guard((c) => c.toMap(this));
+  }
+}
+
+typedef StringOptionInternallyTaggedCopyWithBound
+    = StringOptionInternallyTagged;
+
+abstract class StringOptionInternallyTaggedCopyWith<
+        $R,
+        $In extends StringOptionInternallyTagged,
+        $Out extends StringOptionInternallyTagged>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call();
+  StringOptionInternallyTaggedCopyWith<$R2, $In, $Out2>
+      $chain<$R2, $Out2 extends StringOptionInternallyTagged>(
+          Then<StringOptionInternallyTagged, $Out2> t, Then<$Out2, $R2> t2);
+}
+
+class _NoneMapper extends SubClassMapperBase<_None> {
+  _NoneMapper._();
+  static _NoneMapper? _instance;
+  static _NoneMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = _NoneMapper._());
+      StringOptionInternallyTaggedMapper.ensureInitialized()
+          .addSubMapper(_instance!);
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = '_None';
+
+  @override
+  final Map<Symbol, Field<_None, dynamic>> fields = const {};
+
+  @override
+  final String discriminatorKey = 'Type';
+  @override
+  final dynamic discriminatorValue = 'None';
+  @override
+  late final ClassMapperBase superMapper =
+      StringOptionInternallyTaggedMapper.ensureInitialized();
+
+  static _None _instantiate(DecodingData data) {
+    return _None();
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static _None fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<_None>(map));
+  }
+
+  static _None fromJson(String json) {
+    return _guard((c) => c.fromJson<_None>(json));
+  }
+}
+
+extension _NoneMapperExtension on _None {
+  String toJson() {
+    return _NoneMapper._guard((c) => c.toJson(this));
+  }
+
+  Map<String, dynamic> toMap() {
+    return _NoneMapper._guard((c) => c.toMap(this));
+  }
+}
+
+class _SomeMapper extends SubClassMapperBase<_Some> {
+  _SomeMapper._();
+  static _SomeMapper? _instance;
+  static _SomeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = _SomeMapper._());
+      StringOptionInternallyTaggedMapper.ensureInitialized()
+          .addSubMapper(_instance!);
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = '_Some';
+
+  static String _$data(_Some v) => v.data;
+
+  @override
+  final Map<Symbol, Field<_Some, dynamic>> fields = const {
+    #data: Field<_Some, String>('data', _$data),
+  };
+
+  @override
+  final String discriminatorKey = 'Type';
+  @override
+  final dynamic discriminatorValue = 'Some';
+  @override
+  late final ClassMapperBase superMapper =
+      StringOptionInternallyTaggedMapper.ensureInitialized();
+
+  static _Some _instantiate(DecodingData data) {
+    return _Some(data.get(#data));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static _Some fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<_Some>(map));
+  }
+
+  static _Some fromJson(String json) {
+    return _guard((c) => c.fromJson<_Some>(json));
+  }
+}
+
+extension _SomeMapperExtension on _Some {
+  String toJson() {
+    return _SomeMapper._guard((c) => c.toJson(this));
+  }
+
+  Map<String, dynamic> toMap() {
+    return _SomeMapper._guard((c) => c.toMap(this));
+  }
+}

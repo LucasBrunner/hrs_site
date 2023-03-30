@@ -713,3 +713,298 @@ abstract class _SessionError implements DataError {
   _$$_SessionErrorCopyWith<_$_SessionError> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$StringOptionInternallyTagged {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(String data) some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(String data)? some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(String data)? some,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_None value) none,
+    required TResult Function(_Some value) some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_None value)? none,
+    TResult? Function(_Some value)? some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_None value)? none,
+    TResult Function(_Some value)? some,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $StringOptionInternallyTaggedCopyWith<$Res> {
+  factory $StringOptionInternallyTaggedCopyWith(
+          StringOptionInternallyTagged value,
+          $Res Function(StringOptionInternallyTagged) then) =
+      _$StringOptionInternallyTaggedCopyWithImpl<$Res,
+          StringOptionInternallyTagged>;
+}
+
+/// @nodoc
+class _$StringOptionInternallyTaggedCopyWithImpl<$Res,
+        $Val extends StringOptionInternallyTagged>
+    implements $StringOptionInternallyTaggedCopyWith<$Res> {
+  _$StringOptionInternallyTaggedCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$_NoneCopyWith<$Res> {
+  factory _$$_NoneCopyWith(_$_None value, $Res Function(_$_None) then) =
+      __$$_NoneCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_NoneCopyWithImpl<$Res>
+    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_None>
+    implements _$$_NoneCopyWith<$Res> {
+  __$$_NoneCopyWithImpl(_$_None _value, $Res Function(_$_None) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+@MappableClass(discriminatorValue: 'None')
+class _$_None implements _None {
+  const _$_None();
+
+  @override
+  String toString() {
+    return 'StringOptionInternallyTagged.none()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_None);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(String data) some,
+  }) {
+    return none();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(String data)? some,
+  }) {
+    return none?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(String data)? some,
+    required TResult orElse(),
+  }) {
+    if (none != null) {
+      return none();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_None value) none,
+    required TResult Function(_Some value) some,
+  }) {
+    return none(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_None value)? none,
+    TResult? Function(_Some value)? some,
+  }) {
+    return none?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_None value)? none,
+    TResult Function(_Some value)? some,
+    required TResult orElse(),
+  }) {
+    if (none != null) {
+      return none(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _None implements StringOptionInternallyTagged {
+  const factory _None() = _$_None;
+}
+
+/// @nodoc
+abstract class _$$_SomeCopyWith<$Res> {
+  factory _$$_SomeCopyWith(_$_Some value, $Res Function(_$_Some) then) =
+      __$$_SomeCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String data});
+}
+
+/// @nodoc
+class __$$_SomeCopyWithImpl<$Res>
+    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_Some>
+    implements _$$_SomeCopyWith<$Res> {
+  __$$_SomeCopyWithImpl(_$_Some _value, $Res Function(_$_Some) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$_Some(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+@MappableClass(discriminatorValue: 'Some')
+class _$_Some implements _Some {
+  const _$_Some(this.data);
+
+  @override
+  final String data;
+
+  @override
+  String toString() {
+    return 'StringOptionInternallyTagged.some(data: $data)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Some &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_SomeCopyWith<_$_Some> get copyWith =>
+      __$$_SomeCopyWithImpl<_$_Some>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(String data) some,
+  }) {
+    return some(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(String data)? some,
+  }) {
+    return some?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(String data)? some,
+    required TResult orElse(),
+  }) {
+    if (some != null) {
+      return some(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_None value) none,
+    required TResult Function(_Some value) some,
+  }) {
+    return some(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_None value)? none,
+    TResult? Function(_Some value)? some,
+  }) {
+    return some?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_None value)? none,
+    TResult Function(_Some value)? some,
+    required TResult orElse(),
+  }) {
+    if (some != null) {
+      return some(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Some implements StringOptionInternallyTagged {
+  const factory _Some(final String data) = _$_Some;
+
+  String get data;
+  @JsonKey(ignore: true)
+  _$$_SomeCopyWith<_$_Some> get copyWith => throw _privateConstructorUsedError;
+}

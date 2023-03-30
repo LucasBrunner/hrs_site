@@ -7,7 +7,8 @@ import '../script/employee/warehouse.dart' as warehouse;
 const scriptElements = {
   'signin': signin.setup,
   'signup': signup.setup,
-  'warehouse': warehouse.setup,
+  'warehouses': warehouse.showWarehouses,
+  'warehouse': warehouse.showWarehouse,
 };
 
 void main(List<String> args) {

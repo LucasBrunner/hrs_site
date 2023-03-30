@@ -1,12 +1,12 @@
 use rocket::{request::{FromRequest, Outcome}, Request, http::Status, Route};
 use rocket_db_pools::Connection;
 
-use crate::{database::Db, session::LoginSesion, data::warehouse::warehouses};
+use crate::{database::Db, session::LoginSesion, data::warehouse::{warehouses, warehouse_inventory}};
 
 use super::is_account_employee;
 
 pub fn employee_data_routes() -> Vec<Route> {
-  let r = routes![warehouses];
+  let r = routes![warehouses, warehouse_inventory];
   println!("{:?}", r);
   r
 }
