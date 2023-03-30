@@ -1,4 +1,4 @@
-use super::{phone::Phone, address::Address};
+use super::{address::Address, phone::Phone};
 
 pub struct DbSupplier {
   id: u64,

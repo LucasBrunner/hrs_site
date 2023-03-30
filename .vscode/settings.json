@@ -1,0 +1,20 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".dart",
+        "cmd": "dart run build_runner build --delete-conflicting-outputs"
+      },
+      {
+        "match": ".dart",
+        "cmd": "webdev build -o web:static"
+      },
+    ]
+  },
+  "dart.lineLength": 160,
+  "[dart]": {
+    "editor.rulers": [
+      160
+    ],
+  }
+}

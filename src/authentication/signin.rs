@@ -3,23 +3,23 @@ use rocket::{http::CookieJar, serde::json::Json};
 use rocket_db_pools::Connection;
 use serde::{Deserialize, Serialize};
 
-use crate::{database::Db, session::LoginSesion};
+use crate::{authentication::login_destination, database::Db, session::LoginSesion};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(crate = "rocket::serde")]
 #[serde(rename_all = "camelCase")]
-pub struct EncodedSigninData {
+pub struct EncodedSigninRequest {
   email: String,
   encoded_password: String,
   remember_login: bool,
 }
 
-impl EncodedSigninData {
-  fn decode(self) -> Result<DecodedSigninData, SigninFailure> {
+impl EncodedSigninRequest {
+  fn decode(self) -> Result<SigninRequest, SigninFailure> {
     let Ok(password) = urlencoding::decode(&self.encoded_password) else {
       return Err(SigninFailure::DecodeError);
     };
-    Ok(DecodedSigninData {
+    Ok(SigninRequest {
       email: self.email.to_string(),
       password: password.to_string(),
       remember_login: self.remember_login,
@@ -27,7 +27,7 @@ impl EncodedSigninData {
   }
 }
 
-pub struct DecodedSigninData {
+pub struct SigninRequest {
   email: String,
   password: String,
   remember_login: bool,
@@ -44,18 +44,17 @@ pub enum SigninFailure {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "Type")]
 pub enum SigninResult {
-  Ok,
   #[serde(rename_all = "camelCase")]
-  Err {
-    signin_failure: SigninFailure,
-  },
+  Ok { next_path: String },
+  #[serde(rename_all = "camelCase")]
+  Err { signin_failure: SigninFailure },
 }
 
 #[post("/signin", format = "json", data = "<signin_form>")]
 pub async fn signin(
   cookies: &CookieJar<'_>,
   mut db: Connection<Db>,
-  signin_form: rocket::serde::json::Json<EncodedSigninData>,
+  signin_form: rocket::serde::json::Json<EncodedSigninRequest>,
 ) -> Json<SigninResult> {
   let decoded_signin = match signin_form.into_inner().decode() {
     Ok(ok) => ok,
@@ -106,10 +105,14 @@ pub async fn signin(
   }
 
   println!("Account logged in! email: {}", decoded_signin.email);
-  if let Ok(cookie) = LoginSesion::new_cookie(db, decoded_signin.remember_login, account.id).await {
+  if let Ok(cookie) =
+    LoginSesion::new_cookie(&mut db, decoded_signin.remember_login, account.id).await
+  {
     println!("add cookie");
     cookies.add_private(cookie);
   }
 
-  Json(SigninResult::Ok)
+  Json(SigninResult::Ok {
+    next_path: login_destination(account.id, &mut db).await.to_owned(),
+  })
 }

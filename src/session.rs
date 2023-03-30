@@ -1,7 +1,7 @@
 use rocket::{
-  http::{Cookie, CookieJar},
+  http::{Cookie, CookieJar, Status},
   serde::json::serde_json,
-  time::{Duration, OffsetDateTime},
+  time::{Duration, OffsetDateTime}, request::{FromRequest, Outcome}, Request,
 };
 use rocket_db_pools::{sqlx, Connection};
 use serde::{Deserialize, Serialize};
@@ -35,7 +35,7 @@ pub struct LoginSesion {
 
 impl LoginSesion {
   pub async fn new(
-    mut db: Connection<Db>,
+    db: &mut Connection<Db>,
     remember_login: bool,
     account_id: u64,
   ) -> Result<LoginSesion, ()> {
@@ -90,7 +90,7 @@ impl LoginSesion {
   }
 
   pub async fn new_cookie(
-    db: Connection<Db>,
+    db: &mut Connection<Db>,
     remember_login: bool,
     account_id: u64,
   ) -> Result<Cookie<'static>, ()> {
@@ -137,5 +137,23 @@ impl LoginSesion {
     }
 
     Ok(session)
+  }
+}
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for LoginSesion {
+  type Error = ();
+
+  async fn from_request(req: &'r Request<'_>,) -> Outcome<Self, Self::Error> {
+    let mut db = match req.guard::<Connection<Db>>().await {
+      rocket::outcome::Outcome::Success(db) => db,
+      rocket::outcome::Outcome::Failure(_) => return Outcome::Failure((Status::Forbidden, ())),
+      rocket::outcome::Outcome::Forward(_) => return Outcome::Failure((Status::Forbidden, ())),
+    };
+
+    match LoginSesion::get_session_if_valid(&mut db, req.cookies()).await {
+      Ok(session) => Outcome::Success(session),
+      Err(_) => Outcome::Failure((Status::Forbidden, ())),
+    }
   }
 }

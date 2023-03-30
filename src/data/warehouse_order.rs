@@ -1,6 +1,8 @@
 use sqlx::types::Decimal;
 
-use super::{account::Account, order_state::OrderState, warehouse::Warehouse, inventory_item::InventoryItem};
+use super::{
+  account::Account, inventory_item::InventoryItem, order_state::OrderState, warehouse::Warehouse,
+};
 
 pub struct DbWarehouseOrder {
   id: u64,

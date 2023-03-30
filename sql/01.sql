@@ -1,5 +1,3 @@
-# schema script
-
 DROP DATABASE IF EXISTS `hrs_database`;
 CREATE DATABASE IF NOT EXISTS `hrs_database`;
 
@@ -21,6 +19,11 @@ CREATE TABLE `AccountType`(
   `name` VARCHAR(256) NOT NULL
 );
 
+CREATE TABLE `PhoneType`(
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(256) NOT NULL
+);
+
 # item tables
 CREATE TABLE `Brand`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -31,12 +34,12 @@ CREATE TABLE `InventoryItem`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `cost` DECIMAL(10, 4) NOT NULL,
   `list_price` DECIMAL(10, 4) NOT NULL,
-  `brand` BIGINT UNSIGNED NOT NULL,
+  `brand_id` BIGINT UNSIGNED NOT NULL,
   `model` TINYTEXT NOT NULL,
   `serial` TINYTEXT,
   `description` TEXT,
     
-  FOREIGN KEY (`brand`) REFERENCES `Brand` (`id`)
+  FOREIGN KEY (`brand_id`) REFERENCES `Brand` (`id`)
 );
 
 # account tables
@@ -45,19 +48,19 @@ CREATE TABLE `Account`(
   `email` VARCHAR(256) UNIQUE NOT NULL,
   `preferred_name` TINYTEXT NOT NULL,
   `legal_name` TINYTEXT NOT NULL,
-  `HashedPassword` CHAR(43) NOT NULL,
-  `Salt` CHAR(32) NOT NULL,
-  `Closed` BOOL NOT NULL DEFAULT FALSE
+  `hashed_password` CHAR(43) NOT NULL,
+  `salt` CHAR(32) NOT NULL,
+  `closed` BOOL NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE `AccountTypeRecord`(
-  `account` BIGINT UNSIGNED NOT NULL,
-  `account_type` BIGINT UNSIGNED NOT NULL,
+  `account_id` BIGINT UNSIGNED NOT NULL,
+  `account_type_id` BIGINT UNSIGNED NOT NULL,
 
-  PRIMARY KEY (`account`, `account_type`),
+  PRIMARY KEY (`account_id`, `account_type_id`),
 
-  FOREIGN KEY (`account`) REFERENCES `Account` (`id`),
-  FOREIGN KEY (`account_type`) REFERENCES `AccountType` (`id`)
+  FOREIGN KEY (`account_id`) REFERENCES `Account` (`id`),
+  FOREIGN KEY (`account_type_id`) REFERENCES `AccountType` (`id`)
 );
 
 # address tables
@@ -69,91 +72,123 @@ CREATE TABLE `Address`(
   `zip` TINYTEXT NOT NULL
 );
 
-CREATE TABLE `AccountAdderss`(
-  `address` BIGINT UNSIGNED NOT NULL,
-  `account` BIGINT UNSIGNED NOT NULL,
+CREATE TABLE `Phone`(
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `type_id` BIGINT UNSIGNED NOT NULL,
+  `number` TINYTEXT NOT NULL,
 
-  PRIMARY KEY (`address`, `account`),
+  FOREIGN KEY (`type_id`) REFERENCES `PhoneType` (`id`)
+);
+
+CREATE TABLE `AccountAdderss`(
+  `address_id` BIGINT UNSIGNED NOT NULL,
+  `account_id` BIGINT UNSIGNED NOT NULL,
+
+  PRIMARY KEY (`address_id`, `account_id`),
     
-  FOREIGN KEY (`address`) REFERENCES `Address` (`id`),
-  FOREIGN KEY (`account`) REFERENCES `Account` (`id`)
+  FOREIGN KEY (`address_id`) REFERENCES `Address` (`id`),
+  FOREIGN KEY (`account_id`) REFERENCES `Account` (`id`)
 );
 
 # warehouse tables
 CREATE TABLE `Supplier`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` TEXT NOT NULL,
-  `website` TEXT NOT NULL
+  `website` TEXT NOT NULL,
+  `phone_id` BIGINT UNSIGNED,
+  `address_id` BIGINT UNSIGNED,
+  
+  FOREIGN KEY (`phone_id`) REFERENCES `Phone` (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `Address` (`id`)
 );
 
 CREATE TABLE `Warehouse`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(256) NOT NULL,
-  `address` BIGINT UNSIGNED NOT NULL,
+  `address_id` BIGINT UNSIGNED NOT NULL,
+  `phone_id` BIGINT UNSIGNED NOT NULL,
     
-  FOREIGN KEY (`address`) REFERENCES `Address` (`id`)
+  FOREIGN KEY (`address_id`) REFERENCES `Address` (`id`),
+  FOREIGN KEY (`phone_id`) REFERENCES `Phone` (`id`)
 );
 
 CREATE TABLE `WarehouseOrder`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `warehouse` BIGINT UNSIGNED NOT NULL,
-  `employee` BIGINT UNSIGNED NOT NULL,
-  `supplier` BIGINT UNSIGNED NOT NULL,
+  `warehouse_id` BIGINT UNSIGNED NOT NULL,
+  `employee_id` BIGINT UNSIGNED NOT NULL,
+  `supplier_id` BIGINT UNSIGNED NOT NULL,
   `date` BIGINT NOT NULL,
-  `state` BIGINT UNSIGNED NOT NULL,
+  `state_id` BIGINT UNSIGNED NOT NULL,
     
-  FOREIGN KEY (`warehouse`) REFERENCES `Warehouse` (`id`),
-  FOREIGN KEY (`employee`) REFERENCES `Account` (`id`),
-  FOREIGN KEY (`supplier`) REFERENCES `Supplier` (`id`),
-  FOREIGN KEY (`state`) REFERENCES `OrderState` (`id`)
+  FOREIGN KEY (`warehouse_id`) REFERENCES `Warehouse` (`id`),
+  FOREIGN KEY (`employee_id`) REFERENCES `Account` (`id`),
+  FOREIGN KEY (`supplier_id`) REFERENCES `Supplier` (`id`),
+  FOREIGN KEY (`state_id`) REFERENCES `OrderState` (`id`)
 );
 
 CREATE TABLE `WarehouseOrderItem`(
-  `order` BIGINT UNSIGNED NOT NULL,
-  `item` BIGINT UNSIGNED NOT NULL,
+  `order_id` BIGINT UNSIGNED NOT NULL,
+  `item_id` BIGINT UNSIGNED NOT NULL,
   `amount` INT UNSIGNED NOT NULL,
   `current_cost` DECIMAL(10, 4) NOT NULL,
 
-  PRIMARY KEY(`order`, `item`),
+  PRIMARY KEY(`order_id`, `item_id`),
 
-  FOREIGN KEY (`order`) REFERENCES `WarehouseOrder` (`id`),
-  FOREIGN KEY (`item`) REFERENCES `InventoryItem` (`id`)
+  FOREIGN KEY (`order_id`) REFERENCES `WarehouseOrder` (`id`),
+  FOREIGN KEY (`item_id`) REFERENCES `InventoryItem` (`id`)
 );
 
 CREATE TABLE `WarehouseItem`(
-  `warehouse` BIGINT UNSIGNED NOT NULL,
-  `item` BIGINT UNSIGNED NOT NULL,
+  `warehouse_id` BIGINT UNSIGNED NOT NULL,
+  `item_id` BIGINT UNSIGNED NOT NULL,
   `amount` INT UNSIGNED NOT NULL,
 
-  PRIMARY KEY(`warehouse`, `item`),
+  PRIMARY KEY(`warehouse_id`, `item_id`),
 
-  FOREIGN KEY (`warehouse`) REFERENCES `Warehouse` (`id`),
-  FOREIGN KEY (`item`) REFERENCES `InventoryItem` (`id`)
+  FOREIGN KEY (`warehouse_id`) REFERENCES `Warehouse` (`id`),
+  FOREIGN KEY (`item_id`) REFERENCES `InventoryItem` (`id`)
 );
 
 # sales tables
 CREATE TABLE `SaleOrder`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `account` BIGINT UNSIGNED NOT NULL,
+  `account_id` BIGINT UNSIGNED NOT NULL,
   `date` BIGINT NOT NULL,
-  `address` BIGINT UNSIGNED NOT NULL,
-  `state` BIGINT UNSIGNED NOT NULL,
+  `address_id` BIGINT UNSIGNED NOT NULL,
+  `state_id` BIGINT UNSIGNED NOT NULL,
 
-  FOREIGN KEY (`account`) REFERENCES `Account` (`id`),
-  FOREIGN KEY (`address`) REFERENCES `Address` (`id`),
-  FOREIGN KEY (`state`) REFERENCES `OrderState` (`id`)
+  FOREIGN KEY (`account_id`) REFERENCES `Account` (`id`),
+  FOREIGN KEY (`address_id`) REFERENCES `Address` (`id`),
+  FOREIGN KEY (`state_id`) REFERENCES `OrderState` (`id`)
 );
 
 CREATE TABLE `SaleOrderItem`(
-  `order` BIGINT UNSIGNED NOT NULL,
-  `item` BIGINT UNSIGNED NOT NULL,
-  `warehouse` BIGINT UNSIGNED NOT NULL,
+  `order_id` BIGINT UNSIGNED NOT NULL,
+  `item_id` BIGINT UNSIGNED NOT NULL,
+  `warehouse_id` BIGINT UNSIGNED NOT NULL,
   `amount` INT UNSIGNED NOT NULL,
   `current_cost` DECIMAL(10, 4) NOT NULL,
 
-  PRIMARY KEY(`order`, `item`, `warehouse`),
+  PRIMARY KEY(`order_id`, `item_id`, `warehouse_id`),
   
-  FOREIGN KEY (`order`) REFERENCES `SaleOrder` (`id`),
-  FOREIGN KEY (`item`) REFERENCES `InventoryItem` (`id`),
-  FOREIGN KEY (`warehouse`) REFERENCES `Warehouse` (`id`)
+  FOREIGN KEY (`order_id`) REFERENCES `SaleOrder` (`id`),
+  FOREIGN KEY (`item_id`) REFERENCES `InventoryItem` (`id`),
+  FOREIGN KEY (`warehouse_id`) REFERENCES `Warehouse` (`id`)
 );
+
+# sessions
+CREATE TABLE IF NOT EXISTS `Session`(
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`account_id` BIGINT UNSIGNED NOT NULL,
+  `experation_timestamp` BIGINT SIGNED NOT NULL,
+  
+  FOREIGN KEY (`account_id`) REFERENCES `Account` (`Id`)
+);
+
+CREATE EVENT `end_old_sessions`
+	ON SCHEDULE
+		EVERY 1 DAY
+	COMMENT 'Removes sessions whos experation date has passed'
+    DO
+		DELETE FROM `Session`
+        WHERE `experation_timestamp` < unix_timestamp();
