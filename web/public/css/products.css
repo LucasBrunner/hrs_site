@@ -1,0 +1,42 @@
+#product-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6em;
+}
+
+#product-header > select {
+  height: fit-content;
+}
+
+.product-item {
+  margin-bottom: 1em;
+  height: 10em;
+  background-color: #f8ce9c;
+  display: flex;
+  flex-direction: row;
+  color: #8d4221;
+}
+
+.product-item table {
+  height: fit-content;
+}
+
+.product-item tr > * {
+  padding: 0.5em 0px;
+}
+
+.product-item th {
+  text-align: right;
+}
+
+.product-item td {
+  padding-left: 0.3em;
+}
+
+.product-item .button {
+  padding: 0.3em;
+  background-color: #8d4221;
+  width: fit-content;
+  color: white;
+}

@@ -1,0 +1,13 @@
+#main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#main p {
+  color: #434d38;
+}
+
+#main ul {
+  width: fit-content;
+}

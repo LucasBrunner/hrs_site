@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+
+  <title>Input New Job</title>
+
+  <script defer src="../main.dart.js"></script>
+
+  <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
+</head>
+
+<datalist id="script-elements">
+  <option value="page"></option>
+  <option value="input-customer"></option>
+</datalist>
+
+<body>
+  <h2>Create job</h2>
+  <table>
+    <tr>
+      <th>Date started</th>
+      <td>
+        <input type="date">
+      </td>
+    </tr>
+    <tr>
+      <th>Date completed</th>
+      <td>
+        <input type="date">
+      </td>
+    </tr>
+    <tr>
+      <th>Cost per hour</th>
+      <td>
+        <input type="number">
+      </td>
+    </tr>
+    <tr>
+      <th>Service cost minimum</th>
+      <td>
+        <input type="number">
+      </td>
+    </tr>
+    <tr>
+      <th>Customer</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Steve">Steve</option> 
+          <option value="Joe">Joe</option> 
+          <option value="Mary">Mary</option> 
+          <option value="Tessa">Tessa</option> 
+          <option value="Kate">Kate</option> 
+          <option value="Robert">Robert</option> 
+          <option value="Barry">Barry</option> 
+        </select>
+      </td>
+      <td>
+        <input type="search" value="steve">
+      </td>
+    </tr>
+    <tr>
+      <th>Location</th>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <th>Employee</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Robert">Robert</option> 
+          <option value="Steve">Steve</option> 
+          <option value="Joe">Joe</option> 
+          <option value="Mary">Mary</option> 
+          <option value="Tessa">Tessa</option> 
+          <option value="Kate">Kate</option> 
+          <option value="Barry">Barry</option> 
+        </select>
+      </td>
+      <td>
+        <input type="search" value="rob">
+      </td>
+    </tr>
+  </table>
+  <button>Add job</button>
+</body>
+
+</html>
