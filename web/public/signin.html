@@ -7,11 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
-
-  <title>sign in</title>
+  <title>Home Renovation Systems</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./css/products.css">
 
   <script defer src="../main.dart.js"></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@800&display=swap" rel="stylesheet">
+  
   <script>
     /*to prevent Firefox FOUC, this must be here*/
     let FF_FOUC_FIX;
@@ -21,33 +26,34 @@
 <datalist id="script-elements">
   <option value="page"></option>
   <option value="signin"></option>
+  <option value="public_page"></option>
 </datalist>
 
 <body>
 
   <table>
     <tr>
-      <td>email</td>
+      <td>Email</td>
       <td>
         <input type="text" id="email-input">
       </td>
     </tr>
     <tr>
-      <td>password</td>
+      <td>Password</td>
       <td>
         <input type="password" id="password-input">
       </td>
     </tr>
     <tr>
-      <td></td>
+      <td>Remember me</td>
       <td>
-        <button id="submit-login">go</button>
+        <input type="checkbox" id="remember-login-input">
       </td>
     </tr>
     <tr>
-      <td>remember me</td>
+      <td></td>
       <td>
-        <input type="checkbox" id="remember-login-input">
+        <button id="submit-login">Submit</button>
       </td>
     </tr>
   </table>
