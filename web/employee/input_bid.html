@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+
+  <title>Input New Bid</title>
+
+  <script defer src="../main.dart.js"></script>
+
+  <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
+</head>
+
+<datalist id="script-elements">
+  <option value="page"></option>
+  <option value="input-customer"></option>
+</datalist>
+
+<body>
+  <h2>Create bid</h2>
+  <table>
+    <tr>
+      <th>Date</th>
+      <td>
+        <input type="date">
+      </td>
+    </tr>
+    <tr>
+      <th>Employee</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Robert">Robert</option> 
+          <option value="Steve">Steve</option> 
+          <option value="Joe">Joe</option> 
+          <option value="Mary">Mary</option> 
+          <option value="Tessa">Tessa</option> 
+          <option value="Kate">Kate</option> 
+          <option value="Barry">Barry</option> 
+        </select>
+      </td>
+      <td>
+        <input type="search" value="rob">
+      </td>
+    </tr>
+    <tr>
+      <th>Customer</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Steve">Steve</option> 
+          <option value="Joe">Joe</option> 
+          <option value="Mary">Mary</option> 
+          <option value="Tessa">Tessa</option> 
+          <option value="Kate">Kate</option> 
+          <option value="Robert">Robert</option> 
+          <option value="Barry">Barry</option> 
+        </select>
+      </td>
+      <td>
+        <input type="search" value="steve">
+      </td>
+    </tr>
+    <tr>
+      <th>Item</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Sub Zero Built-in Refrigerator – 48">Sub Zero Built-in Refrigerator – 48</option> 
+        </select>
+      </td>
+      <td>
+        <input type="search" value="sub zero 48">
+      </td>
+    </tr>
+    <tr>
+      <th>Service</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option value="Delivery Installation">Delivery Installation</option>
+          <option value="Design">Design</option>
+          <option value="Cabinet Installation">Cabinet Installation</option>
+          <option value="Cabinet Re-facing">Cabinet Re-facing</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Painting">Painting</option>
+          <option value="Wallpaper hanging">Wallpaper hanging</option>
+          <option value="General Construction">General Construction</option>
+          <option value="Deliveries Normal">Deliveries Normal</option>
+          <option value="Deliveries Large">Deliveries Large</option>
+        </select>
+      </td>
+      <td>
+        <input type="search" value="delivery">
+      </td>
+    </tr>
+    <tr>
+      <th>Total cost</th>
+      <td>
+        <input type="number">
+      </td>
+    </tr>
+  </table>
+  <button>Add bid</button>
+</body>
+
+</html>

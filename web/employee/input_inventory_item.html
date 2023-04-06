@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+
+  <title>Input New Inventory Item</title>
+
+  <script defer src="../main.dart.js"></script>
+
+  <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
+</head>
+
+<datalist id="script-elements">
+  <option value="page"></option>
+  <option value="input-customer"></option>
+</datalist>
+
+<body>
+  <h2>Create inventory item</h2>
+  <table>
+    <tr>
+      <th>Model</th>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <th>Serial nubmer</th>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <th>Brand</th>
+      <td>
+        <select name="brand" id="inventory-item-brand-selection">
+          <option selected="selected" disabled="true">– Select one –</option>
+          <option value="GE">GE</option> 
+          <option value="Bosch">Bosch</option> 
+          <option value="Sub Zero">Sub Zero</option> 
+          <option value="Viking">Viking</option> 
+          <option value="Miele">Miele</option> 
+          <option value="Jenn-Air">Jenn-Air</option> 
+          <option value="Thermador">Thermador</option> 
+        </select>
+      </td>
+      <td>
+        <button>Add new brand</button>
+      </td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <th>Price</th>
+      <td>
+        <input type="text">
+      </td>
+    </tr>
+    <tr>
+      <th>Supplier</th>
+      <td>
+        <select name="supplier" id="inventory-item-supplier-selection">
+          <option selected="selected" disabled="true">– Select one –</option>
+          <option value="American Woodmark Corporation">American Woodmark Corporation</option>
+          <option value="Armstrong Cabinets Products">Armstrong Cabinets Products</option>
+          <option value="Bass Cabinets Mfg., INC.">Bass Cabinets Mfg., INC.</option>
+          <option value="Evans Cabinets Corp.">Evans Cabinets Corp.</option>
+          <option value="CornerStone Cabinetsry">CornerStone Cabinetsry</option>
+          <option value="Custom Wood Products, LLC">Custom Wood Products, LLC</option>
+          <option value="KraftMaid Cabinetsry">KraftMaid Cabinetsry</option>
+          <option value="Fertig's Highland Collection, INC.">Fertig's Highland Collection, INC.</option>
+          <option value="Marsh Furniture Company">Marsh Furniture Company</option>
+          <option value="Thomasville Cabinetsry">Thomasville Cabinetsry</option>
+          <option value="American Lighting">American Lighting</option>
+          <option value="Kichler Lighting">Kichler Lighting</option>
+          <option value="Hunter Fans">Hunter Fans</option>
+          <option value="Broan">Broan</option>
+          <option value="Lightolier">Lightolier</option>
+          <option value="Progress Lighting">Progress Lighting</option>
+          <option value="Ledalite – Sonata">Ledalite – Sonata</option>
+          <option value="Juno Lighting">Juno Lighting</option>
+          <option value="Framburg Lighting">Framburg Lighting</option>
+          <option value="Task Lighting Corporation">Task Lighting Corporation</option>
+          <option value="Kohler Kitchen Faucets">Kohler Kitchen Faucets</option>
+          <option value="Grohe Kitchen Faucets">Grohe Kitchen Faucets</option>
+          <option value="American Standard Kitchen Faucets">American Standard Kitchen Faucets</option>
+          <option value="BlaNCo Kitchen Faucets">BlaNCo Kitchen Faucets</option>
+          <option value="Delta Faucets">Delta Faucets</option>
+          <option value="Price Pfister Faucets">Price Pfister Faucets</option>
+          <option value="Newport Kitchen Faucets">Newport Kitchen Faucets</option>
+          <option value="Elkay Kitchen Faucets">Elkay Kitchen Faucets</option>
+          <option value="Herbeau Kitchen Faucets">Herbeau Kitchen Faucets</option>
+          <option value="Hansgrohe Kitchen Faucets">Hansgrohe Kitchen Faucets</option>
+          <option value="Moen Kitchen Faucets">Moen Kitchen Faucets</option>
+          <option value="Formica ">Formica </option>
+          <option value="Nevamar ">Nevamar </option>
+          <option value="Pionite">Pionite</option>
+          <option value="Wilsonart">Wilsonart</option>
+          <option value="Cosentino">Cosentino</option>
+          <option value="DuPont Zodiaq">DuPont Zodiaq</option>
+          <option value="Green Mountain Soapstone">Green Mountain Soapstone</option>
+          <option value="Burlington Stone">Burlington Stone</option>
+          <option value="Cool Concrete Solutions">Cool Concrete Solutions</option>
+          <option value="Cheng Design">Cheng Design</option>
+          <option value="Dremcoat Flooring">Dremcoat Flooring</option>
+          <option value="American Olean">American Olean</option>
+          <option value="Congoleum">Congoleum</option>
+          <option value="Epro">Epro</option>
+          <option value="Florida Tile">Florida Tile</option>
+          <option value="Dordini Italian Tile">Dordini Italian Tile</option>
+        </select>
+      </td>
+      <td>
+        <button>Add new supplier</button>
+      </td>
+    </tr>
+  </table>
+  <button>Add item to inventory</button>
+</body>
+
+</html>

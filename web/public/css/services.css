@@ -1,0 +1,32 @@
+.service-item {
+  margin-bottom: 1em;
+  background-color: #f8ce9c;
+  color: #8d4221;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.service-item h2 {
+  margin: 0;
+}
+
+.service-item table {
+  width: fit-content;
+}
+
+.service-item th {
+  text-align: right;
+}
+
+.service-item td {
+  padding-left: 0.3em;
+}
+
+.service-item .button {
+  padding: 0.3em;
+  background-color: #8d4221;
+  width: fit-content;
+  color: white;
+}
