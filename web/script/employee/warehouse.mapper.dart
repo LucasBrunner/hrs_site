@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element
 
-part of 'inventory.dart';
+part of 'warehouse.dart';
 
 class WarehouseInventoryItemMapper
     extends ClassMapperBase<WarehouseInventoryItem> {

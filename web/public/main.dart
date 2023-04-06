@@ -2,15 +2,15 @@ import 'dart:html';
 
 import '../script/authentication/signin.dart' as signin;
 import '../script/authentication/signup.dart' as signup;
-import '../script/employee/warehouses.dart' as warehouse;
-import '../script/employee/inventory.dart' as inventory;
+import '../script/employee/warehouses.dart' as warehouses;
+import '../script/employee/warehouse.dart' as warehouse;
 import '../script/public_page.dart' as public_page;
 
 const scriptElements = {
   'signin': signin.setup,
   'signup': signup.setup,
-  'warehouses': warehouse.showWarehouses,
-  'warehouse': inventory.setup,
+  'warehouses': warehouses.showWarehouses,
+  'warehouse': warehouse.setup,
   'public_page': public_page.setup,
 };
 

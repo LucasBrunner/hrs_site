@@ -6,8 +6,8 @@ import '../data.dart';
 import '../html_utility.dart';
 import 'warehouses.dart';
 
-part 'inventory.mapper.dart';
-part 'inventory.freezed.dart';
+part 'warehouse.mapper.dart';
+part 'warehouse.freezed.dart';
 
 @MappableClass()
 class WarehouseInventoryItem with WarehouseInventoryItemMappable implements ToOptionElement {

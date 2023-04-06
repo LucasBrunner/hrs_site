@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import '../data.dart';
 import '../html_utility.dart';
-import 'inventory.dart';
+import 'warehouse.dart';
 
 part 'warehouses.mapper.dart';
 part 'warehouses.freezed.dart';
