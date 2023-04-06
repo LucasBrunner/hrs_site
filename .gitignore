@@ -1,5 +1,6 @@
 /target
 *.bkp
+*.dtmp
 rocket.toml
 .env
 .dart_tool/

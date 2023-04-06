@@ -1,12 +1,5 @@
-pub mod account;
-pub mod address;
-pub mod brand;
-pub mod inventory_item;
-pub mod order_state;
-pub mod phone;
-pub mod supplier;
 pub mod warehouse;
-pub mod warehouse_order;
+pub mod inventory;
 
 use rocket::{routes, Route};
 use serde::{Serialize, Deserialize, Serializer};
@@ -25,6 +18,7 @@ pub enum DataError {
     session_error: SessionError,
   },
   DatabaseFailure,
+  JsonParseError,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

@@ -9,3 +9,13 @@ extension ToSpecificElement on Element {
     }
   }
 }
+
+extension ToSpecificElementList on List<Element> {
+  List<T>? toElements<T>() {
+    try {
+      return List.from(this);
+    } catch (e) {
+      return null;
+    }
+  }
+}

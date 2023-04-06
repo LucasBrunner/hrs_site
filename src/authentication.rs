@@ -57,7 +57,9 @@ pub async fn employee_fs(path: PathBuf, _auth: AuthAccountEmployee) -> Option<Na
   NamedFile::open(path).await.ok()
 }
 
-pub struct AuthSession ();
+pub struct AuthSession {
+  pub session: LoginSesion,
+}
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for AuthSession {
@@ -70,10 +72,9 @@ impl<'r> FromRequest<'r> for AuthSession {
       rocket::outcome::Outcome::Forward(_) => return Outcome::Failure((Status::NotFound, ())),
     };
     
-    if LoginSesion::get_session_if_valid(&mut db, req.cookies()).await.is_ok() {
-      Outcome::Success(AuthSession())
-    } else {
-      Outcome::Failure((Status::Forbidden, ()))
+    match LoginSesion::get_session_if_valid(&mut db, req.cookies()).await {
+      Ok(session) => Outcome::Success(AuthSession { session }),
+      Err(_) => Outcome::Failure((Status::Forbidden, ())),
     }
   }
 }

@@ -412,18 +412,21 @@ mixin _$DataError {
   TResult when<TResult extends Object?>({
     required TResult Function() databaseFailure,
     required TResult Function(SessionError sessionError) sessionError,
+    required TResult Function() badData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? databaseFailure,
     TResult? Function(SessionError sessionError)? sessionError,
+    TResult? Function()? badData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? databaseFailure,
     TResult Function(SessionError sessionError)? sessionError,
+    TResult Function()? badData,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -431,18 +434,21 @@ mixin _$DataError {
   TResult map<TResult extends Object?>({
     required TResult Function(_DatabaseFailure value) databaseFailure,
     required TResult Function(_SessionError value) sessionError,
+    required TResult Function(_ConnectionError value) badData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DatabaseFailure value)? databaseFailure,
     TResult? Function(_SessionError value)? sessionError,
+    TResult? Function(_ConnectionError value)? badData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DatabaseFailure value)? databaseFailure,
     TResult Function(_SessionError value)? sessionError,
+    TResult Function(_ConnectionError value)? badData,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -506,6 +512,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() databaseFailure,
     required TResult Function(SessionError sessionError) sessionError,
+    required TResult Function() badData,
   }) {
     return databaseFailure();
   }
@@ -515,6 +522,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? databaseFailure,
     TResult? Function(SessionError sessionError)? sessionError,
+    TResult? Function()? badData,
   }) {
     return databaseFailure?.call();
   }
@@ -524,6 +532,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? databaseFailure,
     TResult Function(SessionError sessionError)? sessionError,
+    TResult Function()? badData,
     required TResult orElse(),
   }) {
     if (databaseFailure != null) {
@@ -537,6 +546,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(_DatabaseFailure value) databaseFailure,
     required TResult Function(_SessionError value) sessionError,
+    required TResult Function(_ConnectionError value) badData,
   }) {
     return databaseFailure(this);
   }
@@ -546,6 +556,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DatabaseFailure value)? databaseFailure,
     TResult? Function(_SessionError value)? sessionError,
+    TResult? Function(_ConnectionError value)? badData,
   }) {
     return databaseFailure?.call(this);
   }
@@ -555,6 +566,7 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DatabaseFailure value)? databaseFailure,
     TResult Function(_SessionError value)? sessionError,
+    TResult Function(_ConnectionError value)? badData,
     required TResult orElse(),
   }) {
     if (databaseFailure != null) {
@@ -646,6 +658,7 @@ class _$_SessionError implements _SessionError {
   TResult when<TResult extends Object?>({
     required TResult Function() databaseFailure,
     required TResult Function(SessionError sessionError) sessionError,
+    required TResult Function() badData,
   }) {
     return sessionError(this.sessionError);
   }
@@ -655,6 +668,7 @@ class _$_SessionError implements _SessionError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? databaseFailure,
     TResult? Function(SessionError sessionError)? sessionError,
+    TResult? Function()? badData,
   }) {
     return sessionError?.call(this.sessionError);
   }
@@ -664,6 +678,7 @@ class _$_SessionError implements _SessionError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? databaseFailure,
     TResult Function(SessionError sessionError)? sessionError,
+    TResult Function()? badData,
     required TResult orElse(),
   }) {
     if (sessionError != null) {
@@ -677,6 +692,7 @@ class _$_SessionError implements _SessionError {
   TResult map<TResult extends Object?>({
     required TResult Function(_DatabaseFailure value) databaseFailure,
     required TResult Function(_SessionError value) sessionError,
+    required TResult Function(_ConnectionError value) badData,
   }) {
     return sessionError(this);
   }
@@ -686,6 +702,7 @@ class _$_SessionError implements _SessionError {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DatabaseFailure value)? databaseFailure,
     TResult? Function(_SessionError value)? sessionError,
+    TResult? Function(_ConnectionError value)? badData,
   }) {
     return sessionError?.call(this);
   }
@@ -695,6 +712,7 @@ class _$_SessionError implements _SessionError {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DatabaseFailure value)? databaseFailure,
     TResult Function(_SessionError value)? sessionError,
+    TResult Function(_ConnectionError value)? badData,
     required TResult orElse(),
   }) {
     if (sessionError != null) {
@@ -712,6 +730,115 @@ abstract class _SessionError implements DataError {
   @JsonKey(ignore: true)
   _$$_SessionErrorCopyWith<_$_SessionError> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_ConnectionErrorCopyWith<$Res> {
+  factory _$$_ConnectionErrorCopyWith(
+          _$_ConnectionError value, $Res Function(_$_ConnectionError) then) =
+      __$$_ConnectionErrorCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_ConnectionErrorCopyWithImpl<$Res>
+    extends _$DataErrorCopyWithImpl<$Res, _$_ConnectionError>
+    implements _$$_ConnectionErrorCopyWith<$Res> {
+  __$$_ConnectionErrorCopyWithImpl(
+      _$_ConnectionError _value, $Res Function(_$_ConnectionError) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+@MappableClass(discriminatorValue: 'ConnectionError')
+class _$_ConnectionError implements _ConnectionError {
+  const _$_ConnectionError();
+
+  @override
+  String toString() {
+    return 'DataError.badData()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_ConnectionError);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() databaseFailure,
+    required TResult Function(SessionError sessionError) sessionError,
+    required TResult Function() badData,
+  }) {
+    return badData();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? databaseFailure,
+    TResult? Function(SessionError sessionError)? sessionError,
+    TResult? Function()? badData,
+  }) {
+    return badData?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? databaseFailure,
+    TResult Function(SessionError sessionError)? sessionError,
+    TResult Function()? badData,
+    required TResult orElse(),
+  }) {
+    if (badData != null) {
+      return badData();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_DatabaseFailure value) databaseFailure,
+    required TResult Function(_SessionError value) sessionError,
+    required TResult Function(_ConnectionError value) badData,
+  }) {
+    return badData(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_DatabaseFailure value)? databaseFailure,
+    TResult? Function(_SessionError value)? sessionError,
+    TResult? Function(_ConnectionError value)? badData,
+  }) {
+    return badData?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_DatabaseFailure value)? databaseFailure,
+    TResult Function(_SessionError value)? sessionError,
+    TResult Function(_ConnectionError value)? badData,
+    required TResult orElse(),
+  }) {
+    if (badData != null) {
+      return badData(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ConnectionError implements DataError {
+  const factory _ConnectionError() = _$_ConnectionError;
 }
 
 /// @nodoc

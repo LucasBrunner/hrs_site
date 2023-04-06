@@ -241,6 +241,7 @@ class DataErrorMapper extends ClassMapperBase<DataError> {
       MapperContainer.globals.use(_instance = DataErrorMapper._());
       _DatabaseFailureMapper.ensureInitialized();
       _SessionErrorMapper.ensureInitialized();
+      _ConnectionErrorMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -405,6 +406,61 @@ extension _SessionErrorMapperExtension on _SessionError {
 
   Map<String, dynamic> toMap() {
     return _SessionErrorMapper._guard((c) => c.toMap(this));
+  }
+}
+
+class _ConnectionErrorMapper extends SubClassMapperBase<_ConnectionError> {
+  _ConnectionErrorMapper._();
+  static _ConnectionErrorMapper? _instance;
+  static _ConnectionErrorMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = _ConnectionErrorMapper._());
+      DataErrorMapper.ensureInitialized().addSubMapper(_instance!);
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = '_ConnectionError';
+
+  @override
+  final Map<Symbol, Field<_ConnectionError, dynamic>> fields = const {};
+
+  @override
+  final String discriminatorKey = 'Type';
+  @override
+  final dynamic discriminatorValue = 'ConnectionError';
+  @override
+  late final ClassMapperBase superMapper = DataErrorMapper.ensureInitialized();
+
+  static _ConnectionError _instantiate(DecodingData data) {
+    return _ConnectionError();
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static _ConnectionError fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<_ConnectionError>(map));
+  }
+
+  static _ConnectionError fromJson(String json) {
+    return _guard((c) => c.fromJson<_ConnectionError>(json));
+  }
+}
+
+extension _ConnectionErrorMapperExtension on _ConnectionError {
+  String toJson() {
+    return _ConnectionErrorMapper._guard((c) => c.toJson(this));
+  }
+
+  Map<String, dynamic> toMap() {
+    return _ConnectionErrorMapper._guard((c) => c.toMap(this));
   }
 }
 

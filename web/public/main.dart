@@ -3,12 +3,13 @@ import 'dart:html';
 import '../script/authentication/signin.dart' as signin;
 import '../script/authentication/signup.dart' as signup;
 import '../script/employee/warehouse.dart' as warehouse;
+import '../script/employee/inventory.dart' as inventory;
 
 const scriptElements = {
   'signin': signin.setup,
   'signup': signup.setup,
   'warehouses': warehouse.showWarehouses,
-  'warehouse': warehouse.showWarehouse,
+  'warehouse': inventory.setup,
 };
 
 void main(List<String> args) {

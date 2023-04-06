@@ -29,4 +29,49 @@ INSERT INTO `AccountType` (`name`)
 VALUES("employee");
 
 INSERT INTO `AccountType` (`name`)
-VALUES("manager");
+VALUES("president");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("vice president");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("cfo");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("ceo");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("sales manager");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("design manager");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("sales associate");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("design associate");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("store manager");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("office manager");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("warehouse");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("deliveries");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("installations");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("cabinet technician");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("appliance technician");
+
+INSERT INTO `AccountType` (`name`)
+VALUES("bathroom technician");

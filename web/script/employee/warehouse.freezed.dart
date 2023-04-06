@@ -37,20 +37,20 @@ mixin _$WarehouseResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Ok value) ok,
-    required TResult Function(_Err value) err,
+    required TResult Function(_WarehouseOk value) ok,
+    required TResult Function(_WarehouseErr value) err,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Ok value)? ok,
-    TResult? Function(_Err value)? err,
+    TResult? Function(_WarehouseOk value)? ok,
+    TResult? Function(_WarehouseErr value)? err,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Ok value)? ok,
-    TResult Function(_Err value)? err,
+    TResult Function(_WarehouseOk value)? ok,
+    TResult Function(_WarehouseErr value)? err,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -75,18 +75,20 @@ class _$WarehouseResultCopyWithImpl<$Res, $Val extends WarehouseResult>
 }
 
 /// @nodoc
-abstract class _$$_OkCopyWith<$Res> {
-  factory _$$_OkCopyWith(_$_Ok value, $Res Function(_$_Ok) then) =
-      __$$_OkCopyWithImpl<$Res>;
+abstract class _$$_WarehouseOkCopyWith<$Res> {
+  factory _$$_WarehouseOkCopyWith(
+          _$_WarehouseOk value, $Res Function(_$_WarehouseOk) then) =
+      __$$_WarehouseOkCopyWithImpl<$Res>;
   @useResult
   $Res call({List<Warehouse> warehouses});
 }
 
 /// @nodoc
-class __$$_OkCopyWithImpl<$Res>
-    extends _$WarehouseResultCopyWithImpl<$Res, _$_Ok>
-    implements _$$_OkCopyWith<$Res> {
-  __$$_OkCopyWithImpl(_$_Ok _value, $Res Function(_$_Ok) _then)
+class __$$_WarehouseOkCopyWithImpl<$Res>
+    extends _$WarehouseResultCopyWithImpl<$Res, _$_WarehouseOk>
+    implements _$$_WarehouseOkCopyWith<$Res> {
+  __$$_WarehouseOkCopyWithImpl(
+      _$_WarehouseOk _value, $Res Function(_$_WarehouseOk) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +96,7 @@ class __$$_OkCopyWithImpl<$Res>
   $Res call({
     Object? warehouses = null,
   }) {
-    return _then(_$_Ok(
+    return _then(_$_WarehouseOk(
       null == warehouses
           ? _value._warehouses
           : warehouses // ignore: cast_nullable_to_non_nullable
@@ -106,8 +108,9 @@ class __$$_OkCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'Ok')
-class _$_Ok implements _Ok {
-  const _$_Ok(final List<Warehouse> warehouses) : _warehouses = warehouses;
+class _$_WarehouseOk implements _WarehouseOk {
+  const _$_WarehouseOk(final List<Warehouse> warehouses)
+      : _warehouses = warehouses;
 
   final List<Warehouse> _warehouses;
   @override
@@ -126,7 +129,7 @@ class _$_Ok implements _Ok {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Ok &&
+            other is _$_WarehouseOk &&
             const DeepCollectionEquality()
                 .equals(other._warehouses, _warehouses));
   }
@@ -138,8 +141,8 @@ class _$_Ok implements _Ok {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_OkCopyWith<_$_Ok> get copyWith =>
-      __$$_OkCopyWithImpl<_$_Ok>(this, _$identity);
+  _$$_WarehouseOkCopyWith<_$_WarehouseOk> get copyWith =>
+      __$$_WarehouseOkCopyWithImpl<_$_WarehouseOk>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -175,8 +178,8 @@ class _$_Ok implements _Ok {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Ok value) ok,
-    required TResult Function(_Err value) err,
+    required TResult Function(_WarehouseOk value) ok,
+    required TResult Function(_WarehouseErr value) err,
   }) {
     return ok(this);
   }
@@ -184,8 +187,8 @@ class _$_Ok implements _Ok {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Ok value)? ok,
-    TResult? Function(_Err value)? err,
+    TResult? Function(_WarehouseOk value)? ok,
+    TResult? Function(_WarehouseErr value)? err,
   }) {
     return ok?.call(this);
   }
@@ -193,8 +196,8 @@ class _$_Ok implements _Ok {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Ok value)? ok,
-    TResult Function(_Err value)? err,
+    TResult Function(_WarehouseOk value)? ok,
+    TResult Function(_WarehouseErr value)? err,
     required TResult orElse(),
   }) {
     if (ok != null) {
@@ -204,18 +207,20 @@ class _$_Ok implements _Ok {
   }
 }
 
-abstract class _Ok implements WarehouseResult {
-  const factory _Ok(final List<Warehouse> warehouses) = _$_Ok;
+abstract class _WarehouseOk implements WarehouseResult {
+  const factory _WarehouseOk(final List<Warehouse> warehouses) = _$_WarehouseOk;
 
   List<Warehouse> get warehouses;
   @JsonKey(ignore: true)
-  _$$_OkCopyWith<_$_Ok> get copyWith => throw _privateConstructorUsedError;
+  _$$_WarehouseOkCopyWith<_$_WarehouseOk> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ErrCopyWith<$Res> {
-  factory _$$_ErrCopyWith(_$_Err value, $Res Function(_$_Err) then) =
-      __$$_ErrCopyWithImpl<$Res>;
+abstract class _$$_WarehouseErrCopyWith<$Res> {
+  factory _$$_WarehouseErrCopyWith(
+          _$_WarehouseErr value, $Res Function(_$_WarehouseErr) then) =
+      __$$_WarehouseErrCopyWithImpl<$Res>;
   @useResult
   $Res call({DataError err});
 
@@ -223,10 +228,11 @@ abstract class _$$_ErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ErrCopyWithImpl<$Res>
-    extends _$WarehouseResultCopyWithImpl<$Res, _$_Err>
-    implements _$$_ErrCopyWith<$Res> {
-  __$$_ErrCopyWithImpl(_$_Err _value, $Res Function(_$_Err) _then)
+class __$$_WarehouseErrCopyWithImpl<$Res>
+    extends _$WarehouseResultCopyWithImpl<$Res, _$_WarehouseErr>
+    implements _$$_WarehouseErrCopyWith<$Res> {
+  __$$_WarehouseErrCopyWithImpl(
+      _$_WarehouseErr _value, $Res Function(_$_WarehouseErr) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -234,7 +240,7 @@ class __$$_ErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_Err(
+    return _then(_$_WarehouseErr(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -254,8 +260,8 @@ class __$$_ErrCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'Err')
-class _$_Err implements _Err {
-  const _$_Err(this.err);
+class _$_WarehouseErr implements _WarehouseErr {
+  const _$_WarehouseErr(this.err);
 
   @override
   final DataError err;
@@ -269,7 +275,7 @@ class _$_Err implements _Err {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Err &&
+            other is _$_WarehouseErr &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -279,8 +285,8 @@ class _$_Err implements _Err {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ErrCopyWith<_$_Err> get copyWith =>
-      __$$_ErrCopyWithImpl<_$_Err>(this, _$identity);
+  _$$_WarehouseErrCopyWith<_$_WarehouseErr> get copyWith =>
+      __$$_WarehouseErrCopyWithImpl<_$_WarehouseErr>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -316,8 +322,8 @@ class _$_Err implements _Err {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Ok value) ok,
-    required TResult Function(_Err value) err,
+    required TResult Function(_WarehouseOk value) ok,
+    required TResult Function(_WarehouseErr value) err,
   }) {
     return err(this);
   }
@@ -325,8 +331,8 @@ class _$_Err implements _Err {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Ok value)? ok,
-    TResult? Function(_Err value)? err,
+    TResult? Function(_WarehouseOk value)? ok,
+    TResult? Function(_WarehouseErr value)? err,
   }) {
     return err?.call(this);
   }
@@ -334,8 +340,8 @@ class _$_Err implements _Err {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Ok value)? ok,
-    TResult Function(_Err value)? err,
+    TResult Function(_WarehouseOk value)? ok,
+    TResult Function(_WarehouseErr value)? err,
     required TResult orElse(),
   }) {
     if (err != null) {
@@ -345,10 +351,11 @@ class _$_Err implements _Err {
   }
 }
 
-abstract class _Err implements WarehouseResult {
-  const factory _Err(final DataError err) = _$_Err;
+abstract class _WarehouseErr implements WarehouseResult {
+  const factory _WarehouseErr(final DataError err) = _$_WarehouseErr;
 
   DataError get err;
   @JsonKey(ignore: true)
-  _$$_ErrCopyWith<_$_Err> get copyWith => throw _privateConstructorUsedError;
+  _$$_WarehouseErrCopyWith<_$_WarehouseErr> get copyWith =>
+      throw _privateConstructorUsedError;
 }
