@@ -6,8 +6,8 @@ import '../data.dart';
 import '../html_utility.dart';
 import 'inventory.dart';
 
-part 'warehouse.mapper.dart';
-part 'warehouse.freezed.dart';
+part 'warehouses.mapper.dart';
+part 'warehouses.freezed.dart';
 
 @MappableClass()
 class Warehouse with WarehouseMappable {
