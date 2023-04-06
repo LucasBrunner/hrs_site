@@ -83,6 +83,7 @@ impl LoginSesion {
     let cookie = Cookie::build("session", session_string)
       .expires(self.experation_date)
       .same_site(rocket::http::SameSite::Strict)
+      .http_only(false)
       .secure(true)
       .finish();
 

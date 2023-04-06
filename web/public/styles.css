@@ -53,6 +53,10 @@ header > h1 {
   fill: #8d4221;
 }
 
+#profile-icon:hover {
+  cursor: pointer;
+}
+
 #main {
   max-width: 1400px;
   margin: 0px 50px;
@@ -100,4 +104,21 @@ footer > p {
 
 #footer-links li {
   margin-bottom: 0.25em;
+}
+
+.div-button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.div-button:hover {
+  cursor: pointer;
+}
+
+.text-button:hover {
+  cursor: pointer;
 }
