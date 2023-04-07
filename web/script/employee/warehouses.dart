@@ -25,7 +25,7 @@ displayWarehouses(List<Warehouse> warehouses) {
 
 showWarehouses() async {
   final response = await http.get(
-    Uri.http('127.0.0.1:8000', '/data/employee/warehouses'),
+    Uri.http(window.location.host, '/data/employee/warehouses'),
   );
 
   print(response.body);

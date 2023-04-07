@@ -1,15 +1,13 @@
 import 'dart:html';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import '../data.dart';
-import '../html_utility.dart';
 
 part 'inventory.mapper.dart';
 part 'inventory.freezed.dart';
 
 @MappableClass()
-class InventoryItem with InventoryItemMappable implements ToOptionElement {
+class InventoryItem with InventoryItemMappable implements ToOptionElement, ToDisplayRow {
   int inventoryItemId;
   double cost;
   double listPrice;
@@ -35,6 +33,71 @@ class InventoryItem with InventoryItemMappable implements ToOptionElement {
     return OptionElement()
       ..innerText = model
       ..value = inventoryItemId.toString();
+  }
+
+  String descriptionString() {
+    return description.when(
+      none: () => "N/A",
+      some: (data) => data,
+    );
+  }
+
+  TableRowElement _modelRow() {
+    return TableRowElement()
+      ..children.addAll([
+        Element.th()..innerText = 'Product:',
+        Element.td()..innerText = model,
+      ]);
+  }
+
+  TableRowElement? _descriptionRow() {
+    return description.when(
+      none: () => null,
+      some: (data) => TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'Description:',
+          Element.td()..innerText = data,
+        ]),
+    );
+  }
+
+  TableRowElement _priceRow() {
+    return TableRowElement()
+      ..children.addAll([
+        Element.th()..innerText = 'Price:',
+        Element.td()..innerText = listPrice.toString(),
+      ]);
+  }
+
+  TableRowElement _brandRow() {
+    return TableRowElement()
+      ..children.addAll([
+        Element.th()..innerText = 'Brand:',
+        Element.td()..innerText = brandName,
+      ]);
+  }
+
+  List<TableRowElement> _productTableRows() {
+    final rows = <TableRowElement>[];
+    rows.add(_modelRow());
+    final desc = _descriptionRow();
+    if (desc != null) {
+      rows.add(desc);
+    }
+    rows.add(_priceRow());
+    rows.add(_brandRow());
+    return rows;
+  }
+
+  @override
+  DivElement toDisplayRow({Element? belowTable}) {
+    final container = DivElement()..className = 'product-item';
+    container.children.add(ImageElement()..alt = "model: $model, brand: $brandName, description: ${descriptionString()}");
+    container.children.add(DivElement()..children.add(TableElement()..children.addAll(_productTableRows())));
+    if (belowTable != null) {
+      container.children.add(belowTable);
+    }
+    return container;
   }
 }
 

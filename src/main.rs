@@ -14,6 +14,7 @@ extern crate rocket_db_pools;
 use std::path::{PathBuf, Path};
 
 use authentication::prelude::*;
+use data::inventory::get_product_page;
 use database::Db;
 use rocket::fs::NamedFile;
 use rocket_db_pools::Database;
@@ -38,6 +39,7 @@ fn launch() -> _ {
   rocket::build()
     .attach(Db::init())
     .mount("/data/employee", authentication::empoyee::employee_data_routes())
+    .mount("/data/public", routes![get_product_page])
     .mount("/", routes![signin, signup])
     .mount("/", routes![authentication::employee_fs])
     .mount("/", routes![public_fs])

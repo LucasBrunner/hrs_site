@@ -13,7 +13,7 @@ part 'warehouse.freezed.dart';
 
 Future<WarehouseInventoryResult> fetchWarehouseInventory(int warehouseId) async {
   final response = await http.get(
-    Uri.http('127.0.0.1:8000', '/data/employee/warehouse/$warehouseId/inventory'),
+    Uri.http(window.location.host, '/data/employee/warehouse/$warehouseId/inventory'),
   );
 
   print(response.body);

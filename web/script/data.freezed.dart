@@ -490,8 +490,8 @@ class __$$_DatabaseFailureCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'DatabaseFailure')
-class _$_DatabaseFailure implements _DatabaseFailure {
-  const _$_DatabaseFailure();
+class _$_DatabaseFailure extends _DatabaseFailure {
+  const _$_DatabaseFailure() : super._();
 
   @override
   String toString() {
@@ -576,8 +576,9 @@ class _$_DatabaseFailure implements _DatabaseFailure {
   }
 }
 
-abstract class _DatabaseFailure implements DataError {
+abstract class _DatabaseFailure extends DataError {
   const factory _DatabaseFailure() = _$_DatabaseFailure;
+  const _DatabaseFailure._() : super._();
 }
 
 /// @nodoc
@@ -624,8 +625,8 @@ class __$$_SessionErrorCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'SessionError')
-class _$_SessionError implements _SessionError {
-  const _$_SessionError(this.sessionError);
+class _$_SessionError extends _SessionError {
+  const _$_SessionError(this.sessionError) : super._();
 
   @override
   final SessionError sessionError;
@@ -722,9 +723,10 @@ class _$_SessionError implements _SessionError {
   }
 }
 
-abstract class _SessionError implements DataError {
+abstract class _SessionError extends DataError {
   const factory _SessionError(final SessionError sessionError) =
       _$_SessionError;
+  const _SessionError._() : super._();
 
   SessionError get sessionError;
   @JsonKey(ignore: true)
@@ -751,8 +753,8 @@ class __$$_ConnectionErrorCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'ConnectionError')
-class _$_ConnectionError implements _ConnectionError {
-  const _$_ConnectionError();
+class _$_ConnectionError extends _ConnectionError {
+  const _$_ConnectionError() : super._();
 
   @override
   String toString() {
@@ -837,8 +839,9 @@ class _$_ConnectionError implements _ConnectionError {
   }
 }
 
-abstract class _ConnectionError implements DataError {
+abstract class _ConnectionError extends DataError {
   const factory _ConnectionError() = _$_ConnectionError;
+  const _ConnectionError._() : super._();
 }
 
 /// @nodoc

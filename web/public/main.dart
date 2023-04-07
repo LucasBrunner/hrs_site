@@ -5,6 +5,7 @@ import '../script/authentication/signup.dart' as signup;
 import '../script/employee/warehouses.dart' as warehouses;
 import '../script/employee/warehouse.dart' as warehouse;
 import '../script/public_page.dart' as public_page;
+import '../script/public/products.dart' as products;
 
 const scriptElements = {
   'signin': signin.setup,
@@ -12,6 +13,7 @@ const scriptElements = {
   'warehouses': warehouses.showWarehouses,
   'warehouse': warehouse.setup,
   'public_page': public_page.setup,
+  'products': products.setup,
 };
 
 void main(List<String> args) {

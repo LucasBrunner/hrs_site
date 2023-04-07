@@ -20,12 +20,22 @@ class SessionError with _$SessionError {
 @freezed
 @MappableClass(discriminatorKey: 'Type')
 class DataError with _$DataError {
+  const DataError._();
+
   @MappableClass(discriminatorValue: 'DatabaseFailure')
   const factory DataError.databaseFailure() = _DatabaseFailure;
   @MappableClass(discriminatorValue: 'SessionError')
   const factory DataError.sessionError(SessionError sessionError) = _SessionError;
   @MappableClass(discriminatorValue: 'ConnectionError')
   const factory DataError.badData() = _ConnectionError;
+
+  String getErrorMessage() {
+    return when(
+      databaseFailure: () => 'Error: database failure',
+      sessionError: (sessionError) => 'Error: session expired (log in again)',
+      badData: () => "Error: bad data",
+    );
+  }
 }
 
 @freezed
@@ -39,4 +49,8 @@ class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
 
 abstract class ToOptionElement {
   OptionElement toOptionElement();
+}
+
+abstract class ToDisplayRow {
+  DivElement toDisplayRow();
 }

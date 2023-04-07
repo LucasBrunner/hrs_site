@@ -84,7 +84,7 @@ impl LoginSesion {
       .expires(self.experation_date)
       .same_site(rocket::http::SameSite::Strict)
       .http_only(false)
-      .secure(true)
+      .secure(false)
       .finish();
 
     return Ok(cookie);

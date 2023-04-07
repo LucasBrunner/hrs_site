@@ -100,6 +100,44 @@ pub enum InventoryItemResult {
   Ok { items: Vec<InventoryItem> },
 }
 
+#[get("/products/<page_number>/<items_per_page>", format = "json")]
+pub async fn get_product_page(
+  mut db: Connection<Db>,
+  mut page_number: u32,
+  items_per_page: u32,
+) -> Json<InventoryItemResult> {
+  page_number = page_number.min(40);
+  let query = sqlx::query_as!(
+      InventoryItem,
+      r#"
+      SELECT
+        `inventory_item_id`,
+        `cost`,
+        `list_price`,
+        `brand_id`,
+        `Brand`.`name` AS "brand_name",
+        `model`,
+        `serial`,
+        `description`
+      FROM 
+        `InventoryItem`
+        INNER JOIN `Brand` USING(`brand_id`)
+      LIMIT ?
+      OFFSET ?;
+      "#,
+      items_per_page,
+      page_number * items_per_page,
+    )
+    .fetch_all(&mut **db)
+    .await;
+
+  println!("{:?}", query);
+  match query {
+    Ok(items) => Json(InventoryItemResult::Ok { items }),
+    Err(_) => Json(InventoryItemResult::Err { err: DataError::DatabaseFailure }),
+  }
+}
+
 #[get("/inventory/search/<item_name>", format = "json")]
 pub async fn get_inventory_item_data(
   mut db: Connection<Db>,

@@ -74,7 +74,7 @@ void submit() async {
   print(signinRequest.toJson());
 
   final response = await http.post(
-    Uri.http('127.0.0.1:8000', '/signup'),
+    Uri.http(window.location.host, '/signup'),
     body: signinRequest.toJson(),
     headers: {
       'Access-Control-Allow-Origin': '*',
