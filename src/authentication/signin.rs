@@ -37,7 +37,7 @@ pub struct SigninRequest {
 #[serde(tag = "Type")]
 pub enum SigninFailure {
   DecodeError,
-  SigninFailure,
+  General,
   DatabaseError,
 }
 
@@ -86,20 +86,20 @@ pub async fn signin(
   };
 
   let argon2 = Argon2::default();
-  let Ok(password_check) = argon2.hash_password(&decoded_signin.password.as_bytes(), &account.salt) else {
+  let Ok(password_check) = argon2.hash_password(decoded_signin.password.as_bytes(), &account.salt) else {
     println!("password hash failed, hash failed");
-    return Json(SigninResult::Err{signin_failure: SigninFailure::SigninFailure});
+    return Json(SigninResult::Err{signin_failure: SigninFailure::General});
   };
 
   let Some(hash_check) = password_check.hash else {
     println!("password hash failed, no hash");
-    return Json(SigninResult::Err{signin_failure: SigninFailure::SigninFailure});
+    return Json(SigninResult::Err{signin_failure: SigninFailure::General});
   };
 
   if hash_check.to_string() != account.hashed_password {
     println!("passwords do not match");
     let out = SigninResult::Err {
-      signin_failure: SigninFailure::SigninFailure,
+      signin_failure: SigninFailure::General,
     };
     return Json(out);
   }

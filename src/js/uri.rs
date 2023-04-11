@@ -156,7 +156,7 @@ pub fn decode(string: &str, preserve_escape_set: &str) -> Result<String, UriDeco
     };
 
     if c != '%' {
-      if let Err(_) = r.write_char(c) {
+      if r.write_char(c).is_err() {
         return Err(UriDecodeError::CouldNotWriteCharacter(c, k));
       }
     } else {
@@ -203,7 +203,7 @@ pub fn decode(string: &str, preserve_escape_set: &str) -> Result<String, UriDeco
           };
 
           let char_byte = u8_from_hex(c1, c2)?;
-          octets = octets << 4;
+          octets <<= 4;
           octets |= u32::from_be_bytes([0, 0, 0, char_byte]);
         }
         let Some(new_char) = char::from_u32(octets) else {

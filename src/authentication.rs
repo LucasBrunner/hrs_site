@@ -39,8 +39,8 @@ pub async fn is_account_employee(account_id: u64, db: &mut Connection<Db>) -> bo
   query.is_ok()
 }
 
-pub async fn login_destination(account_id: u64, mut db: &mut Connection<Db>) -> &str {
-  if is_account_employee(account_id, &mut db).await {
+pub async fn login_destination(account_id: u64, db: &mut Connection<Db>) -> &str {
+  if is_account_employee(account_id, db).await {
     "/employee"
   } else {
     "/home.html"

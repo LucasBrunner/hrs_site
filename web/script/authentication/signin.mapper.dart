@@ -12,7 +12,7 @@ class SigninFailureMapper extends ClassMapperBase<SigninFailure> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = SigninFailureMapper._());
       _DecodeErrorMapper.ensureInitialized();
-      _SigninFailureMapper.ensureInitialized();
+      _GeneralMapper.ensureInitialized();
       _DatabaseErrorMapper.ensureInitialized();
     }
     return _instance!;
@@ -122,12 +122,12 @@ extension _DecodeErrorMapperExtension on _DecodeError {
   }
 }
 
-class _SigninFailureMapper extends SubClassMapperBase<_SigninFailure> {
-  _SigninFailureMapper._();
-  static _SigninFailureMapper? _instance;
-  static _SigninFailureMapper ensureInitialized() {
+class _GeneralMapper extends SubClassMapperBase<_General> {
+  _GeneralMapper._();
+  static _GeneralMapper? _instance;
+  static _GeneralMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = _SigninFailureMapper._());
+      MapperContainer.globals.use(_instance = _GeneralMapper._());
       SigninFailureMapper.ensureInitialized().addSubMapper(_instance!);
     }
     return _instance!;
@@ -139,10 +139,10 @@ class _SigninFailureMapper extends SubClassMapperBase<_SigninFailure> {
   }
 
   @override
-  final String id = '_SigninFailure';
+  final String id = '_General';
 
   @override
-  final Map<Symbol, Field<_SigninFailure, dynamic>> fields = const {};
+  final Map<Symbol, Field<_General, dynamic>> fields = const {};
 
   @override
   final String discriminatorKey = 'Type';
@@ -152,29 +152,29 @@ class _SigninFailureMapper extends SubClassMapperBase<_SigninFailure> {
   late final ClassMapperBase superMapper =
       SigninFailureMapper.ensureInitialized();
 
-  static _SigninFailure _instantiate(DecodingData data) {
-    return _SigninFailure();
+  static _General _instantiate(DecodingData data) {
+    return _General();
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static _SigninFailure fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<_SigninFailure>(map));
+  static _General fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<_General>(map));
   }
 
-  static _SigninFailure fromJson(String json) {
-    return _guard((c) => c.fromJson<_SigninFailure>(json));
+  static _General fromJson(String json) {
+    return _guard((c) => c.fromJson<_General>(json));
   }
 }
 
-extension _SigninFailureMapperExtension on _SigninFailure {
+extension _GeneralMapperExtension on _General {
   String toJson() {
-    return _SigninFailureMapper._guard((c) => c.toJson(this));
+    return _GeneralMapper._guard((c) => c.toJson(this));
   }
 
   Map<String, dynamic> toMap() {
-    return _SigninFailureMapper._guard((c) => c.toMap(this));
+    return _GeneralMapper._guard((c) => c.toMap(this));
   }
 }
 

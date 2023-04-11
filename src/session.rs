@@ -87,7 +87,7 @@ impl LoginSesion {
       .secure(false)
       .finish();
 
-    return Ok(cookie);
+    Ok(cookie)
   }
 
   pub async fn new_cookie(

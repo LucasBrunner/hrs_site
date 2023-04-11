@@ -13,7 +13,7 @@ class SigninFailure with _$SigninFailure {
   @MappableClass(discriminatorValue: 'DecodeError')
   const factory SigninFailure.decodeError() = _DecodeError;
   @MappableClass(discriminatorValue: 'SigninFailure')
-  const factory SigninFailure.signinFailure() = _SigninFailure;
+  const factory SigninFailure.general() = _General;
   @MappableClass(discriminatorValue: 'DatabaseError')
   const factory SigninFailure.databaseError() = _DatabaseError;
 }

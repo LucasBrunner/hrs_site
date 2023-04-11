@@ -19,21 +19,21 @@ mixin _$SigninFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() decodeError,
-    required TResult Function() signinFailure,
+    required TResult Function() general,
     required TResult Function() databaseError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? decodeError,
-    TResult? Function()? signinFailure,
+    TResult? Function()? general,
     TResult? Function()? databaseError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? decodeError,
-    TResult Function()? signinFailure,
+    TResult Function()? general,
     TResult Function()? databaseError,
     required TResult orElse(),
   }) =>
@@ -41,21 +41,21 @@ mixin _$SigninFailure {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_DecodeError value) decodeError,
-    required TResult Function(_SigninFailure value) signinFailure,
+    required TResult Function(_General value) general,
     required TResult Function(_DatabaseError value) databaseError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DecodeError value)? decodeError,
-    TResult? Function(_SigninFailure value)? signinFailure,
+    TResult? Function(_General value)? general,
     TResult? Function(_DatabaseError value)? databaseError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DecodeError value)? decodeError,
-    TResult Function(_SigninFailure value)? signinFailure,
+    TResult Function(_General value)? general,
     TResult Function(_DatabaseError value)? databaseError,
     required TResult orElse(),
   }) =>
@@ -120,7 +120,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() decodeError,
-    required TResult Function() signinFailure,
+    required TResult Function() general,
     required TResult Function() databaseError,
   }) {
     return decodeError();
@@ -130,7 +130,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? decodeError,
-    TResult? Function()? signinFailure,
+    TResult? Function()? general,
     TResult? Function()? databaseError,
   }) {
     return decodeError?.call();
@@ -140,7 +140,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? decodeError,
-    TResult Function()? signinFailure,
+    TResult Function()? general,
     TResult Function()? databaseError,
     required TResult orElse(),
   }) {
@@ -154,7 +154,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_DecodeError value) decodeError,
-    required TResult Function(_SigninFailure value) signinFailure,
+    required TResult Function(_General value) general,
     required TResult Function(_DatabaseError value) databaseError,
   }) {
     return decodeError(this);
@@ -164,7 +164,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DecodeError value)? decodeError,
-    TResult? Function(_SigninFailure value)? signinFailure,
+    TResult? Function(_General value)? general,
     TResult? Function(_DatabaseError value)? databaseError,
   }) {
     return decodeError?.call(this);
@@ -174,7 +174,7 @@ class _$_DecodeError implements _DecodeError {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DecodeError value)? decodeError,
-    TResult Function(_SigninFailure value)? signinFailure,
+    TResult Function(_General value)? general,
     TResult Function(_DatabaseError value)? databaseError,
     required TResult orElse(),
   }) {
@@ -190,36 +190,35 @@ abstract class _DecodeError implements SigninFailure {
 }
 
 /// @nodoc
-abstract class _$$_SigninFailureCopyWith<$Res> {
-  factory _$$_SigninFailureCopyWith(
-          _$_SigninFailure value, $Res Function(_$_SigninFailure) then) =
-      __$$_SigninFailureCopyWithImpl<$Res>;
+abstract class _$$_GeneralCopyWith<$Res> {
+  factory _$$_GeneralCopyWith(
+          _$_General value, $Res Function(_$_General) then) =
+      __$$_GeneralCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_SigninFailureCopyWithImpl<$Res>
-    extends _$SigninFailureCopyWithImpl<$Res, _$_SigninFailure>
-    implements _$$_SigninFailureCopyWith<$Res> {
-  __$$_SigninFailureCopyWithImpl(
-      _$_SigninFailure _value, $Res Function(_$_SigninFailure) _then)
+class __$$_GeneralCopyWithImpl<$Res>
+    extends _$SigninFailureCopyWithImpl<$Res, _$_General>
+    implements _$$_GeneralCopyWith<$Res> {
+  __$$_GeneralCopyWithImpl(_$_General _value, $Res Function(_$_General) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'SigninFailure')
-class _$_SigninFailure implements _SigninFailure {
-  const _$_SigninFailure();
+class _$_General implements _General {
+  const _$_General();
 
   @override
   String toString() {
-    return 'SigninFailure.signinFailure()';
+    return 'SigninFailure.general()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_SigninFailure);
+        (other.runtimeType == runtimeType && other is _$_General);
   }
 
   @override
@@ -229,32 +228,32 @@ class _$_SigninFailure implements _SigninFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() decodeError,
-    required TResult Function() signinFailure,
+    required TResult Function() general,
     required TResult Function() databaseError,
   }) {
-    return signinFailure();
+    return general();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? decodeError,
-    TResult? Function()? signinFailure,
+    TResult? Function()? general,
     TResult? Function()? databaseError,
   }) {
-    return signinFailure?.call();
+    return general?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? decodeError,
-    TResult Function()? signinFailure,
+    TResult Function()? general,
     TResult Function()? databaseError,
     required TResult orElse(),
   }) {
-    if (signinFailure != null) {
-      return signinFailure();
+    if (general != null) {
+      return general();
     }
     return orElse();
   }
@@ -263,39 +262,39 @@ class _$_SigninFailure implements _SigninFailure {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_DecodeError value) decodeError,
-    required TResult Function(_SigninFailure value) signinFailure,
+    required TResult Function(_General value) general,
     required TResult Function(_DatabaseError value) databaseError,
   }) {
-    return signinFailure(this);
+    return general(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DecodeError value)? decodeError,
-    TResult? Function(_SigninFailure value)? signinFailure,
+    TResult? Function(_General value)? general,
     TResult? Function(_DatabaseError value)? databaseError,
   }) {
-    return signinFailure?.call(this);
+    return general?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DecodeError value)? decodeError,
-    TResult Function(_SigninFailure value)? signinFailure,
+    TResult Function(_General value)? general,
     TResult Function(_DatabaseError value)? databaseError,
     required TResult orElse(),
   }) {
-    if (signinFailure != null) {
-      return signinFailure(this);
+    if (general != null) {
+      return general(this);
     }
     return orElse();
   }
 }
 
-abstract class _SigninFailure implements SigninFailure {
-  const factory _SigninFailure() = _$_SigninFailure;
+abstract class _General implements SigninFailure {
+  const factory _General() = _$_General;
 }
 
 /// @nodoc
@@ -338,7 +337,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() decodeError,
-    required TResult Function() signinFailure,
+    required TResult Function() general,
     required TResult Function() databaseError,
   }) {
     return databaseError();
@@ -348,7 +347,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? decodeError,
-    TResult? Function()? signinFailure,
+    TResult? Function()? general,
     TResult? Function()? databaseError,
   }) {
     return databaseError?.call();
@@ -358,7 +357,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? decodeError,
-    TResult Function()? signinFailure,
+    TResult Function()? general,
     TResult Function()? databaseError,
     required TResult orElse(),
   }) {
@@ -372,7 +371,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_DecodeError value) decodeError,
-    required TResult Function(_SigninFailure value) signinFailure,
+    required TResult Function(_General value) general,
     required TResult Function(_DatabaseError value) databaseError,
   }) {
     return databaseError(this);
@@ -382,7 +381,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_DecodeError value)? decodeError,
-    TResult? Function(_SigninFailure value)? signinFailure,
+    TResult? Function(_General value)? general,
     TResult? Function(_DatabaseError value)? databaseError,
   }) {
     return databaseError?.call(this);
@@ -392,7 +391,7 @@ class _$_DatabaseError implements _DatabaseError {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_DecodeError value)? decodeError,
-    TResult Function(_SigninFailure value)? signinFailure,
+    TResult Function(_General value)? general,
     TResult Function(_DatabaseError value)? databaseError,
     required TResult orElse(),
   }) {

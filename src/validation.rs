@@ -10,7 +10,7 @@ pub fn string_contains_any_invalid_char(check: &str, invalid: &str) -> Result<()
   let check_chars: HashSet<_> = check.chars().collect();
   let invalid_chars: HashSet<_> = invalid.chars().collect();
   let intersection: String = check_chars.intersection(&invalid_chars).collect();
-  if intersection.len() > 0 {
+  if !intersection.is_empty() {
     let mut val_err = ValidationError::new("contains_invalid_character");
     val_err.add_param(Cow::Borrowed("invalid_chars"), &intersection);
     Err(val_err)
@@ -23,7 +23,7 @@ pub fn string_contains_only_valid_chars(check: &str, valid: &str) -> Result<(), 
   let check_chars: HashSet<_> = check.chars().collect();
   let valid_chars: HashSet<_> = valid.chars().collect();
   let difference: String = check_chars.difference(&valid_chars).collect();
-  if difference.len() > 0 {
+  if !difference.is_empty() {
     let mut val_err = ValidationError::new("contains_invalid_character");
     val_err.add_param(Cow::Borrowed("invalid_chars"), &difference);
     Err(val_err)

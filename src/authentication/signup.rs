@@ -198,8 +198,7 @@ impl SignupFailure {
       .reduce(|mut acc, mut item| {
         acc.append(&mut item);
         acc
-      })
-      .unwrap_or_else(|| Vec::new())
+      }).unwrap_or_default()
   }
 
   pub fn json_err_vec(self) -> Json<SignupResult> {

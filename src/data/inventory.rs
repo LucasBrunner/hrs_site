@@ -54,7 +54,7 @@ pub async fn get_inventory_item_data(
   match query {
     Ok(items) => Json(InventoryItemResult::Ok { items }),
     Err(err) => {
-      println!("{}", err.to_string());
+      println!("{}", err);
       Json(InventoryItemResult::Err {
         err: DataError::DatabaseFailure,
       })
