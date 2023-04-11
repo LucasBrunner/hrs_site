@@ -1,6 +1,8 @@
 pub mod warehouses;
 pub mod inventory;
 pub mod warehouse;
+pub mod account;
+mod basic_data;
 
 use rocket::{routes, Route};
 use serde::{Serialize, Deserialize, Serializer};

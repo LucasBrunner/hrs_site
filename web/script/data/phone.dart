@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'phone.mapper.dart';
@@ -20,12 +22,12 @@ class PhoneType with PhoneTypeMappable {
 
 @MappableClass()
 class Phone with PhoneMappable {
-  int id;
+  int phoneId;
   String number;
   PhoneType phoneType;
 
   Phone(
-    this.id,
+    this.phoneId,
     this.number,
     this.phoneType,
   );
@@ -33,5 +35,20 @@ class Phone with PhoneMappable {
   @override
   String toString() {
     return '$phoneType: $number';
+  }
+
+  List<TableRowElement> toTableRows() {
+    return [
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'Phone Type:',
+          Element.td()..innerText = phoneType.name,
+        ]),
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'Phone Number:',
+          Element.td()..innerText = number,
+        ]),
+    ];
   }
 }

@@ -8,69 +8,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
   <title>Home Renovation Systems</title>
-  <link rel="stylesheet" href="./../public/styles.css">
-  <link rel="stylesheet" href="./../public/css/account.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/css/account.css">
+
+  <script defer src="/main.dart.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@800&display=swap" rel="stylesheet">
+  
+  <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
 </head>
+
+<datalist id="script-elements">
+  <option value="public_page"></option>
+  <option value="view_account"></option>
+</datalist>
 
 <body>
   <div id="main">
-    <h1>Lucas B's Profile</h1>
-    <table>
-      <tr>
-        <th>Legal Name:</th>
-        <td>Lucas Brunner</td>
-      </tr>
-      <tr>
-        <th>Preferred Name:</th>
-        <td>Lucas B</td>
-      </tr>
-      <tr>
-        <th>Address:</th>
-        <td>
-          <table>
-            <tr>
-              <th>Street:</th>
-              <td>12345 Eustis Ln</td>
-            </tr>
-            <tr>
-              <th>City:</th>
-              <td>Eustis</td>
-            </tr>
-            <tr>
-              <th>State:</th>
-              <td>Florida</td>
-            </tr>
-            <tr>
-              <th>Zip:</th>
-              <td>67890</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <th>Phone:</th>
-        <td>
-          <table>
-            <tr>
-              <th>Phone Type:</th>
-              <td>Mobile</td>
-            </tr>
-            <tr>
-              <th>Phone Number:</th>
-              <td>123-456-7890</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="display: flex; justify-content: right;">
-          <div class="button">Edit Profile</div>
-        </td>
-      </tr>
+    <h1 id="account-title">Lucas B's Profile</h1>
+    <table id="profile-table">
     </table>
   </div>
 </body>

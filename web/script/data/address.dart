@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'address.mapper.dart';
@@ -21,5 +23,30 @@ class Address with AddressMappable {
   @override
   String toString() {
     return '$street, $city, $state $zip';
+  }
+
+  List<TableRowElement> toTableRows() {
+    return [
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'Street:',
+          Element.td()..innerText = street,
+        ]),
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'City:',
+          Element.td()..innerText = city,
+        ]),
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'State:',
+          Element.td()..innerText = state,
+        ]),
+      TableRowElement()
+        ..children.addAll([
+          Element.th()..innerText = 'Zip:',
+          Element.td()..innerText = zip,
+        ]),
+    ];
   }
 }

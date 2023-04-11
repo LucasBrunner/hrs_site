@@ -13,8 +13,8 @@ extern crate rocket_db_pools;
 
 use std::path::{PathBuf, Path};
 
-use authentication::prelude::*;
-use data::inventory::get_product_page;
+use authentication::{prelude::*, AuthSession};
+use data::{inventory::get_product_page, account::get_account_info};
 use database::Db;
 use rocket::fs::NamedFile;
 use rocket_db_pools::Database;
@@ -34,13 +34,25 @@ async fn public_fs(path: PathBuf) -> Option<NamedFile> {
   NamedFile::open(path).await.ok()
 }
 
+#[rocket::get("/customer/<path..>")]
+pub async fn customer_fs(path: PathBuf, _auth: AuthSession) -> Option<NamedFile> {
+  let mut path = Path::new("./static/customer").join(path);
+  if path.is_dir() {
+    path.push("index.html");
+  }
+
+  NamedFile::open(path).await.ok()
+}
+
 #[launch]
 fn launch() -> _ {
   rocket::build()
     .attach(Db::init())
     .mount("/data/employee", authentication::empoyee::employee_data_routes())
+    .mount("/data/account", routes![get_account_info])
     .mount("/data/public", routes![get_product_page])
     .mount("/", routes![signin, signup])
     .mount("/", routes![authentication::employee_fs])
+    .mount("/", routes![customer_fs])
     .mount("/", routes![public_fs])
 }

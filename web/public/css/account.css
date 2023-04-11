@@ -20,13 +20,13 @@
   border: 1px solid #434d38;
 }
 
-.button {
+.edit-button {
   padding: 0.3em;
   background-color: #8d4221;
   width: fit-content;
   color: white;
 }
 
-#main table button {
+#main table .edit-button {
   margin-top: 0.3em;
 }

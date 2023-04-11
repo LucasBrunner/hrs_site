@@ -80,13 +80,23 @@ CREATE TABLE `Phone`(
   FOREIGN KEY (`phone_type_id`) REFERENCES `PhoneType` (`phone_type_id`)
 );
 
-CREATE TABLE `AccountAdderss`(
+CREATE TABLE `AccountAddress`(
   `address_id` BIGINT UNSIGNED NOT NULL,
   `account_id` BIGINT UNSIGNED NOT NULL,
 
   PRIMARY KEY (`address_id`, `account_id`),
     
   FOREIGN KEY (`address_id`) REFERENCES `Address` (`address_id`),
+  FOREIGN KEY (`account_id`) REFERENCES `Account` (`account_id`)
+);
+
+CREATE TABLE `AccountPhone`(
+  `phone_id` BIGINT UNSIGNED NOT NULL,
+  `account_id` BIGINT UNSIGNED NOT NULL,
+
+  PRIMARY KEY (`phone_id`, `account_id`),
+    
+  FOREIGN KEY (`phone_id`) REFERENCES `Phone` (`phone_id`),
   FOREIGN KEY (`account_id`) REFERENCES `Account` (`account_id`)
 );
 
