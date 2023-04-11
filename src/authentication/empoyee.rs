@@ -1,15 +1,32 @@
-use rocket::{request::{FromRequest, Outcome}, Request, http::Status, Route};
+use rocket::{
+  http::Status,
+  request::{FromRequest, Outcome},
+  Request, Route,
+};
 use rocket_db_pools::Connection;
 
-use crate::{database::Db, session::LoginSesion, data::{warehouses::warehouses, inventory::{warehouse_inventory, get_inventory_item_data, warehouse_inventory_manual_update}}};
+use crate::{
+  data::{
+    inventory::get_inventory_item_data,
+    warehouses::warehouses,
+    warehouse::{warehouse_inventory, warehouse_inventory_manual_update},
+  },
+  database::Db,
+  session::LoginSesion,
+};
 
 use super::is_account_employee;
 
 pub fn employee_data_routes() -> Vec<Route> {
-  routes![warehouses, warehouse_inventory, get_inventory_item_data, warehouse_inventory_manual_update]
+  routes![
+    warehouses,
+    warehouse_inventory,
+    get_inventory_item_data,
+    warehouse_inventory_manual_update
+  ]
 }
 
-pub struct AuthAccountEmployee ();
+pub struct AuthAccountEmployee();
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for AuthAccountEmployee {
