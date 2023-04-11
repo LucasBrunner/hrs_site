@@ -1,4 +1,4 @@
-pub mod warehouse;
+pub mod warehouses;
 pub mod inventory;
 
 use rocket::{routes, Route};

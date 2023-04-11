@@ -1,7 +1,7 @@
 use rocket::{request::{FromRequest, Outcome}, Request, http::Status, Route};
 use rocket_db_pools::Connection;
 
-use crate::{database::Db, session::LoginSesion, data::{warehouse::warehouses, inventory::{warehouse_inventory, get_inventory_item_data, warehouse_inventory_manual_update}}};
+use crate::{database::Db, session::LoginSesion, data::{warehouses::warehouses, inventory::{warehouse_inventory, get_inventory_item_data, warehouse_inventory_manual_update}}};
 
 use super::is_account_employee;
 
