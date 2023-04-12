@@ -1,24 +1,9 @@
 import 'dart:html';
 
-import 'package:http/http.dart' as http;
-
 import '../data/account.dart';
 
-Future<Account?> getAccount() async {
-  final response = await http.get(
-    Uri.http(window.location.host, '/data/account'),
-  );
-  try {
-    return AccountResultMapper.fromJson(response.body).when(ok: (ok) => ok, err: (err) => null);
-  } catch (e) {
-    print(e.toString());
-    querySelector('body')?.children.add(HeadingElement.h2()..text = 'Bad data recived');
-    return null;
-  }
-}
-
 void setup() async {
-  Account? account = await getAccount();
+  Account? account = await Account.getAccount();
   if (account == null) {
     return;
   }

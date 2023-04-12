@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:http/http.dart' as http;
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -40,7 +41,7 @@ class Account with AccountMappable {
   TableCellElement addressTables() {
     final cell = TableCellElement();
     for (Address address in addresses) {
-      cell.children.add(TableElement()..children.addAll(address.toTableRows()));
+      cell.children.add(TableElement()..children.addAll(address.toTableViewRows()));
     }
     return cell;
   }
@@ -67,7 +68,7 @@ class Account with AccountMappable {
     } else {
       row.children.add(Element.th()..innerText = 'Addresses:');
     }
-    row.children.addAll(addresses.map((address) => TableElement()..children.addAll(address.toTableRows())));
+    row.children.addAll(addresses.map((address) => TableElement()..children.addAll(address.toTableViewRows())));
     return row;
   }
 
@@ -104,6 +105,19 @@ class Account with AccountMappable {
     rows.add(addressRow());
     rows.add(phoneRow());
     return rows;
+  }
+
+  static Future<Account?> getAccount() async {
+    final response = await http.get(
+      Uri.http(window.location.host, '/data/account'),
+    );
+    try {
+      return AccountResultMapper.fromJson(response.body).when(ok: (ok) => ok, err: (err) => null);
+    } catch (e) {
+      print(e.toString());
+      querySelector('body')?.children.add(HeadingElement.h2()..text = 'Bad data recived');
+      return null;
+    }
   }
 }
 

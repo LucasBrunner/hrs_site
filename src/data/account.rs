@@ -9,7 +9,7 @@ use crate::{
 
 use super::{DataError, basic_data::{phone::Phone, address::Address}};
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountPublicData {
   pub account_id: u64,
@@ -18,7 +18,7 @@ pub struct AccountPublicData {
   pub legal_name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {
   pub data: AccountPublicData,
@@ -82,7 +82,8 @@ pub async fn get_account_info(
         SELECT
           `Phone`.`phone_id`,
           `Phone`.`number`,
-          `PhoneType`.`name` AS "phone_type_name"
+          `PhoneType`.`name`,
+          `PhoneType`.`phone_type_id`
         FROM 
           `Phone`
           INNER JOIN `PhoneType` USING(phone_type_id)
@@ -107,5 +108,6 @@ pub async fn get_account_info(
     return Json(AccountResult::Err { err: DataError::DatabaseFailure });
   };
 
-  Json(AccountResult::Ok { account: Account { data: account_data, phones: phone_data, addresses: address_data, }})
+  println!("{:?}", serde_json::to_string(&AccountResult::Ok { account: Account { data: account_data.clone(), phones: phone_data.clone(), addresses: address_data.clone(), }}));
+  Json(AccountResult::Ok { account: Account { data: account_data, phones: phone_data, addresses: address_data, }})  
 }

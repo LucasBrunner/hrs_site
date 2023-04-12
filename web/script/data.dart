@@ -47,10 +47,30 @@ class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
   const factory StringOptionInternallyTagged.some(String data) = _Some;
 }
 
+extension AddEditButton on List<TableRowElement> {
+  void addDeleteButton(String onDeleteMessage, void Function() onDelete) {
+    add(TableRowElement()
+      ..children.addAll([
+        TableCellElement(),
+        TableCellElement()
+          ..children.add(ButtonElement()
+            ..innerText = onDeleteMessage
+            ..onClick.listen((event) {
+              print(onDeleteMessage);
+              onDelete.call();
+            })),
+      ]));
+  }
+}
+
 abstract class ToOptionElement {
   OptionElement toOptionElement();
 }
 
 abstract class ToDisplayRow {
   DivElement toDisplayRow();
+}
+
+abstract class ToInputTable<T> {
+  TableElement toInputTable(T options);
 }

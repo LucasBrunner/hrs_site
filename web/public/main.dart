@@ -7,6 +7,7 @@ import '../script/employee/warehouse.dart' as warehouse;
 import '../script/header_footer.dart' as header_footer;
 import '../script/public/products.dart' as products;
 import '../script/account/view_account.dart' as view_account;
+import '../script/account/edit_account.dart' as edit_account;
 
 const scriptElements = {
   'signin': signin.setup,
@@ -16,6 +17,7 @@ const scriptElements = {
   'header_footer': header_footer.setup,
   'products': products.setup,
   'view_account': view_account.setup,
+  'edit_account': edit_account.setup,
 };
 
 void main(List<String> args) {

@@ -23,7 +23,7 @@ class AddressMapper extends ClassMapperBase<Address> {
   @override
   final String id = 'Address';
 
-  static int _$id(Address v) => v.id;
+  static int _$addressId(Address v) => v.addressId;
   static String _$street(Address v) => v.street;
   static String _$city(Address v) => v.city;
   static String _$state(Address v) => v.state;
@@ -31,7 +31,7 @@ class AddressMapper extends ClassMapperBase<Address> {
 
   @override
   final Map<Symbol, Field<Address, dynamic>> fields = const {
-    #id: Field<Address, int>('id', _$id),
+    #addressId: Field<Address, int>('addressId', _$addressId),
     #street: Field<Address, String>('street', _$street),
     #city: Field<Address, String>('city', _$city),
     #state: Field<Address, String>('state', _$state),
@@ -39,7 +39,7 @@ class AddressMapper extends ClassMapperBase<Address> {
   };
 
   static Address _instantiate(DecodingData data) {
-    return Address(data.get(#id), data.get(#street), data.get(#city),
+    return Address(data.get(#addressId), data.get(#street), data.get(#city),
         data.get(#state), data.get(#zip));
   }
 
@@ -94,7 +94,12 @@ typedef AddressCopyWithBound = Address;
 
 abstract class AddressCopyWith<$R, $In extends Address, $Out extends Address>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? id, String? street, String? city, String? state, String? zip});
+  $R call(
+      {int? addressId,
+      String? street,
+      String? city,
+      String? state,
+      String? zip});
   AddressCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2 extends Address>(
       Then<Address, $Out2> t, Then<$Out2, $R2> t2);
 }
@@ -109,13 +114,13 @@ class _AddressCopyWithImpl<$R, $Out extends Address>
       AddressMapper.ensureInitialized();
   @override
   $R call(
-          {int? id,
+          {int? addressId,
           String? street,
           String? city,
           String? state,
           String? zip}) =>
       $apply(FieldCopyWithData({
-        if (id != null) #id: id,
+        if (addressId != null) #addressId: addressId,
         if (street != null) #street: street,
         if (city != null) #city: city,
         if (state != null) #state: state,
@@ -123,7 +128,7 @@ class _AddressCopyWithImpl<$R, $Out extends Address>
       }));
   @override
   Address $make(CopyWithData data) => Address(
-      data.get(#id, or: $value.id),
+      data.get(#addressId, or: $value.addressId),
       data.get(#street, or: $value.street),
       data.get(#city, or: $value.city),
       data.get(#state, or: $value.state),

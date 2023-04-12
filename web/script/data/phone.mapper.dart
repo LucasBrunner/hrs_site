@@ -23,17 +23,17 @@ class PhoneTypeMapper extends ClassMapperBase<PhoneType> {
   @override
   final String id = 'PhoneType';
 
-  static int _$id(PhoneType v) => v.id;
+  static int _$phoneTypeId(PhoneType v) => v.phoneTypeId;
   static String _$name(PhoneType v) => v.name;
 
   @override
   final Map<Symbol, Field<PhoneType, dynamic>> fields = const {
-    #id: Field<PhoneType, int>('id', _$id),
+    #phoneTypeId: Field<PhoneType, int>('phoneTypeId', _$phoneTypeId),
     #name: Field<PhoneType, String>('name', _$name),
   };
 
   static PhoneType _instantiate(DecodingData data) {
-    return PhoneType(data.get(#id), data.get(#name));
+    return PhoneType(data.get(#phoneTypeId), data.get(#name));
   }
 
   @override
@@ -87,7 +87,7 @@ typedef PhoneTypeCopyWithBound = PhoneType;
 
 abstract class PhoneTypeCopyWith<$R, $In extends PhoneType,
     $Out extends PhoneType> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? id, String? name});
+  $R call({int? phoneTypeId, String? name});
   PhoneTypeCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2 extends PhoneType>(
       Then<PhoneType, $Out2> t, Then<$Out2, $R2> t2);
 }
@@ -101,11 +101,14 @@ class _PhoneTypeCopyWithImpl<$R, $Out extends PhoneType>
   late final ClassMapperBase<PhoneType> $mapper =
       PhoneTypeMapper.ensureInitialized();
   @override
-  $R call({int? id, String? name}) => $apply(FieldCopyWithData(
-      {if (id != null) #id: id, if (name != null) #name: name}));
+  $R call({int? phoneTypeId, String? name}) => $apply(FieldCopyWithData({
+        if (phoneTypeId != null) #phoneTypeId: phoneTypeId,
+        if (name != null) #name: name
+      }));
   @override
-  PhoneType $make(CopyWithData data) =>
-      PhoneType(data.get(#id, or: $value.id), data.get(#name, or: $value.name));
+  PhoneType $make(CopyWithData data) => PhoneType(
+      data.get(#phoneTypeId, or: $value.phoneTypeId),
+      data.get(#name, or: $value.name));
 
   @override
   PhoneTypeCopyWith<$R2, PhoneType, $Out2> $chain<$R2, $Out2 extends PhoneType>(

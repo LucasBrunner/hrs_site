@@ -1,6 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct PhoneType {
+  pub name: String,
+  pub phone_type_id: u64,
+}
+
+#[derive(Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Phone {
   pub phone_id: u64,
@@ -8,28 +15,11 @@ pub struct Phone {
   pub phone_type: PhoneType,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub enum PhoneType {
-  Landline,
-  Mobile,
-}
-
 pub struct DbPhoneData {
   pub phone_id: u64,
   pub number: String,
-  pub phone_type_name: String,
-}
-
-#[cfg(test)]
-mod test {
-  use crate::data::basic_data::phone::PhoneType;
-
-  #[test]
-  fn phone_type_serialize() {
-    println!("{:?}", serde_json::to_string(&PhoneType::Mobile));
-    println!("{:?}", serde_json::from_str::<PhoneType>("\"mobile\""));
-  }
+  pub name: String,
+  pub phone_type_id: u64,
 }
 
 pub trait ToPhone {
@@ -38,14 +28,11 @@ pub trait ToPhone {
 
 impl ToPhone for DbPhoneData {
   fn to_phone(self) -> Result<Phone, ()> {
-    let Ok(phone_type) = serde_json::from_str(&format!("\"{}\"", self.phone_type_name)) else {
-      return Err(());
-    };
 
     Ok(Phone {
       phone_id: self.phone_id,
       number: self.number,
-      phone_type,
+      phone_type: PhoneType { name: self.name, phone_type_id: self.phone_type_id, },
     })
   }
 }
