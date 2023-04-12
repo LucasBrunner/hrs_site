@@ -82,13 +82,16 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
         ..children.addAll([
           Element.th()..innerText = 'Phone Number',
           Element.td()
-            ..children.add(InputElement()..value = number)
-            ..className = 'phone-number'
+            ..children.add(InputElement()
+              ..value = number
+              ..className = 'phone-number'),
+          Element.td()..className = 'phone-number-message',
         ]),
       TableRowElement()
         ..children.addAll([
           Element.th()..innerText = 'Phone Type',
           Element.td()..children.add(phoneTypeInput(selected: phoneType.name)..className = 'phone-type'),
+          Element.td()..className = 'phone-type-message',
         ]),
     ]);
   }

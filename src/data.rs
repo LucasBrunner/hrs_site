@@ -39,6 +39,21 @@ pub fn string_option_internally_tagged<S>(x: &Option<String>, s: S) -> Result<S:
   }.serialize(s)
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[serde(tag = "Type")]
+pub enum IntOptionInternallyTagged {
+  Some{data: u64},
+  #[default]
+  None,
+}
+
+pub fn int_option_internally_tagged<S>(x: &Option<u64>, s: S) -> Result<S::Ok, S::Error> where S: Serializer {
+  match x {
+    Some(data) => IntOptionInternallyTagged::Some { data: data.clone() },
+    None => IntOptionInternallyTagged::None,
+  }.serialize(s)
+}
+
 // #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 // #[serde(tag = "Type")]
 // pub enum InternallyTaggedOption<T> {

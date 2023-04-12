@@ -84,6 +84,7 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
               ..className = 'address-street'
               ..type = 'text'
               ..value = street),
+          Element.td()..className = 'address-street-message',
         ]),
       TableRowElement()
         ..children.addAll([
@@ -93,11 +94,13 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
               ..className = 'address-city'
               ..type = 'text'
               ..value = city),
+          Element.td()..className = 'address-city-message',
         ]),
       TableRowElement()
         ..children.addAll([
           Element.th()..innerText = 'State:',
           Element.td()..children.add(stateInput(selected: state)..className = 'address-state'),
+          Element.td()..className = 'address-state-message',
         ]),
       TableRowElement()
         ..children.addAll([
@@ -107,6 +110,7 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
               ..className = 'address-zip'
               ..type = 'text'
               ..value = zip),
+          Element.td()..className = 'address-zip-message',
         ]),
     ];
   }

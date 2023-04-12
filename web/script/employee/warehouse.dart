@@ -2,11 +2,11 @@ import 'dart:html';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
+
 import '../data.dart';
 import '../data/inventory.dart';
 import '../data/warehouse.dart';
 import '../html_utility.dart';
-import 'warehouses.dart';
 
 part 'warehouse.mapper.dart';
 part 'warehouse.freezed.dart';

@@ -119,6 +119,13 @@ class Account with AccountMappable {
       return null;
     }
   }
+
+  void put() {
+    http.put(
+      Uri.http(window.location.host, '/account'),
+      body: toJson(),
+    );
+  }
 }
 
 @freezed

@@ -867,20 +867,20 @@ mixin _$StringOptionInternallyTagged {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_None value) none,
-    required TResult Function(_Some value) some,
+    required TResult Function(_StringNone value) none,
+    required TResult Function(_StringSome value) some,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_None value)? none,
-    TResult? Function(_Some value)? some,
+    TResult? Function(_StringNone value)? none,
+    TResult? Function(_StringSome value)? some,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_None value)? none,
-    TResult Function(_Some value)? some,
+    TResult Function(_StringNone value)? none,
+    TResult Function(_StringSome value)? some,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -908,24 +908,26 @@ class _$StringOptionInternallyTaggedCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_NoneCopyWith<$Res> {
-  factory _$$_NoneCopyWith(_$_None value, $Res Function(_$_None) then) =
-      __$$_NoneCopyWithImpl<$Res>;
+abstract class _$$_StringNoneCopyWith<$Res> {
+  factory _$$_StringNoneCopyWith(
+          _$_StringNone value, $Res Function(_$_StringNone) then) =
+      __$$_StringNoneCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_NoneCopyWithImpl<$Res>
-    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_None>
-    implements _$$_NoneCopyWith<$Res> {
-  __$$_NoneCopyWithImpl(_$_None _value, $Res Function(_$_None) _then)
+class __$$_StringNoneCopyWithImpl<$Res>
+    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_StringNone>
+    implements _$$_StringNoneCopyWith<$Res> {
+  __$$_StringNoneCopyWithImpl(
+      _$_StringNone _value, $Res Function(_$_StringNone) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'None')
-class _$_None implements _None {
-  const _$_None();
+class _$_StringNone implements _StringNone {
+  const _$_StringNone();
 
   @override
   String toString() {
@@ -935,7 +937,7 @@ class _$_None implements _None {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_None);
+        (other.runtimeType == runtimeType && other is _$_StringNone);
   }
 
   @override
@@ -975,8 +977,8 @@ class _$_None implements _None {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_None value) none,
-    required TResult Function(_Some value) some,
+    required TResult Function(_StringNone value) none,
+    required TResult Function(_StringSome value) some,
   }) {
     return none(this);
   }
@@ -984,8 +986,8 @@ class _$_None implements _None {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_None value)? none,
-    TResult? Function(_Some value)? some,
+    TResult? Function(_StringNone value)? none,
+    TResult? Function(_StringSome value)? some,
   }) {
     return none?.call(this);
   }
@@ -993,8 +995,8 @@ class _$_None implements _None {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_None value)? none,
-    TResult Function(_Some value)? some,
+    TResult Function(_StringNone value)? none,
+    TResult Function(_StringSome value)? some,
     required TResult orElse(),
   }) {
     if (none != null) {
@@ -1004,23 +1006,25 @@ class _$_None implements _None {
   }
 }
 
-abstract class _None implements StringOptionInternallyTagged {
-  const factory _None() = _$_None;
+abstract class _StringNone implements StringOptionInternallyTagged {
+  const factory _StringNone() = _$_StringNone;
 }
 
 /// @nodoc
-abstract class _$$_SomeCopyWith<$Res> {
-  factory _$$_SomeCopyWith(_$_Some value, $Res Function(_$_Some) then) =
-      __$$_SomeCopyWithImpl<$Res>;
+abstract class _$$_StringSomeCopyWith<$Res> {
+  factory _$$_StringSomeCopyWith(
+          _$_StringSome value, $Res Function(_$_StringSome) then) =
+      __$$_StringSomeCopyWithImpl<$Res>;
   @useResult
   $Res call({String data});
 }
 
 /// @nodoc
-class __$$_SomeCopyWithImpl<$Res>
-    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_Some>
-    implements _$$_SomeCopyWith<$Res> {
-  __$$_SomeCopyWithImpl(_$_Some _value, $Res Function(_$_Some) _then)
+class __$$_StringSomeCopyWithImpl<$Res>
+    extends _$StringOptionInternallyTaggedCopyWithImpl<$Res, _$_StringSome>
+    implements _$$_StringSomeCopyWith<$Res> {
+  __$$_StringSomeCopyWithImpl(
+      _$_StringSome _value, $Res Function(_$_StringSome) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1028,7 +1032,7 @@ class __$$_SomeCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$_Some(
+    return _then(_$_StringSome(
       null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -1040,8 +1044,8 @@ class __$$_SomeCopyWithImpl<$Res>
 /// @nodoc
 
 @MappableClass(discriminatorValue: 'Some')
-class _$_Some implements _Some {
-  const _$_Some(this.data);
+class _$_StringSome implements _StringSome {
+  const _$_StringSome(this.data);
 
   @override
   final String data;
@@ -1055,7 +1059,7 @@ class _$_Some implements _Some {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Some &&
+            other is _$_StringSome &&
             (identical(other.data, data) || other.data == data));
   }
 
@@ -1065,8 +1069,8 @@ class _$_Some implements _Some {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SomeCopyWith<_$_Some> get copyWith =>
-      __$$_SomeCopyWithImpl<_$_Some>(this, _$identity);
+  _$$_StringSomeCopyWith<_$_StringSome> get copyWith =>
+      __$$_StringSomeCopyWithImpl<_$_StringSome>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1102,8 +1106,8 @@ class _$_Some implements _Some {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_None value) none,
-    required TResult Function(_Some value) some,
+    required TResult Function(_StringNone value) none,
+    required TResult Function(_StringSome value) some,
   }) {
     return some(this);
   }
@@ -1111,8 +1115,8 @@ class _$_Some implements _Some {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_None value)? none,
-    TResult? Function(_Some value)? some,
+    TResult? Function(_StringNone value)? none,
+    TResult? Function(_StringSome value)? some,
   }) {
     return some?.call(this);
   }
@@ -1120,8 +1124,8 @@ class _$_Some implements _Some {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_None value)? none,
-    TResult Function(_Some value)? some,
+    TResult Function(_StringNone value)? none,
+    TResult Function(_StringSome value)? some,
     required TResult orElse(),
   }) {
     if (some != null) {
@@ -1131,10 +1135,307 @@ class _$_Some implements _Some {
   }
 }
 
-abstract class _Some implements StringOptionInternallyTagged {
-  const factory _Some(final String data) = _$_Some;
+abstract class _StringSome implements StringOptionInternallyTagged {
+  const factory _StringSome(final String data) = _$_StringSome;
 
   String get data;
   @JsonKey(ignore: true)
-  _$$_SomeCopyWith<_$_Some> get copyWith => throw _privateConstructorUsedError;
+  _$$_StringSomeCopyWith<_$_StringSome> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$IntOptionInternallyTagged {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(int data) some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(int data)? some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(int data)? some,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_IntNone value) none,
+    required TResult Function(_IntSome value) some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_IntNone value)? none,
+    TResult? Function(_IntSome value)? some,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_IntNone value)? none,
+    TResult Function(_IntSome value)? some,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $IntOptionInternallyTaggedCopyWith<$Res> {
+  factory $IntOptionInternallyTaggedCopyWith(IntOptionInternallyTagged value,
+          $Res Function(IntOptionInternallyTagged) then) =
+      _$IntOptionInternallyTaggedCopyWithImpl<$Res, IntOptionInternallyTagged>;
+}
+
+/// @nodoc
+class _$IntOptionInternallyTaggedCopyWithImpl<$Res,
+        $Val extends IntOptionInternallyTagged>
+    implements $IntOptionInternallyTaggedCopyWith<$Res> {
+  _$IntOptionInternallyTaggedCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$_IntNoneCopyWith<$Res> {
+  factory _$$_IntNoneCopyWith(
+          _$_IntNone value, $Res Function(_$_IntNone) then) =
+      __$$_IntNoneCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_IntNoneCopyWithImpl<$Res>
+    extends _$IntOptionInternallyTaggedCopyWithImpl<$Res, _$_IntNone>
+    implements _$$_IntNoneCopyWith<$Res> {
+  __$$_IntNoneCopyWithImpl(_$_IntNone _value, $Res Function(_$_IntNone) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+@MappableClass(discriminatorValue: 'None')
+class _$_IntNone implements _IntNone {
+  const _$_IntNone();
+
+  @override
+  String toString() {
+    return 'IntOptionInternallyTagged.none()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_IntNone);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(int data) some,
+  }) {
+    return none();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(int data)? some,
+  }) {
+    return none?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(int data)? some,
+    required TResult orElse(),
+  }) {
+    if (none != null) {
+      return none();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_IntNone value) none,
+    required TResult Function(_IntSome value) some,
+  }) {
+    return none(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_IntNone value)? none,
+    TResult? Function(_IntSome value)? some,
+  }) {
+    return none?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_IntNone value)? none,
+    TResult Function(_IntSome value)? some,
+    required TResult orElse(),
+  }) {
+    if (none != null) {
+      return none(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _IntNone implements IntOptionInternallyTagged {
+  const factory _IntNone() = _$_IntNone;
+}
+
+/// @nodoc
+abstract class _$$_IntSomeCopyWith<$Res> {
+  factory _$$_IntSomeCopyWith(
+          _$_IntSome value, $Res Function(_$_IntSome) then) =
+      __$$_IntSomeCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int data});
+}
+
+/// @nodoc
+class __$$_IntSomeCopyWithImpl<$Res>
+    extends _$IntOptionInternallyTaggedCopyWithImpl<$Res, _$_IntSome>
+    implements _$$_IntSomeCopyWith<$Res> {
+  __$$_IntSomeCopyWithImpl(_$_IntSome _value, $Res Function(_$_IntSome) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$_IntSome(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+@MappableClass(discriminatorValue: 'Some')
+class _$_IntSome implements _IntSome {
+  const _$_IntSome(this.data);
+
+  @override
+  final int data;
+
+  @override
+  String toString() {
+    return 'IntOptionInternallyTagged.some(data: $data)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_IntSome &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_IntSomeCopyWith<_$_IntSome> get copyWith =>
+      __$$_IntSomeCopyWithImpl<_$_IntSome>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() none,
+    required TResult Function(int data) some,
+  }) {
+    return some(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? none,
+    TResult? Function(int data)? some,
+  }) {
+    return some?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? none,
+    TResult Function(int data)? some,
+    required TResult orElse(),
+  }) {
+    if (some != null) {
+      return some(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_IntNone value) none,
+    required TResult Function(_IntSome value) some,
+  }) {
+    return some(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_IntNone value)? none,
+    TResult? Function(_IntSome value)? some,
+  }) {
+    return some?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_IntNone value)? none,
+    TResult Function(_IntSome value)? some,
+    required TResult orElse(),
+  }) {
+    if (some != null) {
+      return some(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _IntSome implements IntOptionInternallyTagged {
+  const factory _IntSome(final int data) = _$_IntSome;
+
+  int get data;
+  @JsonKey(ignore: true)
+  _$$_IntSomeCopyWith<_$_IntSome> get copyWith =>
+      throw _privateConstructorUsedError;
 }

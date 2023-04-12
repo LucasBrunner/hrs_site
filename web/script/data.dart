@@ -42,9 +42,18 @@ class DataError with _$DataError {
 @MappableClass(discriminatorKey: 'Type')
 class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
   @MappableClass(discriminatorValue: 'None')
-  const factory StringOptionInternallyTagged.none() = _None;
+  const factory StringOptionInternallyTagged.none() = _StringNone;
   @MappableClass(discriminatorValue: 'Some')
-  const factory StringOptionInternallyTagged.some(String data) = _Some;
+  const factory StringOptionInternallyTagged.some(String data) = _StringSome;
+}
+
+@freezed
+@MappableClass(discriminatorKey: 'Type')
+class IntOptionInternallyTagged with _$StringOptionInternallyTagged {
+  @MappableClass(discriminatorValue: 'None')
+  const factory IntOptionInternallyTagged.none() = _IntNone;
+  @MappableClass(discriminatorValue: 'Some')
+  const factory IntOptionInternallyTagged.some(int data) = _IntSome;
 }
 
 extension AddEditButton on List<TableRowElement> {
