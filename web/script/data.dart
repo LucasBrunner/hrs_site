@@ -104,13 +104,17 @@ class DataWithId<T> with DataMaybeIdMappable {
 }
 
 extension AddEditButton on List<TableRowElement> {
-  void addDeleteButton(String onDeleteMessage, void Function() onDelete) {
+  void addDeleteButton(
+    String buttonText,
+    String onDeleteMessage,
+    void Function() onDelete,
+  ) {
     add(TableRowElement()
       ..children.addAll([
         TableCellElement(),
         TableCellElement()
           ..children.add(ButtonElement()
-            ..innerText = onDeleteMessage
+            ..innerText = buttonText
             ..onClick.listen((event) {
               print(onDeleteMessage);
               onDelete.call();

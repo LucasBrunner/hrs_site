@@ -2,37 +2,16 @@ import 'dart:html';
 
 import 'package:dart_mappable/dart_mappable.dart';
 
-import '../data.dart';
-
 part 'address.mapper.dart';
 
-class AddressOptions {
-  String onDeleteMessage;
-  void Function() onDelete;
-
-  AddressOptions(
-    this.onDeleteMessage,
-    this.onDelete,
-  );
-
-  static AddressOptions fromAddress(Address address) {
-    return AddressOptions(
-      'Remove address from account',
-      () => querySelector('.address-input[data-address-id="${address.addressId}"]')?.remove(),
-    );
-  }
-}
-
 @MappableClass()
-class Address extends ToInputTable<AddressOptions> with AddressMappable {
-  int addressId;
+class Address with AddressMappable {
   String street;
   String city;
   String state;
   String zip;
 
   Address(
-    this.addressId,
     this.street,
     this.city,
     this.state,
@@ -41,7 +20,7 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
 
   static Address defaultAddress() {
     uniqueNegativeId -= 1;
-    return Address(uniqueNegativeId, '', '', 'Arizona', '');
+    return Address('', '', 'Arizona', '');
   }
 
   @override
@@ -74,7 +53,7 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
     ];
   }
 
-  List<TableRowElement> _toTableEditRows() {
+  List<TableRowElement> toTableEditRows() {
     return [
       TableRowElement()
         ..children.addAll([
@@ -113,18 +92,6 @@ class Address extends ToInputTable<AddressOptions> with AddressMappable {
           Element.td()..className = 'address-zip-message',
         ]),
     ];
-  }
-
-  @override
-  TableElement toInputTable(AddressOptions options) {
-    return TableElement()
-      ..setAttribute('data-address-id', addressId)
-      ..className = 'address-input'
-      ..children.addAll(_toTableEditRows()
-        ..addDeleteButton(
-          options.onDeleteMessage,
-          options.onDelete,
-        ));
   }
 }
 

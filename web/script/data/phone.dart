@@ -20,28 +20,8 @@ enum PhoneType {
   });
 }
 
-class PhoneOptions {
-  String onDeleteMessage;
-  String id;
-  void Function() onDelete;
-
-  PhoneOptions(
-    this.onDeleteMessage,
-    this.id,
-    this.onDelete,
-  );
-
-  static PhoneOptions fromPhone(Phone phone, String id) {
-    return PhoneOptions(
-      'Remove phone from account',
-      id,
-      () => querySelector('.phone-input[data-phone-id="$id"]')?.remove(),
-    );
-  }
-}
-
 @MappableClass()
-class Phone with PhoneMappable implements ToInputTable<PhoneOptions> {
+class Phone with PhoneMappable {
   String number;
   PhoneType phoneType;
 
@@ -92,18 +72,6 @@ class Phone with PhoneMappable implements ToInputTable<PhoneOptions> {
           Element.td()..className = 'phone-type-message',
         ]),
     ]);
-  }
-
-  @override
-  TableElement toInputTable(PhoneOptions options) {
-    return TableElement()
-      ..setAttribute('data-phone-id', options.id)
-      ..className = 'phone-input'
-      ..children.addAll(toTableEditRows()
-        ..addDeleteButton(
-          options.onDeleteMessage,
-          options.onDelete,
-        ));
   }
 }
 
