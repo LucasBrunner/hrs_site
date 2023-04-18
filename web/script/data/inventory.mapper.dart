@@ -25,40 +25,51 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
   final String id = 'InventoryItem';
 
   static int _$inventoryItemId(InventoryItem v) => v.inventoryItemId;
+  static const Field<InventoryItem, int> _f$inventoryItemId =
+      Field('inventoryItemId', _$inventoryItemId);
   static double _$cost(InventoryItem v) => v.cost;
+  static const Field<InventoryItem, double> _f$cost = Field('cost', _$cost);
   static double _$listPrice(InventoryItem v) => v.listPrice;
+  static const Field<InventoryItem, double> _f$listPrice =
+      Field('listPrice', _$listPrice);
   static int _$brandId(InventoryItem v) => v.brandId;
+  static const Field<InventoryItem, int> _f$brandId =
+      Field('brandId', _$brandId);
   static String _$brandName(InventoryItem v) => v.brandName;
+  static const Field<InventoryItem, String> _f$brandName =
+      Field('brandName', _$brandName);
   static String _$model(InventoryItem v) => v.model;
+  static const Field<InventoryItem, String> _f$model = Field('model', _$model);
   static StringOptionInternallyTagged _$serial(InventoryItem v) => v.serial;
+  static const Field<InventoryItem, StringOptionInternallyTagged> _f$serial =
+      Field('serial', _$serial);
   static StringOptionInternallyTagged _$description(InventoryItem v) =>
       v.description;
+  static const Field<InventoryItem, StringOptionInternallyTagged>
+      _f$description = Field('description', _$description);
 
   @override
   final Map<Symbol, Field<InventoryItem, dynamic>> fields = const {
-    #inventoryItemId:
-        Field<InventoryItem, int>('inventoryItemId', _$inventoryItemId),
-    #cost: Field<InventoryItem, double>('cost', _$cost),
-    #listPrice: Field<InventoryItem, double>('listPrice', _$listPrice),
-    #brandId: Field<InventoryItem, int>('brandId', _$brandId),
-    #brandName: Field<InventoryItem, String>('brandName', _$brandName),
-    #model: Field<InventoryItem, String>('model', _$model),
-    #serial:
-        Field<InventoryItem, StringOptionInternallyTagged>('serial', _$serial),
-    #description: Field<InventoryItem, StringOptionInternallyTagged>(
-        'description', _$description),
+    #inventoryItemId: _f$inventoryItemId,
+    #cost: _f$cost,
+    #listPrice: _f$listPrice,
+    #brandId: _f$brandId,
+    #brandName: _f$brandName,
+    #model: _f$model,
+    #serial: _f$serial,
+    #description: _f$description,
   };
 
   static InventoryItem _instantiate(DecodingData data) {
     return InventoryItem(
-        data.get(#inventoryItemId),
-        data.get(#cost),
-        data.get(#listPrice),
-        data.get(#brandId),
-        data.get(#brandName),
-        data.get(#model),
-        data.get(#serial),
-        data.get(#description));
+        data.dec(_f$inventoryItemId),
+        data.dec(_f$cost),
+        data.dec(_f$listPrice),
+        data.dec(_f$brandId),
+        data.dec(_f$brandName),
+        data.dec(_f$model),
+        data.dec(_f$serial),
+        data.dec(_f$description));
   }
 
   @override
@@ -254,10 +265,12 @@ class _InventoryItemOkMapper extends SubClassMapperBase<_InventoryItemOk> {
   final String id = '_InventoryItemOk';
 
   static List<InventoryItem> _$items(_InventoryItemOk v) => v.items;
+  static const Field<_InventoryItemOk, List<InventoryItem>> _f$items =
+      Field('items', _$items);
 
   @override
   final Map<Symbol, Field<_InventoryItemOk, dynamic>> fields = const {
-    #items: Field<_InventoryItemOk, List<InventoryItem>>('items', _$items),
+    #items: _f$items,
   };
 
   @override
@@ -269,7 +282,7 @@ class _InventoryItemOkMapper extends SubClassMapperBase<_InventoryItemOk> {
       InventoryItemResultMapper.ensureInitialized();
 
   static _InventoryItemOk _instantiate(DecodingData data) {
-    return _InventoryItemOk(data.get(#items));
+    return _InventoryItemOk(data.dec(_f$items));
   }
 
   @override
@@ -315,10 +328,11 @@ class _InventoryItemErrMapper extends SubClassMapperBase<_InventoryItemErr> {
   final String id = '_InventoryItemErr';
 
   static DataError _$err(_InventoryItemErr v) => v.err;
+  static const Field<_InventoryItemErr, DataError> _f$err = Field('err', _$err);
 
   @override
   final Map<Symbol, Field<_InventoryItemErr, dynamic>> fields = const {
-    #err: Field<_InventoryItemErr, DataError>('err', _$err),
+    #err: _f$err,
   };
 
   @override
@@ -330,7 +344,7 @@ class _InventoryItemErrMapper extends SubClassMapperBase<_InventoryItemErr> {
       InventoryItemResultMapper.ensureInitialized();
 
   static _InventoryItemErr _instantiate(DecodingData data) {
-    return _InventoryItemErr(data.get(#err));
+    return _InventoryItemErr(data.dec(_f$err));
   }
 
   @override
@@ -376,48 +390,64 @@ class WarehouseInventoryItemMapper
   final String id = 'WarehouseInventoryItem';
 
   static int _$warehouseId(WarehouseInventoryItem v) => v.warehouseId;
+  static const Field<WarehouseInventoryItem, int> _f$warehouseId =
+      Field('warehouseId', _$warehouseId);
   static int _$inventoryItemId(WarehouseInventoryItem v) => v.inventoryItemId;
+  static const Field<WarehouseInventoryItem, int> _f$inventoryItemId =
+      Field('inventoryItemId', _$inventoryItemId);
   static double _$cost(WarehouseInventoryItem v) => v.cost;
+  static const Field<WarehouseInventoryItem, double> _f$cost =
+      Field('cost', _$cost);
   static double _$listPrice(WarehouseInventoryItem v) => v.listPrice;
+  static const Field<WarehouseInventoryItem, double> _f$listPrice =
+      Field('listPrice', _$listPrice);
   static int _$brandId(WarehouseInventoryItem v) => v.brandId;
+  static const Field<WarehouseInventoryItem, int> _f$brandId =
+      Field('brandId', _$brandId);
   static String _$brandName(WarehouseInventoryItem v) => v.brandName;
+  static const Field<WarehouseInventoryItem, String> _f$brandName =
+      Field('brandName', _$brandName);
   static String _$model(WarehouseInventoryItem v) => v.model;
+  static const Field<WarehouseInventoryItem, String> _f$model =
+      Field('model', _$model);
   static StringOptionInternallyTagged _$serial(WarehouseInventoryItem v) =>
       v.serial;
+  static const Field<WarehouseInventoryItem, StringOptionInternallyTagged>
+      _f$serial = Field('serial', _$serial);
   static StringOptionInternallyTagged _$description(WarehouseInventoryItem v) =>
       v.description;
+  static const Field<WarehouseInventoryItem, StringOptionInternallyTagged>
+      _f$description = Field('description', _$description);
   static int _$amount(WarehouseInventoryItem v) => v.amount;
+  static const Field<WarehouseInventoryItem, int> _f$amount =
+      Field('amount', _$amount);
 
   @override
   final Map<Symbol, Field<WarehouseInventoryItem, dynamic>> fields = const {
-    #warehouseId:
-        Field<WarehouseInventoryItem, int>('warehouseId', _$warehouseId),
-    #inventoryItemId: Field<WarehouseInventoryItem, int>(
-        'inventoryItemId', _$inventoryItemId),
-    #cost: Field<WarehouseInventoryItem, double>('cost', _$cost),
-    #listPrice: Field<WarehouseInventoryItem, double>('listPrice', _$listPrice),
-    #brandId: Field<WarehouseInventoryItem, int>('brandId', _$brandId),
-    #brandName: Field<WarehouseInventoryItem, String>('brandName', _$brandName),
-    #model: Field<WarehouseInventoryItem, String>('model', _$model),
-    #serial: Field<WarehouseInventoryItem, StringOptionInternallyTagged>(
-        'serial', _$serial),
-    #description: Field<WarehouseInventoryItem, StringOptionInternallyTagged>(
-        'description', _$description),
-    #amount: Field<WarehouseInventoryItem, int>('amount', _$amount),
+    #warehouseId: _f$warehouseId,
+    #inventoryItemId: _f$inventoryItemId,
+    #cost: _f$cost,
+    #listPrice: _f$listPrice,
+    #brandId: _f$brandId,
+    #brandName: _f$brandName,
+    #model: _f$model,
+    #serial: _f$serial,
+    #description: _f$description,
+    #amount: _f$amount,
   };
 
   static WarehouseInventoryItem _instantiate(DecodingData data) {
     return WarehouseInventoryItem(
-        data.get(#warehouseId),
-        data.get(#inventoryItemId),
-        data.get(#cost),
-        data.get(#listPrice),
-        data.get(#brandId),
-        data.get(#brandName),
-        data.get(#model),
-        data.get(#serial),
-        data.get(#description),
-        data.get(#amount));
+        data.dec(_f$warehouseId),
+        data.dec(_f$inventoryItemId),
+        data.dec(_f$cost),
+        data.dec(_f$listPrice),
+        data.dec(_f$brandId),
+        data.dec(_f$brandName),
+        data.dec(_f$model),
+        data.dec(_f$serial),
+        data.dec(_f$description),
+        data.dec(_f$amount));
   }
 
   @override
@@ -635,10 +665,12 @@ class _InventoryOkMapper extends SubClassMapperBase<_InventoryOk> {
   final String id = '_InventoryOk';
 
   static List<WarehouseInventoryItem> _$items(_InventoryOk v) => v.items;
+  static const Field<_InventoryOk, List<WarehouseInventoryItem>> _f$items =
+      Field('items', _$items);
 
   @override
   final Map<Symbol, Field<_InventoryOk, dynamic>> fields = const {
-    #items: Field<_InventoryOk, List<WarehouseInventoryItem>>('items', _$items),
+    #items: _f$items,
   };
 
   @override
@@ -650,7 +682,7 @@ class _InventoryOkMapper extends SubClassMapperBase<_InventoryOk> {
       WarehouseInventoryResultMapper.ensureInitialized();
 
   static _InventoryOk _instantiate(DecodingData data) {
-    return _InventoryOk(data.get(#items));
+    return _InventoryOk(data.dec(_f$items));
   }
 
   @override
@@ -697,10 +729,11 @@ class _InventoryErrMapper extends SubClassMapperBase<_InventoryErr> {
   final String id = '_InventoryErr';
 
   static DataError _$err(_InventoryErr v) => v.err;
+  static const Field<_InventoryErr, DataError> _f$err = Field('err', _$err);
 
   @override
   final Map<Symbol, Field<_InventoryErr, dynamic>> fields = const {
-    #err: Field<_InventoryErr, DataError>('err', _$err),
+    #err: _f$err,
   };
 
   @override
@@ -712,7 +745,7 @@ class _InventoryErrMapper extends SubClassMapperBase<_InventoryErr> {
       WarehouseInventoryResultMapper.ensureInitialized();
 
   static _InventoryErr _instantiate(DecodingData data) {
-    return _InventoryErr(data.get(#err));
+    return _InventoryErr(data.dec(_f$err));
   }
 
   @override

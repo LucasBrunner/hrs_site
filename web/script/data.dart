@@ -47,13 +47,60 @@ class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
   const factory StringOptionInternallyTagged.some(String data) = _StringSome;
 }
 
-@freezed
-@MappableClass(discriminatorKey: 'Type')
-class IntOptionInternallyTagged with _$StringOptionInternallyTagged {
-  @MappableClass(discriminatorValue: 'None')
-  const factory IntOptionInternallyTagged.none() = _IntNone;
-  @MappableClass(discriminatorValue: 'Some')
-  const factory IntOptionInternallyTagged.some(int data) = _IntSome;
+@MappableClass(ignoreNull: true)
+class DataResult<T> with DataResultMappable {
+  T? ok;
+  DataError? err;
+
+  DataResult.ok(this.ok);
+
+  DataResult.err(this.err);
+
+  U when<U>({
+    required U Function(T ok) ok,
+    required U Function(DataError err) err,
+  }) {
+    if (this.ok != null && this.err == null) {
+      return ok.call(this.ok as T);
+    } else if (this.ok == null && this.err != null) {
+      return err.call(this.err!);
+    } else {
+      throw Exception("Invalid union state!");
+    }
+  }
+}
+
+@MappableClass(ignoreNull: true, generateMethods: GenerateMethods.decode)
+class DataMaybeId<T> with DataMaybeIdMappable {
+  T data;
+  int? id;
+
+  DataMaybeId.id(this.id, this.data);
+
+  DataMaybeId.noId(this.data);
+
+  U when<U>({
+    required U Function(int id) id,
+    required U Function() noId,
+  }) {
+    if (this.id == null) {
+      return noId.call();
+    } else {
+      return id.call(this.id!);
+    }
+  }
+}
+
+@MappableClass()
+class DataWithId<T> with DataMaybeIdMappable {
+  T data;
+  int id;
+
+  DataWithId(this.id, this.data);
+
+  DataMaybeId<T> toMaybeId() {
+    return DataMaybeId.id(id, data);
+  }
 }
 
 extension AddEditButton on List<TableRowElement> {
@@ -70,6 +117,10 @@ extension AddEditButton on List<TableRowElement> {
             })),
       ]));
   }
+}
+
+abstract class HttpGetRange<T> {
+  T? httpGet(int fristIndex, int lastIndex);
 }
 
 abstract class ToOptionElement {

@@ -369,11 +369,12 @@ class _SessionErrorMapper extends SubClassMapperBase<_SessionError> {
   final String id = '_SessionError';
 
   static SessionError _$sessionError(_SessionError v) => v.sessionError;
+  static const Field<_SessionError, SessionError> _f$sessionError =
+      Field('sessionError', _$sessionError);
 
   @override
   final Map<Symbol, Field<_SessionError, dynamic>> fields = const {
-    #sessionError:
-        Field<_SessionError, SessionError>('sessionError', _$sessionError),
+    #sessionError: _f$sessionError,
   };
 
   @override
@@ -384,7 +385,7 @@ class _SessionErrorMapper extends SubClassMapperBase<_SessionError> {
   late final ClassMapperBase superMapper = DataErrorMapper.ensureInitialized();
 
   static _SessionError _instantiate(DecodingData data) {
-    return _SessionError(data.get(#sessionError));
+    return _SessionError(data.dec(_f$sessionError));
   }
 
   @override
@@ -610,10 +611,11 @@ class _StringSomeMapper extends SubClassMapperBase<_StringSome> {
   final String id = '_StringSome';
 
   static String _$data(_StringSome v) => v.data;
+  static const Field<_StringSome, String> _f$data = Field('data', _$data);
 
   @override
   final Map<Symbol, Field<_StringSome, dynamic>> fields = const {
-    #data: Field<_StringSome, String>('data', _$data),
+    #data: _f$data,
   };
 
   @override
@@ -625,7 +627,7 @@ class _StringSomeMapper extends SubClassMapperBase<_StringSome> {
       StringOptionInternallyTaggedMapper.ensureInitialized();
 
   static _StringSome _instantiate(DecodingData data) {
-    return _StringSome(data.get(#data));
+    return _StringSome(data.dec(_f$data));
   }
 
   @override
@@ -650,16 +652,12 @@ extension _StringSomeMapperExtension on _StringSome {
   }
 }
 
-class IntOptionInternallyTaggedMapper
-    extends ClassMapperBase<IntOptionInternallyTagged> {
-  IntOptionInternallyTaggedMapper._();
-  static IntOptionInternallyTaggedMapper? _instance;
-  static IntOptionInternallyTaggedMapper ensureInitialized() {
+class DataResultMapper extends ClassMapperBase<DataResult> {
+  DataResultMapper._();
+  static DataResultMapper? _instance;
+  static DataResultMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals
-          .use(_instance = IntOptionInternallyTaggedMapper._());
-      _IntNoneMapper.ensureInitialized();
-      _IntSomeMapper.ensureInitialized();
+      MapperContainer.globals.use(_instance = DataResultMapper._());
     }
     return _instance!;
   }
@@ -670,61 +668,115 @@ class IntOptionInternallyTaggedMapper
   }
 
   @override
-  final String id = 'IntOptionInternallyTagged';
+  final String id = 'DataResult';
+  @override
+  Function get typeFactory => <T>(f) => f<DataResult<T>>();
+
+  static dynamic _$ok(DataResult v) => v.ok;
+  static dynamic _arg$ok<T>(f) => f<T?>();
+  static const Field<DataResult, dynamic> _f$ok =
+      Field('ok', _$ok, arg: _arg$ok);
+  static DataError? _$err(DataResult v) => v.err;
+  static const Field<DataResult, DataError?> _f$err =
+      Field('err', _$err, mode: FieldMode.member);
 
   @override
-  final Map<Symbol, Field<IntOptionInternallyTagged, dynamic>> fields =
-      const {};
+  final Map<Symbol, Field<DataResult, dynamic>> fields = const {
+    #ok: _f$ok,
+    #err: _f$err,
+  };
+  @override
+  final bool ignoreNull = true;
 
-  static IntOptionInternallyTagged _instantiate(DecodingData data) {
-    throw MapperException.missingSubclass(
-        'IntOptionInternallyTagged', 'Type', '${data.value['Type']}');
+  static DataResult<T> _instantiate<T>(DecodingData data) {
+    return DataResult.ok(data.dec(_f$ok));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static IntOptionInternallyTagged fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<IntOptionInternallyTagged>(map));
+  static DataResult<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<DataResult<T>>(map));
   }
 
-  static IntOptionInternallyTagged fromJson(String json) {
-    return _guard((c) => c.fromJson<IntOptionInternallyTagged>(json));
+  static DataResult<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<DataResult<T>>(json));
   }
 }
 
-extension IntOptionInternallyTaggedMapperExtension
-    on IntOptionInternallyTagged {
+mixin DataResultMappable<T> {
   String toJson() {
-    return IntOptionInternallyTaggedMapper._guard((c) => c.toJson(this));
+    return DataResultMapper._guard((c) => c.toJson(this as DataResult<T>));
   }
 
   Map<String, dynamic> toMap() {
-    return IntOptionInternallyTaggedMapper._guard((c) => c.toMap(this));
+    return DataResultMapper._guard((c) => c.toMap(this as DataResult<T>));
+  }
+
+  DataResultCopyWith<DataResult<T>, DataResult<T>, DataResult<T>, T>
+      get copyWith =>
+          _DataResultCopyWithImpl(this as DataResult<T>, $identity, $identity);
+  @override
+  String toString() {
+    return DataResultMapper._guard((c) => c.asString(this));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (runtimeType == other.runtimeType &&
+            DataResultMapper._guard((c) => c.isEqual(this, other)));
+  }
+
+  @override
+  int get hashCode {
+    return DataResultMapper._guard((c) => c.hash(this));
   }
 }
 
-typedef IntOptionInternallyTaggedCopyWithBound = IntOptionInternallyTagged;
-
-abstract class IntOptionInternallyTaggedCopyWith<
-        $R,
-        $In extends IntOptionInternallyTagged,
-        $Out extends IntOptionInternallyTagged>
-    implements ClassCopyWith<$R, $In, $Out> {
-  $R call();
-  IntOptionInternallyTaggedCopyWith<$R2, $In, $Out2>
-      $chain<$R2, $Out2 extends IntOptionInternallyTagged>(
-          Then<IntOptionInternallyTagged, $Out2> t, Then<$Out2, $R2> t2);
+extension DataResultValueCopy<$R, $Out extends DataResult, T>
+    on ObjectCopyWith<$R, DataResult<T>, $Out> {
+  DataResultCopyWith<$R, DataResult<T>, $Out, T> get $asDataResult =>
+      $base.as((v, t, t2) => _DataResultCopyWithImpl(v, t, t2));
 }
 
-class _IntNoneMapper extends SubClassMapperBase<_IntNone> {
-  _IntNoneMapper._();
-  static _IntNoneMapper? _instance;
-  static _IntNoneMapper ensureInitialized() {
+typedef DataResultCopyWithBound = DataResult;
+
+abstract class DataResultCopyWith<$R, $In extends DataResult<T>,
+    $Out extends DataResult, T> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({T? ok});
+  DataResultCopyWith<$R2, $In, $Out2, T> $chain<$R2, $Out2 extends DataResult>(
+      Then<DataResult<T>, $Out2> t, Then<$Out2, $R2> t2);
+}
+
+class _DataResultCopyWithImpl<$R, $Out extends DataResult, T>
+    extends ClassCopyWithBase<$R, DataResult<T>, $Out>
+    implements DataResultCopyWith<$R, DataResult<T>, $Out, T> {
+  _DataResultCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<DataResult> $mapper =
+      DataResultMapper.ensureInitialized();
+  @override
+  $R call({Object? ok = $none}) =>
+      $apply(FieldCopyWithData({if (ok != $none) #ok: ok}));
+  @override
+  DataResult<T> $make(CopyWithData data) =>
+      DataResult.ok(data.get(#ok, or: $value.ok));
+
+  @override
+  DataResultCopyWith<$R2, DataResult<T>, $Out2, T>
+      $chain<$R2, $Out2 extends DataResult>(
+              Then<DataResult<T>, $Out2> t, Then<$Out2, $R2> t2) =>
+          _DataResultCopyWithImpl($value, t, t2);
+}
+
+class DataMaybeIdMapper extends ClassMapperBase<DataMaybeId> {
+  DataMaybeIdMapper._();
+  static DataMaybeIdMapper? _instance;
+  static DataMaybeIdMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = _IntNoneMapper._());
-      IntOptionInternallyTaggedMapper.ensureInitialized()
-          .addSubMapper(_instance!);
+      MapperContainer.globals.use(_instance = DataMaybeIdMapper._());
     }
     return _instance!;
   }
@@ -735,53 +787,49 @@ class _IntNoneMapper extends SubClassMapperBase<_IntNone> {
   }
 
   @override
-  final String id = '_IntNone';
+  final String id = 'DataMaybeId';
+  @override
+  Function get typeFactory => <T>(f) => f<DataMaybeId<T>>();
+
+  static int? _$id(DataMaybeId v) => v.id;
+  static const Field<DataMaybeId, int?> _f$id = Field('id', _$id);
+  static dynamic _$data(DataMaybeId v) => v.data;
+  static dynamic _arg$data<T>(f) => f<T>();
+  static const Field<DataMaybeId, dynamic> _f$data =
+      Field('data', _$data, arg: _arg$data);
 
   @override
-  final Map<Symbol, Field<_IntNone, dynamic>> fields = const {};
+  final Map<Symbol, Field<DataMaybeId, dynamic>> fields = const {
+    #id: _f$id,
+    #data: _f$data,
+  };
+  @override
+  final bool ignoreNull = true;
 
-  @override
-  final String discriminatorKey = 'Type';
-  @override
-  final dynamic discriminatorValue = 'None';
-  @override
-  late final ClassMapperBase superMapper =
-      IntOptionInternallyTaggedMapper.ensureInitialized();
-
-  static _IntNone _instantiate(DecodingData data) {
-    return _IntNone();
+  static DataMaybeId<T> _instantiate<T>(DecodingData data) {
+    return DataMaybeId.id(data.dec(_f$id), data.dec(_f$data));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static _IntNone fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<_IntNone>(map));
+  static DataMaybeId<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<DataMaybeId<T>>(map));
   }
 
-  static _IntNone fromJson(String json) {
-    return _guard((c) => c.fromJson<_IntNone>(json));
-  }
-}
-
-extension _IntNoneMapperExtension on _IntNone {
-  String toJson() {
-    return _IntNoneMapper._guard((c) => c.toJson(this));
-  }
-
-  Map<String, dynamic> toMap() {
-    return _IntNoneMapper._guard((c) => c.toMap(this));
+  static DataMaybeId<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<DataMaybeId<T>>(json));
   }
 }
 
-class _IntSomeMapper extends SubClassMapperBase<_IntSome> {
-  _IntSomeMapper._();
-  static _IntSomeMapper? _instance;
-  static _IntSomeMapper ensureInitialized() {
+mixin DataMaybeIdMappable<T> {}
+
+class DataWithIdMapper extends ClassMapperBase<DataWithId> {
+  DataWithIdMapper._();
+  static DataWithIdMapper? _instance;
+  static DataWithIdMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = _IntSomeMapper._());
-      IntOptionInternallyTaggedMapper.ensureInitialized()
-          .addSubMapper(_instance!);
+      MapperContainer.globals.use(_instance = DataWithIdMapper._());
     }
     return _instance!;
   }
@@ -792,45 +840,102 @@ class _IntSomeMapper extends SubClassMapperBase<_IntSome> {
   }
 
   @override
-  final String id = '_IntSome';
+  final String id = 'DataWithId';
+  @override
+  Function get typeFactory => <T>(f) => f<DataWithId<T>>();
 
-  static int _$data(_IntSome v) => v.data;
+  static int _$id(DataWithId v) => v.id;
+  static const Field<DataWithId, int> _f$id = Field('id', _$id);
+  static dynamic _$data(DataWithId v) => v.data;
+  static dynamic _arg$data<T>(f) => f<T>();
+  static const Field<DataWithId, dynamic> _f$data =
+      Field('data', _$data, arg: _arg$data);
 
   @override
-  final Map<Symbol, Field<_IntSome, dynamic>> fields = const {
-    #data: Field<_IntSome, int>('data', _$data),
+  final Map<Symbol, Field<DataWithId, dynamic>> fields = const {
+    #id: _f$id,
+    #data: _f$data,
   };
 
-  @override
-  final String discriminatorKey = 'Type';
-  @override
-  final dynamic discriminatorValue = 'Some';
-  @override
-  late final ClassMapperBase superMapper =
-      IntOptionInternallyTaggedMapper.ensureInitialized();
-
-  static _IntSome _instantiate(DecodingData data) {
-    return _IntSome(data.get(#data));
+  static DataWithId<T> _instantiate<T>(DecodingData data) {
+    return DataWithId(data.dec(_f$id), data.dec(_f$data));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static _IntSome fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<_IntSome>(map));
+  static DataWithId<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<DataWithId<T>>(map));
   }
 
-  static _IntSome fromJson(String json) {
-    return _guard((c) => c.fromJson<_IntSome>(json));
+  static DataWithId<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<DataWithId<T>>(json));
   }
 }
 
-extension _IntSomeMapperExtension on _IntSome {
+mixin DataWithIdMappable<T> {
   String toJson() {
-    return _IntSomeMapper._guard((c) => c.toJson(this));
+    return DataWithIdMapper._guard((c) => c.toJson(this as DataWithId<T>));
   }
 
   Map<String, dynamic> toMap() {
-    return _IntSomeMapper._guard((c) => c.toMap(this));
+    return DataWithIdMapper._guard((c) => c.toMap(this as DataWithId<T>));
   }
+
+  DataWithIdCopyWith<DataWithId<T>, DataWithId<T>, DataWithId<T>, T>
+      get copyWith =>
+          _DataWithIdCopyWithImpl(this as DataWithId<T>, $identity, $identity);
+  @override
+  String toString() {
+    return DataWithIdMapper._guard((c) => c.asString(this));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (runtimeType == other.runtimeType &&
+            DataWithIdMapper._guard((c) => c.isEqual(this, other)));
+  }
+
+  @override
+  int get hashCode {
+    return DataWithIdMapper._guard((c) => c.hash(this));
+  }
+}
+
+extension DataWithIdValueCopy<$R, $Out extends DataWithId, T>
+    on ObjectCopyWith<$R, DataWithId<T>, $Out> {
+  DataWithIdCopyWith<$R, DataWithId<T>, $Out, T> get $asDataWithId =>
+      $base.as((v, t, t2) => _DataWithIdCopyWithImpl(v, t, t2));
+}
+
+typedef DataWithIdCopyWithBound = DataWithId;
+
+abstract class DataWithIdCopyWith<$R, $In extends DataWithId<T>,
+    $Out extends DataWithId, T> implements ClassCopyWith<$R, $In, $Out> {
+  $R call({int? id, T? data});
+  DataWithIdCopyWith<$R2, $In, $Out2, T> $chain<$R2, $Out2 extends DataWithId>(
+      Then<DataWithId<T>, $Out2> t, Then<$Out2, $R2> t2);
+}
+
+class _DataWithIdCopyWithImpl<$R, $Out extends DataWithId, T>
+    extends ClassCopyWithBase<$R, DataWithId<T>, $Out>
+    implements DataWithIdCopyWith<$R, DataWithId<T>, $Out, T> {
+  _DataWithIdCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<DataWithId> $mapper =
+      DataWithIdMapper.ensureInitialized();
+  @override
+  $R call({int? id, T? data}) => $apply(FieldCopyWithData(
+      {if (id != null) #id: id, if (data != null) #data: data}));
+  @override
+  DataWithId<T> $make(CopyWithData data) => DataWithId(
+      data.get(#id, or: $value.id), data.get(#data, or: $value.data));
+
+  @override
+  DataWithIdCopyWith<$R2, DataWithId<T>, $Out2, T>
+      $chain<$R2, $Out2 extends DataWithId>(
+              Then<DataWithId<T>, $Out2> t, Then<$Out2, $R2> t2) =>
+          _DataWithIdCopyWithImpl($value, t, t2);
 }

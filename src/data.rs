@@ -6,11 +6,57 @@ mod basic_data;
 
 use rocket::{routes, Route};
 use serde::{Serialize, Deserialize, Serializer};
+use sqlx::{FromRow, mysql::MySqlRow, Row};
 
 use crate::session::SessionError;
 
 pub fn data_routes() -> Vec<Route> {
   routes![]
+}
+
+pub trait IdColumnName {
+  const ID_COLUMN_NAME: &'static str;
+}
+
+pub trait ToSqlxError<T> {
+  fn to_boxdyn_error(self) -> Result<T, sqlx::error::BoxDynError>;
+  fn to_sql_error(self) -> Result<T, sqlx::Error>;
+}
+
+#[derive(Debug, Serialize, Clone)]
+#[serde(untagged)]
+pub enum DataMaybeId<T> {
+  Id {
+    data: T,
+    id: u64,
+  },
+  NoId {
+    data: T,
+  },
+}
+
+impl<'a, 'r, T> FromRow<'r, MySqlRow> for DataMaybeId<T> where 'r: 'a, T: FromRow<'a, MySqlRow> + IdColumnName {
+  fn from_row(row: &'r MySqlRow) -> Result<Self, sqlx::Error> {
+    match row.try_get(T::ID_COLUMN_NAME) {
+      Ok(id) => Ok(DataMaybeId::Id { data: T::from_row(row)?, id }),
+      Err(_) => Err(sqlx::Error::ColumnNotFound(T::ID_COLUMN_NAME.to_owned())),
+    }
+  }
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct DataWithId<T> {
+  pub data: T,
+  pub id: u64,
+}
+
+impl<'a, 'r, T> FromRow<'r, MySqlRow> for DataWithId<T> where 'r: 'a, T: FromRow<'a, MySqlRow> + IdColumnName {
+  fn from_row(row: &'r MySqlRow) -> Result<Self, sqlx::Error> {
+    match row.try_get(T::ID_COLUMN_NAME) {
+      Ok(id) => Ok(DataWithId { data: T::from_row(row)?, id }),
+      Err(_) => Err(sqlx::Error::ColumnNotFound(T::ID_COLUMN_NAME.to_owned())),
+    }
+  }
 }
 
 #[derive(Debug, Clone, Copy, Serialize)]

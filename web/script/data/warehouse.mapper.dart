@@ -24,36 +24,50 @@ class WarehouseMapper extends ClassMapperBase<Warehouse> {
   final String id = 'Warehouse';
 
   static int _$id(Warehouse v) => v.id;
+  static const Field<Warehouse, int> _f$id = Field('id', _$id);
   static String _$name(Warehouse v) => v.name;
+  static const Field<Warehouse, String> _f$name = Field('name', _$name);
   static String _$phoneType(Warehouse v) => v.phoneType;
+  static const Field<Warehouse, String> _f$phoneType =
+      Field('phoneType', _$phoneType);
   static String _$phoneNumber(Warehouse v) => v.phoneNumber;
+  static const Field<Warehouse, String> _f$phoneNumber =
+      Field('phoneNumber', _$phoneNumber);
   static String _$addressStreet(Warehouse v) => v.addressStreet;
+  static const Field<Warehouse, String> _f$addressStreet =
+      Field('addressStreet', _$addressStreet);
   static String _$addressCity(Warehouse v) => v.addressCity;
+  static const Field<Warehouse, String> _f$addressCity =
+      Field('addressCity', _$addressCity);
   static String _$addressState(Warehouse v) => v.addressState;
+  static const Field<Warehouse, String> _f$addressState =
+      Field('addressState', _$addressState);
   static String _$addressZip(Warehouse v) => v.addressZip;
+  static const Field<Warehouse, String> _f$addressZip =
+      Field('addressZip', _$addressZip);
 
   @override
   final Map<Symbol, Field<Warehouse, dynamic>> fields = const {
-    #id: Field<Warehouse, int>('id', _$id),
-    #name: Field<Warehouse, String>('name', _$name),
-    #phoneType: Field<Warehouse, String>('phoneType', _$phoneType),
-    #phoneNumber: Field<Warehouse, String>('phoneNumber', _$phoneNumber),
-    #addressStreet: Field<Warehouse, String>('addressStreet', _$addressStreet),
-    #addressCity: Field<Warehouse, String>('addressCity', _$addressCity),
-    #addressState: Field<Warehouse, String>('addressState', _$addressState),
-    #addressZip: Field<Warehouse, String>('addressZip', _$addressZip),
+    #id: _f$id,
+    #name: _f$name,
+    #phoneType: _f$phoneType,
+    #phoneNumber: _f$phoneNumber,
+    #addressStreet: _f$addressStreet,
+    #addressCity: _f$addressCity,
+    #addressState: _f$addressState,
+    #addressZip: _f$addressZip,
   };
 
   static Warehouse _instantiate(DecodingData data) {
     return Warehouse(
-        data.get(#id),
-        data.get(#name),
-        data.get(#phoneType),
-        data.get(#phoneNumber),
-        data.get(#addressStreet),
-        data.get(#addressCity),
-        data.get(#addressState),
-        data.get(#addressZip));
+        data.dec(_f$id),
+        data.dec(_f$name),
+        data.dec(_f$phoneType),
+        data.dec(_f$phoneNumber),
+        data.dec(_f$addressStreet),
+        data.dec(_f$addressCity),
+        data.dec(_f$addressState),
+        data.dec(_f$addressZip));
   }
 
   @override
@@ -246,11 +260,12 @@ class _WarehouseOkMapper extends SubClassMapperBase<_WarehouseOk> {
   final String id = '_WarehouseOk';
 
   static List<Warehouse> _$warehouses(_WarehouseOk v) => v.warehouses;
+  static const Field<_WarehouseOk, List<Warehouse>> _f$warehouses =
+      Field('warehouses', _$warehouses);
 
   @override
   final Map<Symbol, Field<_WarehouseOk, dynamic>> fields = const {
-    #warehouses:
-        Field<_WarehouseOk, List<Warehouse>>('warehouses', _$warehouses),
+    #warehouses: _f$warehouses,
   };
 
   @override
@@ -262,7 +277,7 @@ class _WarehouseOkMapper extends SubClassMapperBase<_WarehouseOk> {
       WarehouseResultMapper.ensureInitialized();
 
   static _WarehouseOk _instantiate(DecodingData data) {
-    return _WarehouseOk(data.get(#warehouses));
+    return _WarehouseOk(data.dec(_f$warehouses));
   }
 
   @override
@@ -308,10 +323,11 @@ class _WarehouseErrMapper extends SubClassMapperBase<_WarehouseErr> {
   final String id = '_WarehouseErr';
 
   static DataError _$err(_WarehouseErr v) => v.err;
+  static const Field<_WarehouseErr, DataError> _f$err = Field('err', _$err);
 
   @override
   final Map<Symbol, Field<_WarehouseErr, dynamic>> fields = const {
-    #err: Field<_WarehouseErr, DataError>('err', _$err),
+    #err: _f$err,
   };
 
   @override
@@ -323,7 +339,7 @@ class _WarehouseErrMapper extends SubClassMapperBase<_WarehouseErr> {
       WarehouseResultMapper.ensureInitialized();
 
   static _WarehouseErr _instantiate(DecodingData data) {
-    return _WarehouseErr(data.get(#err));
+    return _WarehouseErr(data.dec(_f$err));
   }
 
   @override

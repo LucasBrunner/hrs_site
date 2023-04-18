@@ -92,13 +92,13 @@ class _InvalidPasswordMapper extends SubClassMapperBase<_InvalidPassword> {
   static PasswordInvalidationDescription _$passwordInvalidationDescription(
           _InvalidPassword v) =>
       v.passwordInvalidationDescription;
+  static const Field<_InvalidPassword, PasswordInvalidationDescription>
+      _f$passwordInvalidationDescription = Field(
+          'passwordInvalidationDescription', _$passwordInvalidationDescription);
 
   @override
   final Map<Symbol, Field<_InvalidPassword, dynamic>> fields = const {
-    #passwordInvalidationDescription:
-        Field<_InvalidPassword, PasswordInvalidationDescription>(
-            'passwordInvalidationDescription',
-            _$passwordInvalidationDescription),
+    #passwordInvalidationDescription: _f$passwordInvalidationDescription,
   };
 
   @override
@@ -110,7 +110,7 @@ class _InvalidPasswordMapper extends SubClassMapperBase<_InvalidPassword> {
       SignupFailureMapper.ensureInitialized();
 
   static _InvalidPassword _instantiate(DecodingData data) {
-    return _InvalidPassword(data.get(#passwordInvalidationDescription));
+    return _InvalidPassword(data.dec(_f$passwordInvalidationDescription));
   }
 
   @override
@@ -158,13 +158,13 @@ class _InvalidUsernameMapper extends SubClassMapperBase<_InvalidUsername> {
   static UsernameInvalidationDescription _$usernameInvalidationDescription(
           _InvalidUsername v) =>
       v.usernameInvalidationDescription;
+  static const Field<_InvalidUsername, UsernameInvalidationDescription>
+      _f$usernameInvalidationDescription = Field(
+          'usernameInvalidationDescription', _$usernameInvalidationDescription);
 
   @override
   final Map<Symbol, Field<_InvalidUsername, dynamic>> fields = const {
-    #usernameInvalidationDescription:
-        Field<_InvalidUsername, UsernameInvalidationDescription>(
-            'usernameInvalidationDescription',
-            _$usernameInvalidationDescription),
+    #usernameInvalidationDescription: _f$usernameInvalidationDescription,
   };
 
   @override
@@ -176,7 +176,7 @@ class _InvalidUsernameMapper extends SubClassMapperBase<_InvalidUsername> {
       SignupFailureMapper.ensureInitialized();
 
   static _InvalidUsername _instantiate(DecodingData data) {
-    return _InvalidUsername(data.get(#usernameInvalidationDescription));
+    return _InvalidUsername(data.dec(_f$usernameInvalidationDescription));
   }
 
   @override
@@ -504,10 +504,11 @@ class _OkMapper extends SubClassMapperBase<_Ok> {
   final String id = '_Ok';
 
   static String _$nextPath(_Ok v) => v.nextPath;
+  static const Field<_Ok, String> _f$nextPath = Field('nextPath', _$nextPath);
 
   @override
   final Map<Symbol, Field<_Ok, dynamic>> fields = const {
-    #nextPath: Field<_Ok, String>('nextPath', _$nextPath),
+    #nextPath: _f$nextPath,
   };
 
   @override
@@ -519,7 +520,7 @@ class _OkMapper extends SubClassMapperBase<_Ok> {
       SignupResultMapper.ensureInitialized();
 
   static _Ok _instantiate(DecodingData data) {
-    return _Ok(data.get(#nextPath));
+    return _Ok(data.dec(_f$nextPath));
   }
 
   @override
@@ -565,11 +566,12 @@ class _ErrMapper extends SubClassMapperBase<_Err> {
   final String id = '_Err';
 
   static List<SignupFailure> _$signupFailure(_Err v) => v.signupFailure;
+  static const Field<_Err, List<SignupFailure>> _f$signupFailure =
+      Field('signupFailure', _$signupFailure);
 
   @override
   final Map<Symbol, Field<_Err, dynamic>> fields = const {
-    #signupFailure:
-        Field<_Err, List<SignupFailure>>('signupFailure', _$signupFailure),
+    #signupFailure: _f$signupFailure,
   };
 
   @override
@@ -581,7 +583,7 @@ class _ErrMapper extends SubClassMapperBase<_Err> {
       SignupResultMapper.ensureInitialized();
 
   static _Err _instantiate(DecodingData data) {
-    return _Err(data.get(#signupFailure));
+    return _Err(data.dec(_f$signupFailure));
   }
 
   @override
@@ -625,30 +627,36 @@ class SignupRequestMapper extends ClassMapperBase<SignupRequest> {
   final String id = 'SignupRequest';
 
   static String _$email(SignupRequest v) => v.email;
+  static const Field<SignupRequest, String> _f$email = Field('email', _$email);
   static String _$preferredName(SignupRequest v) => v.preferredName;
+  static const Field<SignupRequest, String> _f$preferredName =
+      Field('preferredName', _$preferredName);
   static String _$legalName(SignupRequest v) => v.legalName;
+  static const Field<SignupRequest, String> _f$legalName =
+      Field('legalName', _$legalName);
   static String _$encodedPassword(SignupRequest v) => v.encodedPassword;
+  static const Field<SignupRequest, String> _f$encodedPassword =
+      Field('encodedPassword', _$encodedPassword);
   static bool _$rememberLogin(SignupRequest v) => v.rememberLogin;
+  static const Field<SignupRequest, bool> _f$rememberLogin =
+      Field('rememberLogin', _$rememberLogin);
 
   @override
   final Map<Symbol, Field<SignupRequest, dynamic>> fields = const {
-    #email: Field<SignupRequest, String>('email', _$email),
-    #preferredName:
-        Field<SignupRequest, String>('preferredName', _$preferredName),
-    #legalName: Field<SignupRequest, String>('legalName', _$legalName),
-    #encodedPassword:
-        Field<SignupRequest, String>('encodedPassword', _$encodedPassword),
-    #rememberLogin:
-        Field<SignupRequest, bool>('rememberLogin', _$rememberLogin),
+    #email: _f$email,
+    #preferredName: _f$preferredName,
+    #legalName: _f$legalName,
+    #encodedPassword: _f$encodedPassword,
+    #rememberLogin: _f$rememberLogin,
   };
 
   static SignupRequest _instantiate(DecodingData data) {
     return SignupRequest(
-        data.get(#email),
-        data.get(#preferredName),
-        data.get(#legalName),
-        data.get(#encodedPassword),
-        data.get(#rememberLogin));
+        data.dec(_f$email),
+        data.dec(_f$preferredName),
+        data.dec(_f$legalName),
+        data.dec(_f$encodedPassword),
+        data.dec(_f$rememberLogin));
   }
 
   @override

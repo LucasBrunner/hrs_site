@@ -139,10 +139,12 @@ class FilteredCharactersPMapper
   final String id = 'FilteredCharactersP';
 
   static String _$characters(FilteredCharactersP v) => v.characters;
+  static const Field<FilteredCharactersP, String> _f$characters =
+      Field('characters', _$characters);
 
   @override
   final Map<Symbol, Field<FilteredCharactersP, dynamic>> fields = const {
-    #characters: Field<FilteredCharactersP, String>('characters', _$characters),
+    #characters: _f$characters,
   };
 
   @override
@@ -154,7 +156,7 @@ class FilteredCharactersPMapper
       PasswordInvalidationDescriptionMapper.ensureInitialized();
 
   static FilteredCharactersP _instantiate(DecodingData data) {
-    return FilteredCharactersP(data.get(#characters));
+    return FilteredCharactersP(data.dec(_f$characters));
   }
 
   @override
@@ -200,10 +202,12 @@ class FirstCharacterPMapper extends SubClassMapperBase<FirstCharacterP> {
   final String id = 'FirstCharacterP';
 
   static String _$character(FirstCharacterP v) => v.character;
+  static const Field<FirstCharacterP, String> _f$character =
+      Field('character', _$character);
 
   @override
   final Map<Symbol, Field<FirstCharacterP, dynamic>> fields = const {
-    #character: Field<FirstCharacterP, String>('character', _$character),
+    #character: _f$character,
   };
 
   @override
@@ -215,7 +219,7 @@ class FirstCharacterPMapper extends SubClassMapperBase<FirstCharacterP> {
       PasswordInvalidationDescriptionMapper.ensureInitialized();
 
   static FirstCharacterP _instantiate(DecodingData data) {
-    return FirstCharacterP(data.get(#character));
+    return FirstCharacterP(data.dec(_f$character));
   }
 
   @override
@@ -261,10 +265,12 @@ class LastCharacterPMapper extends SubClassMapperBase<LastCharacterP> {
   final String id = 'LastCharacterP';
 
   static String _$character(LastCharacterP v) => v.character;
+  static const Field<LastCharacterP, String> _f$character =
+      Field('character', _$character);
 
   @override
   final Map<Symbol, Field<LastCharacterP, dynamic>> fields = const {
-    #character: Field<LastCharacterP, String>('character', _$character),
+    #character: _f$character,
   };
 
   @override
@@ -276,7 +282,7 @@ class LastCharacterPMapper extends SubClassMapperBase<LastCharacterP> {
       PasswordInvalidationDescriptionMapper.ensureInitialized();
 
   static LastCharacterP _instantiate(DecodingData data) {
-    return LastCharacterP(data.get(#character));
+    return LastCharacterP(data.dec(_f$character));
   }
 
   @override
@@ -322,12 +328,15 @@ class MinLengthPMapper extends SubClassMapperBase<MinLengthP> {
   final String id = 'MinLengthP';
 
   static int _$passwordLength(MinLengthP v) => v.passwordLength;
+  static const Field<MinLengthP, int> _f$passwordLength =
+      Field('passwordLength', _$passwordLength);
   static int _$limit(MinLengthP v) => v.limit;
+  static const Field<MinLengthP, int> _f$limit = Field('limit', _$limit);
 
   @override
   final Map<Symbol, Field<MinLengthP, dynamic>> fields = const {
-    #passwordLength: Field<MinLengthP, int>('passwordLength', _$passwordLength),
-    #limit: Field<MinLengthP, int>('limit', _$limit),
+    #passwordLength: _f$passwordLength,
+    #limit: _f$limit,
   };
 
   @override
@@ -339,7 +348,7 @@ class MinLengthPMapper extends SubClassMapperBase<MinLengthP> {
       PasswordInvalidationDescriptionMapper.ensureInitialized();
 
   static MinLengthP _instantiate(DecodingData data) {
-    return MinLengthP(data.get(#passwordLength), data.get(#limit));
+    return MinLengthP(data.dec(_f$passwordLength), data.dec(_f$limit));
   }
 
   @override
@@ -385,12 +394,15 @@ class MaxLengthPMapper extends SubClassMapperBase<MaxLengthP> {
   final String id = 'MaxLengthP';
 
   static int _$passwordLength(MaxLengthP v) => v.passwordLength;
+  static const Field<MaxLengthP, int> _f$passwordLength =
+      Field('passwordLength', _$passwordLength);
   static int _$limit(MaxLengthP v) => v.limit;
+  static const Field<MaxLengthP, int> _f$limit = Field('limit', _$limit);
 
   @override
   final Map<Symbol, Field<MaxLengthP, dynamic>> fields = const {
-    #passwordLength: Field<MaxLengthP, int>('passwordLength', _$passwordLength),
-    #limit: Field<MaxLengthP, int>('limit', _$limit),
+    #passwordLength: _f$passwordLength,
+    #limit: _f$limit,
   };
 
   @override
@@ -402,7 +414,7 @@ class MaxLengthPMapper extends SubClassMapperBase<MaxLengthP> {
       PasswordInvalidationDescriptionMapper.ensureInitialized();
 
   static MaxLengthP _instantiate(DecodingData data) {
-    return MaxLengthP(data.get(#passwordLength), data.get(#limit));
+    return MaxLengthP(data.dec(_f$passwordLength), data.dec(_f$limit));
   }
 
   @override

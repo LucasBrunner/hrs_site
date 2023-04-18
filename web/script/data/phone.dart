@@ -6,47 +6,46 @@ import '../data.dart';
 
 part 'phone.mapper.dart';
 
-@MappableClass()
-class PhoneType with PhoneTypeMappable {
-  int phoneTypeId;
-  String name;
+@MappableEnum(caseStyle: CaseStyle.camelCase)
+enum PhoneType {
+  landline(id: 1, formalName: "Landline"),
+  mobile(id: 2, formalName: "Mobile");
 
-  PhoneType(
-    this.phoneTypeId,
-    this.name,
-  );
+  final int id;
+  final String formalName;
 
-  @override
-  String toString() {
-    return name;
-  }
+  const PhoneType({
+    required this.id,
+    required this.formalName,
+  });
 }
 
 class PhoneOptions {
   String onDeleteMessage;
+  String id;
   void Function() onDelete;
 
   PhoneOptions(
     this.onDeleteMessage,
+    this.id,
     this.onDelete,
   );
 
-  static PhoneOptions fromPhone(Phone phone) {
+  static PhoneOptions fromPhone(Phone phone, String id) {
     return PhoneOptions(
       'Remove phone from account',
-      () => querySelector('.phone-input[data-phone-id="${phone.phoneId}"]')?.remove(),
+      id,
+      () => querySelector('.phone-input[data-phone-id="$id"]')?.remove(),
     );
   }
 }
 
 @MappableClass()
-class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
-  int phoneId;
+class Phone with PhoneMappable implements ToInputTable<PhoneOptions> {
   String number;
   PhoneType phoneType;
 
   Phone(
-    this.phoneId,
     this.number,
     this.phoneType,
   );
@@ -57,11 +56,10 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
   }
 
   static Phone defaultPhone() {
-    uniqueNegativeId -= 1;
-    return Phone(uniqueNegativeId, '', PhoneType(0, 'Mobile'));
+    return Phone('', PhoneType.mobile);
   }
 
-  List<TableRowElement> toTableRows() {
+  List<TableRowElement> toTableViewRows() {
     return [
       TableRowElement()
         ..children.addAll([
@@ -76,7 +74,7 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
     ];
   }
 
-  List<TableRowElement> _toTableEditRows() {
+  List<TableRowElement> toTableEditRows() {
     return List.from([
       TableRowElement()
         ..children.addAll([
@@ -90,7 +88,7 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
       TableRowElement()
         ..children.addAll([
           Element.th()..innerText = 'Phone Type',
-          Element.td()..children.add(phoneTypeInput(selected: phoneType.name)..className = 'phone-type'),
+          Element.td()..children.add(phoneTypeInput(selected: phoneType)..className = 'phone-type'),
           Element.td()..className = 'phone-type-message',
         ]),
     ]);
@@ -99,9 +97,9 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
   @override
   TableElement toInputTable(PhoneOptions options) {
     return TableElement()
-      ..setAttribute('data-phone-id', phoneId)
+      ..setAttribute('data-phone-id', options.id)
       ..className = 'phone-input'
-      ..children.addAll(_toTableEditRows()
+      ..children.addAll(toTableEditRows()
         ..addDeleteButton(
           options.onDeleteMessage,
           options.onDelete,
@@ -111,24 +109,19 @@ class Phone extends ToInputTable<PhoneOptions> with PhoneMappable {
 
 int uniqueNegativeId = -1;
 
-SelectElement phoneTypeInput({String selected = ''}) {
+SelectElement phoneTypeInput({PhoneType? selected}) {
   final input = SelectElement();
-  input.children.addAll(phoneTypes.map((state) {
+  input.children.addAll(PhoneType.values.map((type) {
     return OptionElement()
-      ..value = state
-      ..innerText = state
-      ..selected = state == selected;
+      ..value = type.formalName
+      ..innerText = type.formalName
+      ..selected = type.name == selected?.name;
   }));
   input.children.insert(
       0,
       OptionElement()
         ..value = ''
         ..innerText = '— Select One —'
-        ..selected = selected.isEmpty);
+        ..selected = selected == null);
   return input;
 }
-
-final List<String> phoneTypes = List.from([
-  'Landline',
-  'Mobile',
-]);

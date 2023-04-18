@@ -25,6 +25,13 @@ INSERT INTO `JobState` (`name`)
 VALUES("completed");
 
 
+INSERT INTO `PhoneType` (`name`)
+VALUES("landline");
+
+INSERT INTO `PhoneType` (`name`)
+VALUES("mobile");
+
+
 INSERT INTO `AccountType` (`name`)
 VALUES("employee");
 

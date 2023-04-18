@@ -99,10 +99,12 @@ class _FilteredCharactersMapper
   final String id = '_FilteredCharacters';
 
   static String _$characters(_FilteredCharacters v) => v.characters;
+  static const Field<_FilteredCharacters, String> _f$characters =
+      Field('characters', _$characters);
 
   @override
   final Map<Symbol, Field<_FilteredCharacters, dynamic>> fields = const {
-    #characters: Field<_FilteredCharacters, String>('characters', _$characters),
+    #characters: _f$characters,
   };
 
   @override
@@ -114,7 +116,7 @@ class _FilteredCharactersMapper
       UsernameInvalidationDescriptionMapper.ensureInitialized();
 
   static _FilteredCharacters _instantiate(DecodingData data) {
-    return _FilteredCharacters(data.get(#characters));
+    return _FilteredCharacters(data.dec(_f$characters));
   }
 
   @override
@@ -160,10 +162,12 @@ class _FirstCharacterMapper extends SubClassMapperBase<_FirstCharacter> {
   final String id = '_FirstCharacter';
 
   static String _$character(_FirstCharacter v) => v.character;
+  static const Field<_FirstCharacter, String> _f$character =
+      Field('character', _$character);
 
   @override
   final Map<Symbol, Field<_FirstCharacter, dynamic>> fields = const {
-    #character: Field<_FirstCharacter, String>('character', _$character),
+    #character: _f$character,
   };
 
   @override
@@ -175,7 +179,7 @@ class _FirstCharacterMapper extends SubClassMapperBase<_FirstCharacter> {
       UsernameInvalidationDescriptionMapper.ensureInitialized();
 
   static _FirstCharacter _instantiate(DecodingData data) {
-    return _FirstCharacter(data.get(#character));
+    return _FirstCharacter(data.dec(_f$character));
   }
 
   @override
@@ -221,10 +225,12 @@ class _LastCharacterMapper extends SubClassMapperBase<_LastCharacter> {
   final String id = '_LastCharacter';
 
   static String _$character(_LastCharacter v) => v.character;
+  static const Field<_LastCharacter, String> _f$character =
+      Field('character', _$character);
 
   @override
   final Map<Symbol, Field<_LastCharacter, dynamic>> fields = const {
-    #character: Field<_LastCharacter, String>('character', _$character),
+    #character: _f$character,
   };
 
   @override
@@ -236,7 +242,7 @@ class _LastCharacterMapper extends SubClassMapperBase<_LastCharacter> {
       UsernameInvalidationDescriptionMapper.ensureInitialized();
 
   static _LastCharacter _instantiate(DecodingData data) {
-    return _LastCharacter(data.get(#character));
+    return _LastCharacter(data.dec(_f$character));
   }
 
   @override
@@ -282,12 +288,15 @@ class _MinLengthMapper extends SubClassMapperBase<_MinLength> {
   final String id = '_MinLength';
 
   static int _$usernameLength(_MinLength v) => v.usernameLength;
+  static const Field<_MinLength, int> _f$usernameLength =
+      Field('usernameLength', _$usernameLength);
   static int _$limit(_MinLength v) => v.limit;
+  static const Field<_MinLength, int> _f$limit = Field('limit', _$limit);
 
   @override
   final Map<Symbol, Field<_MinLength, dynamic>> fields = const {
-    #usernameLength: Field<_MinLength, int>('usernameLength', _$usernameLength),
-    #limit: Field<_MinLength, int>('limit', _$limit),
+    #usernameLength: _f$usernameLength,
+    #limit: _f$limit,
   };
 
   @override
@@ -299,7 +308,7 @@ class _MinLengthMapper extends SubClassMapperBase<_MinLength> {
       UsernameInvalidationDescriptionMapper.ensureInitialized();
 
   static _MinLength _instantiate(DecodingData data) {
-    return _MinLength(data.get(#usernameLength), data.get(#limit));
+    return _MinLength(data.dec(_f$usernameLength), data.dec(_f$limit));
   }
 
   @override
@@ -345,12 +354,15 @@ class _MaxLengthMapper extends SubClassMapperBase<_MaxLength> {
   final String id = '_MaxLength';
 
   static int _$usernameLength(_MaxLength v) => v.usernameLength;
+  static const Field<_MaxLength, int> _f$usernameLength =
+      Field('usernameLength', _$usernameLength);
   static int _$limit(_MaxLength v) => v.limit;
+  static const Field<_MaxLength, int> _f$limit = Field('limit', _$limit);
 
   @override
   final Map<Symbol, Field<_MaxLength, dynamic>> fields = const {
-    #usernameLength: Field<_MaxLength, int>('usernameLength', _$usernameLength),
-    #limit: Field<_MaxLength, int>('limit', _$limit),
+    #usernameLength: _f$usernameLength,
+    #limit: _f$limit,
   };
 
   @override
@@ -362,7 +374,7 @@ class _MaxLengthMapper extends SubClassMapperBase<_MaxLength> {
       UsernameInvalidationDescriptionMapper.ensureInitialized();
 
   static _MaxLength _instantiate(DecodingData data) {
-    return _MaxLength(data.get(#usernameLength), data.get(#limit));
+    return _MaxLength(data.dec(_f$usernameLength), data.dec(_f$limit));
   }
 
   @override

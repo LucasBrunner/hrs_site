@@ -27,19 +27,22 @@ class WarehouseInventoryManualUpdateMapper
 
   static int _$inventoryItemId(WarehouseInventoryManualUpdate v) =>
       v.inventoryItemId;
+  static const Field<WarehouseInventoryManualUpdate, int> _f$inventoryItemId =
+      Field('inventoryItemId', _$inventoryItemId);
   static int _$amount(WarehouseInventoryManualUpdate v) => v.amount;
+  static const Field<WarehouseInventoryManualUpdate, int> _f$amount =
+      Field('amount', _$amount);
 
   @override
   final Map<Symbol, Field<WarehouseInventoryManualUpdate, dynamic>> fields =
       const {
-    #inventoryItemId: Field<WarehouseInventoryManualUpdate, int>(
-        'inventoryItemId', _$inventoryItemId),
-    #amount: Field<WarehouseInventoryManualUpdate, int>('amount', _$amount),
+    #inventoryItemId: _f$inventoryItemId,
+    #amount: _f$amount,
   };
 
   static WarehouseInventoryManualUpdate _instantiate(DecodingData data) {
     return WarehouseInventoryManualUpdate(
-        data.get(#inventoryItemId), data.get(#amount));
+        data.dec(_f$inventoryItemId), data.dec(_f$amount));
   }
 
   @override
@@ -238,11 +241,12 @@ class _InventoryUpdateOkMapper extends SubClassMapperBase<_InventoryUpdateOk> {
   final String id = '_InventoryUpdateOk';
 
   static List<WarehouseInventoryItem> _$items(_InventoryUpdateOk v) => v.items;
+  static const Field<_InventoryUpdateOk, List<WarehouseInventoryItem>>
+      _f$items = Field('items', _$items);
 
   @override
   final Map<Symbol, Field<_InventoryUpdateOk, dynamic>> fields = const {
-    #items: Field<_InventoryUpdateOk, List<WarehouseInventoryItem>>(
-        'items', _$items),
+    #items: _f$items,
   };
 
   @override
@@ -254,7 +258,7 @@ class _InventoryUpdateOkMapper extends SubClassMapperBase<_InventoryUpdateOk> {
       WarehouseInventoryManualUpdateResultMapper.ensureInitialized();
 
   static _InventoryUpdateOk _instantiate(DecodingData data) {
-    return _InventoryUpdateOk(data.get(#items));
+    return _InventoryUpdateOk(data.dec(_f$items));
   }
 
   @override
@@ -302,10 +306,12 @@ class _InventoryUpdateErrMapper
   final String id = '_InventoryUpdateErr';
 
   static DataError _$err(_InventoryUpdateErr v) => v.err;
+  static const Field<_InventoryUpdateErr, DataError> _f$err =
+      Field('err', _$err);
 
   @override
   final Map<Symbol, Field<_InventoryUpdateErr, dynamic>> fields = const {
-    #err: Field<_InventoryUpdateErr, DataError>('err', _$err),
+    #err: _f$err,
   };
 
   @override
@@ -317,7 +323,7 @@ class _InventoryUpdateErrMapper
       WarehouseInventoryManualUpdateResultMapper.ensureInitialized();
 
   static _InventoryUpdateErr _instantiate(DecodingData data) {
-    return _InventoryUpdateErr(data.get(#err));
+    return _InventoryUpdateErr(data.dec(_f$err));
   }
 
   @override

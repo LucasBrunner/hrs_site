@@ -24,23 +24,29 @@ class AddressMapper extends ClassMapperBase<Address> {
   final String id = 'Address';
 
   static int _$addressId(Address v) => v.addressId;
+  static const Field<Address, int> _f$addressId =
+      Field('addressId', _$addressId);
   static String _$street(Address v) => v.street;
+  static const Field<Address, String> _f$street = Field('street', _$street);
   static String _$city(Address v) => v.city;
+  static const Field<Address, String> _f$city = Field('city', _$city);
   static String _$state(Address v) => v.state;
+  static const Field<Address, String> _f$state = Field('state', _$state);
   static String _$zip(Address v) => v.zip;
+  static const Field<Address, String> _f$zip = Field('zip', _$zip);
 
   @override
   final Map<Symbol, Field<Address, dynamic>> fields = const {
-    #addressId: Field<Address, int>('addressId', _$addressId),
-    #street: Field<Address, String>('street', _$street),
-    #city: Field<Address, String>('city', _$city),
-    #state: Field<Address, String>('state', _$state),
-    #zip: Field<Address, String>('zip', _$zip),
+    #addressId: _f$addressId,
+    #street: _f$street,
+    #city: _f$city,
+    #state: _f$state,
+    #zip: _f$zip,
   };
 
   static Address _instantiate(DecodingData data) {
-    return Address(data.get(#addressId), data.get(#street), data.get(#city),
-        data.get(#state), data.get(#zip));
+    return Address(data.dec(_f$addressId), data.dec(_f$street),
+        data.dec(_f$city), data.dec(_f$state), data.dec(_f$zip));
   }
 
   @override

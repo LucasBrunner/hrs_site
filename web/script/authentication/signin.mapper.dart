@@ -313,10 +313,12 @@ class SigninResult_OkMapper extends SubClassMapperBase<SigninResult_Ok> {
   final String id = 'SigninResult_Ok';
 
   static String _$nextPath(SigninResult_Ok v) => v.nextPath;
+  static const Field<SigninResult_Ok, String> _f$nextPath =
+      Field('nextPath', _$nextPath);
 
   @override
   final Map<Symbol, Field<SigninResult_Ok, dynamic>> fields = const {
-    #nextPath: Field<SigninResult_Ok, String>('nextPath', _$nextPath),
+    #nextPath: _f$nextPath,
   };
 
   @override
@@ -328,7 +330,7 @@ class SigninResult_OkMapper extends SubClassMapperBase<SigninResult_Ok> {
       SigninResultMapper.ensureInitialized();
 
   static SigninResult_Ok _instantiate(DecodingData data) {
-    return SigninResult_Ok(data.get(#nextPath));
+    return SigninResult_Ok(data.dec(_f$nextPath));
   }
 
   @override
@@ -374,11 +376,12 @@ class _ErrMapper extends SubClassMapperBase<_Err> {
   final String id = '_Err';
 
   static SigninFailure _$signinFailure(_Err v) => v.signinFailure;
+  static const Field<_Err, SigninFailure> _f$signinFailure =
+      Field('signinFailure', _$signinFailure);
 
   @override
   final Map<Symbol, Field<_Err, dynamic>> fields = const {
-    #signinFailure:
-        Field<_Err, SigninFailure>('signinFailure', _$signinFailure),
+    #signinFailure: _f$signinFailure,
   };
 
   @override
@@ -390,7 +393,7 @@ class _ErrMapper extends SubClassMapperBase<_Err> {
       SigninResultMapper.ensureInitialized();
 
   static _Err _instantiate(DecodingData data) {
-    return _Err(data.get(#signinFailure));
+    return _Err(data.dec(_f$signinFailure));
   }
 
   @override
@@ -434,21 +437,24 @@ class SigninRequestMapper extends ClassMapperBase<SigninRequest> {
   final String id = 'SigninRequest';
 
   static String _$email(SigninRequest v) => v.email;
+  static const Field<SigninRequest, String> _f$email = Field('email', _$email);
   static String _$encodedPassword(SigninRequest v) => v.encodedPassword;
+  static const Field<SigninRequest, String> _f$encodedPassword =
+      Field('encodedPassword', _$encodedPassword);
   static bool _$rememberLogin(SigninRequest v) => v.rememberLogin;
+  static const Field<SigninRequest, bool> _f$rememberLogin =
+      Field('rememberLogin', _$rememberLogin);
 
   @override
   final Map<Symbol, Field<SigninRequest, dynamic>> fields = const {
-    #email: Field<SigninRequest, String>('email', _$email),
-    #encodedPassword:
-        Field<SigninRequest, String>('encodedPassword', _$encodedPassword),
-    #rememberLogin:
-        Field<SigninRequest, bool>('rememberLogin', _$rememberLogin),
+    #email: _f$email,
+    #encodedPassword: _f$encodedPassword,
+    #rememberLogin: _f$rememberLogin,
   };
 
   static SigninRequest _instantiate(DecodingData data) {
-    return SigninRequest(
-        data.get(#email), data.get(#encodedPassword), data.get(#rememberLogin));
+    return SigninRequest(data.dec(_f$email), data.dec(_f$encodedPassword),
+        data.dec(_f$rememberLogin));
   }
 
   @override

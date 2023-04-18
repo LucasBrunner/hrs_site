@@ -39,7 +39,12 @@ pub async fn customer_fs(path: PathBuf, _auth: AuthSession) -> Option<NamedFile>
   let mut path = Path::new("./static/customer").join(path);
   if path.is_dir() {
     path.push("index.html");
-  }
+  } else if !path.is_file() {
+    if let Some(p) = path.to_str() {
+      let new_path = p.to_owned() + ".html";
+      path = Path::new(&new_path).to_path_buf();
+    }
+  } 
 
   NamedFile::open(path).await.ok()
 }

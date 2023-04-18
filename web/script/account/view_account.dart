@@ -3,12 +3,12 @@ import 'dart:html';
 import '../data/account.dart';
 
 void setup() async {
-  Account? account = await Account.getAccount();
+  Account? account = await Account.httpGetImplicit();
   if (account == null) {
     return;
   }
 
-  querySelector('#profile-table')?.children.addAll(account.toTableRows()
+  querySelector('#profile-table')?.children.addAll(account.toTableViewRows()
     ..add(TableRowElement()
       ..style.display = 'flex'
       ..style.justifyContent = 'right'
