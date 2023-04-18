@@ -77,9 +77,7 @@ void submit() async {
     Uri.http(window.location.host, '/signup'),
     body: signinRequest.toJson(),
     headers: {
-      'Access-Control-Allow-Origin': '*',
       'Content-type': 'application/json',
-      'Accept': 'application/json',
     },
   );
 

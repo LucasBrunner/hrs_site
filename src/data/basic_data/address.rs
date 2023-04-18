@@ -1,9 +1,9 @@
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use sqlx::FromRow;
 
 use crate::data::IdColumnName;
 
-#[derive(Serialize, Clone, FromRow)]
+#[derive(Serialize, Deserialize, Clone, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Address {
   pub address_id: u64,

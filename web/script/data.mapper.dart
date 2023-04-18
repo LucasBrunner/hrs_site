@@ -652,6 +652,65 @@ extension _StringSomeMapperExtension on _StringSome {
   }
 }
 
+class UpdateTypeMapper extends ClassMapperBase<UpdateType> {
+  UpdateTypeMapper._();
+  static UpdateTypeMapper? _instance;
+  static UpdateTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = UpdateTypeMapper._());
+      UpdateTypeTypeMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = 'UpdateType';
+  @override
+  Function get typeFactory => <T>(f) => f<UpdateType<T>>();
+
+  static UpdateTypeType? _$updateType(UpdateType v) => v.updateType;
+  static const Field<UpdateType, UpdateTypeType?> _f$updateType =
+      Field('updateType', _$updateType, key: 'type');
+  static int? _$_id(UpdateType v) => v._id;
+  static const Field<UpdateType, int?> _f$_id = Field('_id', _$_id, key: 'id');
+  static dynamic _$_item(UpdateType v) => v._item;
+  static dynamic _arg$_item<T>(f) => f<T?>();
+  static const Field<UpdateType, dynamic> _f$_item =
+      Field('_item', _$_item, key: 'item', arg: _arg$_item);
+
+  @override
+  final Map<Symbol, Field<UpdateType, dynamic>> fields = const {
+    #updateType: _f$updateType,
+    #_id: _f$_id,
+    #_item: _f$_item,
+  };
+  @override
+  final bool ignoreNull = true;
+
+  static UpdateType<T> _instantiate<T>(DecodingData data) {
+    return UpdateType.serialize(
+        data.dec(_f$updateType), data.dec(_f$_id), data.dec(_f$_item));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+}
+
+mixin UpdateTypeMappable<T> {
+  String toJson() {
+    return UpdateTypeMapper._guard((c) => c.toJson(this as UpdateType<T>));
+  }
+
+  Map<String, dynamic> toMap() {
+    return UpdateTypeMapper._guard((c) => c.toMap(this as UpdateType<T>));
+  }
+}
+
 class DataResultMapper extends ClassMapperBase<DataResult> {
   DataResultMapper._();
   static DataResultMapper? _instance;
@@ -938,4 +997,53 @@ class _DataWithIdCopyWithImpl<$R, $Out extends DataWithId, T>
       $chain<$R2, $Out2 extends DataWithId>(
               Then<DataWithId<T>, $Out2> t, Then<$Out2, $R2> t2) =>
           _DataWithIdCopyWithImpl($value, t, t2);
+}
+
+class UpdateTypeTypeMapper extends EnumMapper<UpdateTypeType> {
+  UpdateTypeTypeMapper._();
+  static UpdateTypeTypeMapper? _instance;
+  static UpdateTypeTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = UpdateTypeTypeMapper._());
+    }
+    return _instance!;
+  }
+
+  static UpdateTypeType fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
+
+  @override
+  UpdateTypeType decode(dynamic value) {
+    switch (value) {
+      case 'put':
+        return UpdateTypeType.put;
+      case 'delete':
+        return UpdateTypeType.delete;
+      case 'ignore':
+        return UpdateTypeType.ignore;
+      default:
+        throw MapperException.unknownEnumValue(value);
+    }
+  }
+
+  @override
+  dynamic encode(UpdateTypeType self) {
+    switch (self) {
+      case UpdateTypeType.put:
+        return 'put';
+      case UpdateTypeType.delete:
+        return 'delete';
+      case UpdateTypeType.ignore:
+        return 'ignore';
+    }
+  }
+}
+
+extension UpdateTypeTypeMapperExtension on UpdateTypeType {
+  String toValue() {
+    UpdateTypeTypeMapper.ensureInitialized();
+    return MapperContainer.globals.toValue(this) as String;
+  }
 }

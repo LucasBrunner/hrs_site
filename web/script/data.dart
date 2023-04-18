@@ -47,6 +47,58 @@ class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
   const factory StringOptionInternallyTagged.some(String data) = _StringSome;
 }
 
+@MappableEnum(caseStyle: CaseStyle.camelCase)
+enum UpdateTypeType {
+  put(id: 1),
+  delete(id: 2),
+  ignore(id: 3);
+
+  final int id;
+
+  const UpdateTypeType({
+    required this.id,
+  });
+}
+
+@MappableClass(ignoreNull: true, generateMethods: GenerateMethods.encode)
+class UpdateType<T> with UpdateTypeMappable {
+  @MappableField(key: 'item')
+  T? _item;
+  @MappableField(key: 'id')
+  int? _id;
+  @MappableField(key: 'type')
+  UpdateTypeType? updateType;
+
+  UpdateType.put(this._item) {
+    this.updateType = UpdateTypeType.put;
+  }
+
+  UpdateType.delete(this._id) {
+    this.updateType = UpdateTypeType.delete;
+  }
+
+  UpdateType.ignore() {
+    this.updateType = UpdateTypeType.ignore;
+  }
+
+  @MappableConstructor()
+  UpdateType.serialize(this.updateType, this._id, this._item);
+
+  U? when<U>({
+    required U Function(T item) put,
+    required U Function(int id) delete,
+  }) {
+    switch (updateType) {
+      case UpdateTypeType.put:
+        return put.call(_item!);
+      case UpdateTypeType.delete:
+        return delete.call(_id!);
+      default:
+        return null;
+    }
+  }
+}
+
 @MappableClass(ignoreNull: true)
 class DataResult<T> with DataResultMappable {
   T? ok;

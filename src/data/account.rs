@@ -2,19 +2,18 @@ use std::io::Cursor;
 
 use rocket::{response::{Responder, self}, http::{ContentType, Status}, Response};
 use rocket_db_pools::Connection;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 use crate::{authentication::AuthSession, database::Db};
 
 use super::{
   basic_data::{address::Address, phone::Phone},
-  DataError, DataWithId,
+  DataError, DataWithId, UpdateType,
 };
 
 #[derive(Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountPublicData {
-  pub account_id: u64,
   pub email: String,
   pub preferred_name: String,
   pub legal_name: String,
@@ -83,7 +82,6 @@ pub async fn get_account_info(
     AccountPublicData,
     r#"
         SELECT
-          `account_id`,
           `email`,
           `preferred_name`,
           `legal_name`
@@ -160,4 +158,14 @@ pub async fn get_account_info(
       addresses: address_data.clone(),
     }
   ).unwrap(), status: Status::Ok, }
+}
+
+#[derive(Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct AccountUpdate {
+  email: UpdateType<String>,
+  preferred_name: UpdateType<String>,
+  legal_name: UpdateType<String>,
+  phones: UpdateType<Vec<Phone>>,
+  addresses: UpdateType<Vec<Address>>,
 }

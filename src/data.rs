@@ -23,7 +23,7 @@ pub trait ToSqlxError<T> {
   fn to_sql_error(self) -> Result<T, sqlx::Error>;
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum DataMaybeId<T> {
   Id {
@@ -44,7 +44,7 @@ impl<'a, 'r, T> FromRow<'r, MySqlRow> for DataMaybeId<T> where 'r: 'a, T: FromRo
   }
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DataWithId<T> {
   pub data: T,
   pub id: u64,
@@ -57,6 +57,16 @@ impl<'a, 'r, T> FromRow<'r, MySqlRow> for DataWithId<T> where 'r: 'a, T: FromRow
       Err(_) => Err(sqlx::Error::ColumnNotFound(T::ID_COLUMN_NAME.to_owned())),
     }
   }
+}
+
+#[derive(Debug, Deserialize, Clone)]
+#[serde(tag = "type", rename_all = "camelCase")]
+pub enum UpdateType<T> {
+  #[serde(rename_all = "camelCase")]
+  Put { item: DataMaybeId<T> },
+  #[serde(rename_all = "camelCase")]
+  Delete { id: u64 },
+  Ignore,
 }
 
 #[derive(Debug, Clone, Copy, Serialize)]

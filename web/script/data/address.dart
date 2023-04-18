@@ -111,7 +111,8 @@ SelectElement stateInput({String selected = ''}) {
       OptionElement()
         ..value = ''
         ..innerText = '— Select One —'
-        ..selected = selected.isEmpty);
+        ..selected = selected.isEmpty
+        ..disabled = true);
   return input;
 }
 

@@ -77,7 +77,7 @@ impl FromRow<'_, MySqlRow> for PhoneType {
   }
 }
 
-#[derive(Serialize, Clone, sqlx::FromRow)]
+#[derive(Serialize, Deserialize, Clone, sqlx::FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Phone {
   pub number: String,

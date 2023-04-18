@@ -2,8 +2,6 @@ import 'dart:html';
 
 import 'package:dart_mappable/dart_mappable.dart';
 
-import '../data.dart';
-
 part 'phone.mapper.dart';
 
 @MappableEnum(caseStyle: CaseStyle.camelCase)
@@ -90,6 +88,7 @@ SelectElement phoneTypeInput({PhoneType? selected}) {
       OptionElement()
         ..value = ''
         ..innerText = '— Select One —'
-        ..selected = selected == null);
+        ..selected = selected == null
+        ..disabled = true);
   return input;
 }

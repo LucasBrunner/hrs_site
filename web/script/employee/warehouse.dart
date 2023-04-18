@@ -172,9 +172,7 @@ void _updateItemCount(Warehouse warehouse) async {
   final response = await http.post(
     Uri.http(window.location.host, '/data/employee/warehouse/${warehouse.id}/inventory/manual_update'),
     headers: {
-      'Access-Control-Allow-Origin': '*',
       'Content-type': 'application/json',
-      'Accept': 'application/json',
     },
     body: update.toJson(),
   );
