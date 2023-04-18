@@ -24,7 +24,7 @@ pub trait ToSqlxError<T> {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(untagged)]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum DataMaybeId<T> {
   Id {
     data: T,
@@ -59,11 +59,11 @@ impl<'a, 'r, T> FromRow<'r, MySqlRow> for DataWithId<T> where 'r: 'a, T: FromRow
   }
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum UpdateType<T> {
   #[serde(rename_all = "camelCase")]
-  Put { item: DataMaybeId<T> },
+  Put { item: T },
   #[serde(rename_all = "camelCase")]
   Delete { id: u64 },
   Ignore,

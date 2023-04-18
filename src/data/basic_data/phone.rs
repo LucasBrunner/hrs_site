@@ -5,7 +5,7 @@ use sqlx::{mysql::MySqlRow, Database, Decode, FromRow, Row, Type};
 
 use crate::data::{IdColumnName, ToSqlxError};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
 pub enum PhoneType {
   Landline = 1,

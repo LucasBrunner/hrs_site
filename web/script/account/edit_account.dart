@@ -105,25 +105,21 @@ Future<bool> _saveData(Account account) async {
 
       if (id.startsWith('temp-')) {
         accountUpdate.addresses.add(UpdateType.put(DataMaybeId.noId(address)));
-      } else {
-        accountUpdate.addresses.add(UpdateType.put(DataMaybeId.noId(address)));
+        continue;
       }
 
       final compareAddress = account.addresses.firstWhere(
         (element) => element.id.toString() == id,
         orElse: () => DataWithId(-1, Address.defaultAddress()),
       );
-      if (identical(compareAddress.data, Address.defaultAddress())) {
+      if (compareAddress.id == -1) {
         dataValid = false;
         querySelector('#general-error-message')?.innerText = 'There was an error serializing your account.';
         continue;
-      } else if (identical(
-        address,
-        compareAddress.data,
-      )) {
+      } else if (address == compareAddress.data) {
         continue;
       } else {
-        accountUpdate.addresses.add(UpdateType.put(DataMaybeId.id(compareAddress.id, compareAddress.data)));
+        accountUpdate.addresses.add(UpdateType.put(DataMaybeId.id(compareAddress.id, address)));
       }
     }
   }
@@ -160,26 +156,34 @@ Future<bool> _saveData(Account account) async {
 
       if (id.startsWith('temp-')) {
         accountUpdate.phones.add(UpdateType.put(DataMaybeId.noId(phone)));
-      } else {
-        accountUpdate.phones.add(UpdateType.put(DataMaybeId.noId(phone)));
+        continue;
       }
 
       final comparePhone = account.phones.firstWhere(
         (element) => element.id.toString() == id,
         orElse: () => DataWithId(-1, Phone.defaultPhone()),
       );
-      if (identical(comparePhone.data, Phone.defaultPhone())) {
+      if (comparePhone.id == -1) {
         dataValid = false;
         querySelector('#general-error-message')?.innerText = 'There was an error serializing your account.';
         continue;
-      } else if (identical(
-        phone,
-        comparePhone.data,
-      )) {
+      } else if (phone == comparePhone.data) {
         continue;
       } else {
-        accountUpdate.phones.add(UpdateType.put(DataMaybeId.id(comparePhone.id, comparePhone.data)));
+        accountUpdate.phones.add(UpdateType.put(DataMaybeId.id(comparePhone.id, phone)));
       }
+    }
+  }
+
+  for (DataWithId<Address> address in account.addresses) {
+    if (querySelector('.address-input[data-address-id="${address.id}"]') == null) {
+      accountUpdate.addresses.add(UpdateType.delete(address.id));
+    }
+  }
+
+  for (DataWithId<Phone> phone in account.phones) {
+    if (querySelector('.phone-input[data-phone-id="${phone.id}"]') == null) {
+      accountUpdate.phones.add(UpdateType.delete(phone.id));
     }
   }
 
@@ -191,6 +195,9 @@ Future<bool> _saveData(Account account) async {
         return true;
       case 401:
         querySelector('#general-error-message')?.innerText = 'Login session expired.';
+        return false;
+      case 422:
+        querySelector('#general-error-message')?.innerText = 'There was an error serializing your account.';
         return false;
       case 500:
         querySelector('#general-error-message')?.innerText = 'There was a server error.';
@@ -295,6 +302,6 @@ void setup() async {
     querySelector('body')?.children.insert(1, HeadingElement.h2()..text = 'Account not found');
     return;
   }
-
+  querySelector('#account-title')?.innerText = 'Currently Editing ${account.data.preferredName}\'s account';
   querySelector('#account-edit-table')?.children.addAll(accountEditTableRows(account));
 }

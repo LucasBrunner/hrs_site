@@ -673,8 +673,8 @@ class UpdateTypeMapper extends ClassMapperBase<UpdateType> {
   @override
   Function get typeFactory => <T>(f) => f<UpdateType<T>>();
 
-  static UpdateTypeType? _$updateType(UpdateType v) => v.updateType;
-  static const Field<UpdateType, UpdateTypeType?> _f$updateType =
+  static UpdateTypeType _$updateType(UpdateType v) => v.updateType;
+  static const Field<UpdateType, UpdateTypeType> _f$updateType =
       Field('updateType', _$updateType, key: 'type');
   static int? _$_id(UpdateType v) => v._id;
   static const Field<UpdateType, int?> _f$_id = Field('_id', _$_id, key: 'id');
@@ -693,7 +693,7 @@ class UpdateTypeMapper extends ClassMapperBase<UpdateType> {
   final bool ignoreNull = true;
 
   static UpdateType<T> _instantiate<T>(DecodingData data) {
-    return UpdateType.serialize(
+    return UpdateType.map(
         data.dec(_f$updateType), data.dec(_f$_id), data.dec(_f$_item));
   }
 
@@ -717,6 +717,8 @@ class DataResultMapper extends ClassMapperBase<DataResult> {
   static DataResultMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = DataResultMapper._());
+      DataErrorMapper.ensureInitialized();
+      DataResultTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -731,24 +733,28 @@ class DataResultMapper extends ClassMapperBase<DataResult> {
   @override
   Function get typeFactory => <T>(f) => f<DataResult<T>>();
 
+  static DataError? _$err(DataResult v) => v.err;
+  static const Field<DataResult, DataError?> _f$err = Field('err', _$err);
   static dynamic _$ok(DataResult v) => v.ok;
   static dynamic _arg$ok<T>(f) => f<T?>();
   static const Field<DataResult, dynamic> _f$ok =
       Field('ok', _$ok, arg: _arg$ok);
-  static DataError? _$err(DataResult v) => v.err;
-  static const Field<DataResult, DataError?> _f$err =
-      Field('err', _$err, mode: FieldMode.member);
+  static DataResultType _$_type(DataResult v) => v._type;
+  static const Field<DataResult, DataResultType> _f$_type =
+      Field('_type', _$_type, key: 'type');
 
   @override
   final Map<Symbol, Field<DataResult, dynamic>> fields = const {
-    #ok: _f$ok,
     #err: _f$err,
+    #ok: _f$ok,
+    #_type: _f$_type,
   };
   @override
   final bool ignoreNull = true;
 
   static DataResult<T> _instantiate<T>(DecodingData data) {
-    return DataResult.ok(data.dec(_f$ok));
+    return DataResult.map(
+        data.dec(_f$err), data.dec(_f$ok), data.dec(_f$_type));
   }
 
   @override
@@ -771,63 +777,6 @@ mixin DataResultMappable<T> {
   Map<String, dynamic> toMap() {
     return DataResultMapper._guard((c) => c.toMap(this as DataResult<T>));
   }
-
-  DataResultCopyWith<DataResult<T>, DataResult<T>, DataResult<T>, T>
-      get copyWith =>
-          _DataResultCopyWithImpl(this as DataResult<T>, $identity, $identity);
-  @override
-  String toString() {
-    return DataResultMapper._guard((c) => c.asString(this));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (runtimeType == other.runtimeType &&
-            DataResultMapper._guard((c) => c.isEqual(this, other)));
-  }
-
-  @override
-  int get hashCode {
-    return DataResultMapper._guard((c) => c.hash(this));
-  }
-}
-
-extension DataResultValueCopy<$R, $Out extends DataResult, T>
-    on ObjectCopyWith<$R, DataResult<T>, $Out> {
-  DataResultCopyWith<$R, DataResult<T>, $Out, T> get $asDataResult =>
-      $base.as((v, t, t2) => _DataResultCopyWithImpl(v, t, t2));
-}
-
-typedef DataResultCopyWithBound = DataResult;
-
-abstract class DataResultCopyWith<$R, $In extends DataResult<T>,
-    $Out extends DataResult, T> implements ClassCopyWith<$R, $In, $Out> {
-  $R call({T? ok});
-  DataResultCopyWith<$R2, $In, $Out2, T> $chain<$R2, $Out2 extends DataResult>(
-      Then<DataResult<T>, $Out2> t, Then<$Out2, $R2> t2);
-}
-
-class _DataResultCopyWithImpl<$R, $Out extends DataResult, T>
-    extends ClassCopyWithBase<$R, DataResult<T>, $Out>
-    implements DataResultCopyWith<$R, DataResult<T>, $Out, T> {
-  _DataResultCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<DataResult> $mapper =
-      DataResultMapper.ensureInitialized();
-  @override
-  $R call({Object? ok = $none}) =>
-      $apply(FieldCopyWithData({if (ok != $none) #ok: ok}));
-  @override
-  DataResult<T> $make(CopyWithData data) =>
-      DataResult.ok(data.get(#ok, or: $value.ok));
-
-  @override
-  DataResultCopyWith<$R2, DataResult<T>, $Out2, T>
-      $chain<$R2, $Out2 extends DataResult>(
-              Then<DataResult<T>, $Out2> t, Then<$Out2, $R2> t2) =>
-          _DataResultCopyWithImpl($value, t, t2);
 }
 
 class DataMaybeIdMapper extends ClassMapperBase<DataMaybeId> {
@@ -836,6 +785,7 @@ class DataMaybeIdMapper extends ClassMapperBase<DataMaybeId> {
   static DataMaybeIdMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = DataMaybeIdMapper._());
+      DataMaybeIdTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -850,23 +800,28 @@ class DataMaybeIdMapper extends ClassMapperBase<DataMaybeId> {
   @override
   Function get typeFactory => <T>(f) => f<DataMaybeId<T>>();
 
-  static int? _$id(DataMaybeId v) => v.id;
-  static const Field<DataMaybeId, int?> _f$id = Field('id', _$id);
   static dynamic _$data(DataMaybeId v) => v.data;
   static dynamic _arg$data<T>(f) => f<T>();
   static const Field<DataMaybeId, dynamic> _f$data =
       Field('data', _$data, arg: _arg$data);
+  static int? _$id(DataMaybeId v) => v.id;
+  static const Field<DataMaybeId, int?> _f$id = Field('id', _$id);
+  static DataMaybeIdType _$_type(DataMaybeId v) => v._type;
+  static const Field<DataMaybeId, DataMaybeIdType> _f$_type =
+      Field('_type', _$_type, key: 'type');
 
   @override
   final Map<Symbol, Field<DataMaybeId, dynamic>> fields = const {
-    #id: _f$id,
     #data: _f$data,
+    #id: _f$id,
+    #_type: _f$_type,
   };
   @override
   final bool ignoreNull = true;
 
   static DataMaybeId<T> _instantiate<T>(DecodingData data) {
-    return DataMaybeId.id(data.dec(_f$id), data.dec(_f$data));
+    return DataMaybeId.map(
+        data.dec(_f$data), data.dec(_f$id), data.dec(_f$_type));
   }
 
   @override
@@ -881,7 +836,15 @@ class DataMaybeIdMapper extends ClassMapperBase<DataMaybeId> {
   }
 }
 
-mixin DataMaybeIdMappable<T> {}
+mixin DataMaybeIdMappable<T> {
+  String toJson() {
+    return DataMaybeIdMapper._guard((c) => c.toJson(this as DataMaybeId<T>));
+  }
+
+  Map<String, dynamic> toMap() {
+    return DataMaybeIdMapper._guard((c) => c.toMap(this as DataMaybeId<T>));
+  }
+}
 
 class DataWithIdMapper extends ClassMapperBase<DataWithId> {
   DataWithIdMapper._();
@@ -1044,6 +1007,96 @@ class UpdateTypeTypeMapper extends EnumMapper<UpdateTypeType> {
 extension UpdateTypeTypeMapperExtension on UpdateTypeType {
   String toValue() {
     UpdateTypeTypeMapper.ensureInitialized();
+    return MapperContainer.globals.toValue(this) as String;
+  }
+}
+
+class DataResultTypeMapper extends EnumMapper<DataResultType> {
+  DataResultTypeMapper._();
+  static DataResultTypeMapper? _instance;
+  static DataResultTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = DataResultTypeMapper._());
+    }
+    return _instance!;
+  }
+
+  static DataResultType fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
+
+  @override
+  DataResultType decode(dynamic value) {
+    switch (value) {
+      case 'ok':
+        return DataResultType.ok;
+      case 'err':
+        return DataResultType.err;
+      default:
+        throw MapperException.unknownEnumValue(value);
+    }
+  }
+
+  @override
+  dynamic encode(DataResultType self) {
+    switch (self) {
+      case DataResultType.ok:
+        return 'ok';
+      case DataResultType.err:
+        return 'err';
+    }
+  }
+}
+
+extension DataResultTypeMapperExtension on DataResultType {
+  String toValue() {
+    DataResultTypeMapper.ensureInitialized();
+    return MapperContainer.globals.toValue(this) as String;
+  }
+}
+
+class DataMaybeIdTypeMapper extends EnumMapper<DataMaybeIdType> {
+  DataMaybeIdTypeMapper._();
+  static DataMaybeIdTypeMapper? _instance;
+  static DataMaybeIdTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = DataMaybeIdTypeMapper._());
+    }
+    return _instance!;
+  }
+
+  static DataMaybeIdType fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
+
+  @override
+  DataMaybeIdType decode(dynamic value) {
+    switch (value) {
+      case 'id':
+        return DataMaybeIdType.id;
+      case 'noId':
+        return DataMaybeIdType.noId;
+      default:
+        throw MapperException.unknownEnumValue(value);
+    }
+  }
+
+  @override
+  dynamic encode(DataMaybeIdType self) {
+    switch (self) {
+      case DataMaybeIdType.id:
+        return 'id';
+      case DataMaybeIdType.noId:
+        return 'noId';
+    }
+  }
+}
+
+extension DataMaybeIdTypeMapperExtension on DataMaybeIdType {
+  String toValue() {
+    DataMaybeIdTypeMapper.ensureInitialized();
     return MapperContainer.globals.toValue(this) as String;
   }
 }

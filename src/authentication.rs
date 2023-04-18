@@ -74,7 +74,7 @@ impl<'r> FromRequest<'r> for AuthSession {
     
     match LoginSesion::get_session_if_valid(&mut db, req.cookies()).await {
       Ok(session) => Outcome::Success(AuthSession { session }),
-      Err(_) => Outcome::Failure((Status::Forbidden, ())),
+      Err(_) => Outcome::Failure((Status::Unauthorized, ())),
     }
   }
 }

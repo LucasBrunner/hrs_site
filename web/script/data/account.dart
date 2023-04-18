@@ -133,7 +133,7 @@ class AccountUpdate with AccountUpdateMappable {
 
   Future<Response> httpPut() async {
     return await http.put(
-      Uri.http(window.location.host, '/signin'),
+      Uri.http(window.location.host, '/data/account'),
       body: toJson(),
       headers: {
         'Content-type': 'application/json',

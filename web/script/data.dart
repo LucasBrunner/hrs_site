@@ -49,15 +49,9 @@ class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
 
 @MappableEnum(caseStyle: CaseStyle.camelCase)
 enum UpdateTypeType {
-  put(id: 1),
-  delete(id: 2),
-  ignore(id: 3);
-
-  final int id;
-
-  const UpdateTypeType({
-    required this.id,
-  });
+  put,
+  delete,
+  ignore,
 }
 
 @MappableClass(ignoreNull: true, generateMethods: GenerateMethods.encode)
@@ -67,24 +61,24 @@ class UpdateType<T> with UpdateTypeMappable {
   @MappableField(key: 'id')
   int? _id;
   @MappableField(key: 'type')
-  UpdateTypeType? updateType;
+  late final UpdateTypeType updateType;
 
   UpdateType.put(this._item) {
-    this.updateType = UpdateTypeType.put;
+    updateType = UpdateTypeType.put;
   }
 
   UpdateType.delete(this._id) {
-    this.updateType = UpdateTypeType.delete;
+    updateType = UpdateTypeType.delete;
   }
 
   UpdateType.ignore() {
-    this.updateType = UpdateTypeType.ignore;
+    updateType = UpdateTypeType.ignore;
   }
 
   @MappableConstructor()
-  UpdateType.serialize(this.updateType, this._id, this._item);
+  UpdateType.map(this.updateType, this._id, this._item);
 
-  U? when<U>({
+  U when<U>({
     required U Function(T item) put,
     required U Function(int id) delete,
   }) {
@@ -94,57 +88,91 @@ class UpdateType<T> with UpdateTypeMappable {
       case UpdateTypeType.delete:
         return delete.call(_id!);
       default:
-        return null;
+        throw Exception("Invalid union state!");
     }
   }
 }
 
-@MappableClass(ignoreNull: true)
+@MappableEnum(caseStyle: CaseStyle.camelCase)
+enum DataResultType {
+  ok,
+  err,
+}
+
+@MappableClass(ignoreNull: true, generateMethods: GenerateMethods.decode | GenerateMethods.encode)
 class DataResult<T> with DataResultMappable {
   T? ok;
   DataError? err;
+  @MappableField(key: 'type')
+  late final DataResultType _type;
 
-  DataResult.ok(this.ok);
+  DataResult.ok(this.ok) {
+    _type = DataResultType.ok;
+  }
 
-  DataResult.err(this.err);
+  DataResult.err(this.err) {
+    _type = DataResultType.err;
+  }
+
+  @MappableConstructor()
+  DataResult.map(this.err, this.ok, this._type);
 
   U when<U>({
     required U Function(T ok) ok,
     required U Function(DataError err) err,
   }) {
-    if (this.ok != null && this.err == null) {
-      return ok.call(this.ok as T);
-    } else if (this.ok == null && this.err != null) {
-      return err.call(this.err!);
-    } else {
-      throw Exception("Invalid union state!");
+    switch (_type) {
+      case DataResultType.ok:
+        return ok.call(this.ok as T);
+      case DataResultType.err:
+        return err.call(this.err!);
+      default:
+        throw Exception("Invalid union state!");
     }
   }
 }
 
-@MappableClass(ignoreNull: true, generateMethods: GenerateMethods.decode)
+@MappableEnum(caseStyle: CaseStyle.camelCase)
+enum DataMaybeIdType {
+  id,
+  noId,
+}
+
+@MappableClass(ignoreNull: true, generateMethods: GenerateMethods.decode | GenerateMethods.encode)
 class DataMaybeId<T> with DataMaybeIdMappable {
   T data;
   int? id;
+  @MappableField(key: 'type')
+  late final DataMaybeIdType _type;
 
-  DataMaybeId.id(this.id, this.data);
+  DataMaybeId.id(this.id, this.data) {
+    _type = DataMaybeIdType.id;
+  }
 
-  DataMaybeId.noId(this.data);
+  DataMaybeId.noId(this.data) {
+    _type = DataMaybeIdType.noId;
+  }
+
+  @MappableConstructor()
+  DataMaybeId.map(this.data, this.id, this._type);
 
   U when<U>({
-    required U Function(int id) id,
-    required U Function() noId,
+    required U Function(int id, T data) id,
+    required U Function(T data) noId,
   }) {
-    if (this.id == null) {
-      return noId.call();
-    } else {
-      return id.call(this.id!);
+    switch (_type) {
+      case DataMaybeIdType.id:
+        return id.call(this.id!, data);
+      case DataMaybeIdType.noId:
+        return noId.call(data);
+      default:
+        throw Exception("Invalid union state!");
     }
   }
 }
 
 @MappableClass()
-class DataWithId<T> with DataMaybeIdMappable {
+class DataWithId<T> with DataWithIdMappable {
   T data;
   int id;
 
