@@ -1,22 +1,39 @@
-use std::path::{Path, PathBuf};
-
 use rocket::{
-  fs::NamedFile,
-  http::Status,
+  http::{Status, Cookie},
   request::{FromRequest, Outcome},
-  Request,
+  Request, Route,
 };
 use rocket_db_pools::Connection;
 
-use crate::{database::Db, session::LoginSesion, authentication::empoyee::AuthAccountEmployee};
+use crate::{database::Db, session::LoginSesion};
 
+pub mod empoyee;
 pub mod signin;
 pub mod signup;
-pub mod empoyee;
 
-pub mod prelude {
-  pub use super::signin::signin;
-  pub use super::signup::signup;
+pub fn authentication_routes() -> Vec<Route> {
+  routes![signin::signin, signup::signup, sign_out_everywhere]
+}
+
+#[post("/signout_everywhere")]
+pub async fn sign_out_everywhere(
+  mut db: Connection<Db>,
+  auth_session: AuthSession,
+) -> Status {
+  let session_end_result = sqlx::query!(
+    r#"
+      DELETE FROM `Session`
+      WHERE `account_id` = ?;
+    "#,
+    auth_session.session.account_id,
+  )
+  .execute(&mut *db)
+  .await;
+
+  match session_end_result {
+    Ok(_) => Status::Ok,
+    Err(_) => Status::InternalServerError,
+  }
 }
 
 pub async fn is_account_employee(account_id: u64, db: &mut Connection<Db>) -> bool {
@@ -47,16 +64,6 @@ pub async fn login_destination(account_id: u64, db: &mut Connection<Db>) -> &str
   }
 }
 
-#[rocket::get("/employee/<path..>")]
-pub async fn employee_fs(path: PathBuf, _auth: AuthAccountEmployee) -> Option<NamedFile> {
-  let mut path = Path::new("./static/employee").join(path);
-  if path.is_dir() {
-    path.push("index.html");
-  }
-
-  NamedFile::open(path).await.ok()
-}
-
 pub struct AuthSession {
   pub session: LoginSesion,
 }
@@ -71,10 +78,13 @@ impl<'r> FromRequest<'r> for AuthSession {
       rocket::outcome::Outcome::Failure(_) => return Outcome::Failure((Status::NotFound, ())),
       rocket::outcome::Outcome::Forward(_) => return Outcome::Failure((Status::NotFound, ())),
     };
-    
+
     match LoginSesion::get_session_if_valid(&mut db, req.cookies()).await {
       Ok(session) => Outcome::Success(AuthSession { session }),
-      Err(_) => Outcome::Failure((Status::Unauthorized, ())),
+      Err(_) => {
+        req.cookies().remove_private(Cookie::named("session"));
+        Outcome::Failure((Status::Unauthorized, ()))
+      },
     }
   }
 }

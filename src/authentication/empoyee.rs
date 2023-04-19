@@ -1,5 +1,5 @@
 use rocket::{
-  http::Status,
+  http::{Status, Cookie},
   request::{FromRequest, Outcome},
   Request, Route,
 };
@@ -8,8 +8,8 @@ use rocket_db_pools::Connection;
 use crate::{
   data::{
     inventory::get_inventory_item_data,
-    warehouses::warehouses,
-    warehouse::{warehouse_inventory, warehouse_inventory_manual_update},
+    warehouses::get_warehouses,
+    warehouse::{get_warehouse_inventory, post_warehouse_inventory},
   },
   database::Db,
   session::LoginSesion,
@@ -17,12 +17,12 @@ use crate::{
 
 use super::is_account_employee;
 
-pub fn employee_data_routes() -> Vec<Route> {
+pub fn employee_crud_routes() -> Vec<Route> {
   routes![
-    warehouses,
-    warehouse_inventory,
+    get_warehouses,
+    get_warehouse_inventory,
     get_inventory_item_data,
-    warehouse_inventory_manual_update
+    post_warehouse_inventory,
   ]
 }
 
@@ -41,6 +41,7 @@ impl<'r> FromRequest<'r> for AuthAccountEmployee {
 
     let Ok(session) = LoginSesion::get_session_if_valid(&mut db, req.cookies()).await else {
       print!("invalid session!");
+      req.cookies().remove_private(Cookie::named("session"));
       return Outcome::Failure((Status::Forbidden, ()));
     };
 

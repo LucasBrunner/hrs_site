@@ -232,7 +232,7 @@ List<Element> accountEditTableRows(Account account) {
           ..id = 'account-preferred-name'
           ..type = 'text'
           ..value = account.data.preferredName),
-      Element.td()..classes.addAll(['input-error-message', 'preferred-name-error-message']),
+      Element.td()..classes.addAll(['error-message', 'preferred-name-error-message']),
     ]));
 
   final addressRow = TableRowElement();
@@ -274,14 +274,14 @@ List<Element> accountEditTableRows(Account account) {
         ..style.justifyContent = 'right'
         ..children.addAll([
           SpanElement()
-            ..className = 'input-error-message'
+            ..className = 'error-message'
             ..id = 'general-error-message',
           SpanElement()
             ..className = 'div-button edit-button'
             ..innerText = 'Save changes'
             ..onClick.listen((event) async {
               if (await _saveData(account)) {
-                window.location.pathname = '/customer/account.html';
+                window.location.pathname = '/account';
               }
             }),
         ]),
@@ -289,7 +289,7 @@ List<Element> accountEditTableRows(Account account) {
         ..children.add(SpanElement()
           ..className = 'div-button edit-button'
           ..innerText = 'Don\'t save changes'
-          ..onClick.listen((event) => window.location.pathname = '/customer/account.html')),
+          ..onClick.listen((event) => window.location.pathname = '/account')),
     ]);
   rows.add(finishButtonsRow);
 

@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'authentication/authentication.dart';
+
 const headerHtml = '''
     <h1>Home Renovation Systems</h1>
     <div id="header-left-content">
@@ -69,7 +71,7 @@ void _placeHeader() {
     querySelector('#header-left-content')?.children.add(ImageElement()
       ..id = 'profile-icon'
       ..src = '/icons/profile-icon.svg'
-      ..onClick.listen((event) => window.location.pathname = '/customer/account'));
+      ..onClick.listen((event) => window.location.pathname = '/account'));
   } else {
     querySelector('#header-left-content')?.children.addAll([
       SpanElement()
@@ -96,17 +98,22 @@ void _placeFooter() {
         ..children.add(ParagraphElement()
           ..innerText = 'View Account'
           ..className = 'text-button'
-          ..onClick.listen((event) => window.location.pathname = '/customer/account')),
+          ..onClick.listen((event) => window.location.pathname = '/account')),
       LIElement()
         ..children.add(ParagraphElement()
           ..innerText = 'View Orders'
           ..className = 'text-button'
-          ..onClick.listen((event) => window.location.pathname = '/customer/orders')),
+          ..onClick.listen((event) => window.location.pathname = '/account/orders')),
       LIElement()
         ..children.add(ParagraphElement()
           ..innerText = 'View Statements'
           ..className = 'text-button'
           ..onClick.listen((event) => window.location.pathname = '/signup')),
+      LIElement()
+        ..children.add(ParagraphElement()
+          ..innerText = 'Sign Out'
+          ..className = 'text-button'
+          ..onClick.listen((event) => signOut())),
     ]);
   } else {
     querySelector('#account-links')?.children.addAll([

@@ -41,10 +41,48 @@ class DataError with _$DataError {
 @freezed
 @MappableClass(discriminatorKey: 'Type')
 class StringOptionInternallyTagged with _$StringOptionInternallyTagged {
-  @MappableClass(discriminatorValue: 'None')
   const factory StringOptionInternallyTagged.none() = _StringNone;
-  @MappableClass(discriminatorValue: 'Some')
   const factory StringOptionInternallyTagged.some(String data) = _StringSome;
+}
+
+@MappableEnum(caseStyle: CaseStyle.camelCase)
+enum OptionInternallyTaggedType {
+  some,
+  none,
+}
+
+@MappableClass(generateMethods: GenerateMethods.encode | GenerateMethods.decode)
+class OptionInternallyTagged<T> with OptionInternallyTaggedMappable {
+  @MappableField(key: 'data')
+  T? _data;
+
+  @MappableField(key: 'type')
+  late final OptionInternallyTaggedType _updateType;
+
+  OptionInternallyTagged.some(this._data) {
+    _updateType = OptionInternallyTaggedType.none;
+  }
+
+  OptionInternallyTagged.none() {
+    _updateType = OptionInternallyTaggedType.none;
+  }
+
+  @MappableConstructor()
+  OptionInternallyTagged.map(this._data, this._updateType);
+
+  U when<U>({
+    required U Function(T data) some,
+    required U Function() none,
+  }) {
+    switch (_updateType) {
+      case OptionInternallyTaggedType.none:
+        return none.call();
+      case OptionInternallyTaggedType.some:
+        return some.call(_data as T);
+      default:
+        throw Exception("Invalid union state!");
+    }
+  }
 }
 
 @MappableEnum(caseStyle: CaseStyle.camelCase)
@@ -84,12 +122,33 @@ class UpdateType<T> with UpdateTypeMappable {
   }) {
     switch (updateType) {
       case UpdateTypeType.put:
-        return put.call(_item!);
+        return put.call(_item as T);
       case UpdateTypeType.delete:
         return delete.call(_id!);
       default:
         throw Exception("Invalid union state!");
     }
+  }
+}
+
+@MappableClass(generateMethods: GenerateMethods.decode | GenerateMethods.encode)
+class ItemCount<T> with ItemCountMappable {
+  T item;
+  int count;
+
+  ItemCount(
+    this.item,
+    this.count,
+  );
+}
+
+extension ConvertItemCount<T> on List<ItemCount<T>> {
+  Iterable<T> items() {
+    return map((element) => element.item);
+  }
+
+  List<T> itemList() {
+    return items().toList();
   }
 }
 
@@ -209,6 +268,18 @@ abstract class HttpGetRange<T> {
 
 abstract class ToOptionElement {
   OptionElement toOptionElement();
+}
+
+abstract class HasTitle {
+  String title();
+}
+
+extension ToOptionElementE on DataWithId<HasTitle> {
+  OptionElement toOptionElement() {
+    return OptionElement()
+      ..innerText = data.title()
+      ..value = id.toString();
+  }
 }
 
 abstract class ToDisplayRow {

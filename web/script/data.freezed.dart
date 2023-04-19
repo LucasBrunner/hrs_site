@@ -925,7 +925,6 @@ class __$$_StringNoneCopyWithImpl<$Res>
 
 /// @nodoc
 
-@MappableClass(discriminatorValue: 'None')
 class _$_StringNone implements _StringNone {
   const _$_StringNone();
 
@@ -1043,7 +1042,6 @@ class __$$_StringSomeCopyWithImpl<$Res>
 
 /// @nodoc
 
-@MappableClass(discriminatorValue: 'Some')
 class _$_StringSome implements _StringSome {
   const _$_StringSome(this.data);
 

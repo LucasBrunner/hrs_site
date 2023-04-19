@@ -61,13 +61,13 @@ class Phone with PhoneMappable {
             ..children.add(InputElement()
               ..value = number
               ..className = 'phone-number'),
-          Element.td()..className = 'phone-number-message',
+          Element.td()..classes.addAll(['phone-number-message', 'error-message']),
         ]),
       TableRowElement()
         ..children.addAll([
           Element.th()..innerText = 'Phone Type',
           Element.td()..children.add(phoneTypeInput(selected: phoneType)..className = 'phone-type'),
-          Element.td()..className = 'phone-type-message',
+          Element.td()..classes.addAll(['phone-type-message', 'error-message']),
         ]),
     ]);
   }

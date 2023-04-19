@@ -473,8 +473,6 @@ class StringOptionInternallyTaggedMapper
     if (_instance == null) {
       MapperContainer.globals
           .use(_instance = StringOptionInternallyTaggedMapper._());
-      _StringNoneMapper.ensureInitialized();
-      _StringSomeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -492,8 +490,7 @@ class StringOptionInternallyTaggedMapper
       const {};
 
   static StringOptionInternallyTagged _instantiate(DecodingData data) {
-    throw MapperException.missingSubclass(
-        'StringOptionInternallyTagged', 'Type', '${data.value['Type']}');
+    return StringOptionInternallyTagged.none();
   }
 
   @override
@@ -508,15 +505,46 @@ class StringOptionInternallyTaggedMapper
   }
 }
 
-extension StringOptionInternallyTaggedMapperExtension
-    on StringOptionInternallyTagged {
+mixin StringOptionInternallyTaggedMappable {
   String toJson() {
-    return StringOptionInternallyTaggedMapper._guard((c) => c.toJson(this));
+    return StringOptionInternallyTaggedMapper._guard(
+        (c) => c.toJson(this as StringOptionInternallyTagged));
   }
 
   Map<String, dynamic> toMap() {
-    return StringOptionInternallyTaggedMapper._guard((c) => c.toMap(this));
+    return StringOptionInternallyTaggedMapper._guard(
+        (c) => c.toMap(this as StringOptionInternallyTagged));
   }
+
+  StringOptionInternallyTaggedCopyWith<StringOptionInternallyTagged,
+          StringOptionInternallyTagged, StringOptionInternallyTagged>
+      get copyWith => _StringOptionInternallyTaggedCopyWithImpl(
+          this as StringOptionInternallyTagged, $identity, $identity);
+  @override
+  String toString() {
+    return StringOptionInternallyTaggedMapper._guard((c) => c.asString(this));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (runtimeType == other.runtimeType &&
+            StringOptionInternallyTaggedMapper._guard(
+                (c) => c.isEqual(this, other)));
+  }
+
+  @override
+  int get hashCode {
+    return StringOptionInternallyTaggedMapper._guard((c) => c.hash(this));
+  }
+}
+
+extension StringOptionInternallyTaggedValueCopy<$R,
+        $Out extends StringOptionInternallyTagged>
+    on ObjectCopyWith<$R, StringOptionInternallyTagged, $Out> {
+  StringOptionInternallyTaggedCopyWith<$R, StringOptionInternallyTagged, $Out>
+      get $asStringOptionInternallyTagged => $base.as(
+          (v, t, t2) => _StringOptionInternallyTaggedCopyWithImpl(v, t, t2));
 }
 
 typedef StringOptionInternallyTaggedCopyWithBound
@@ -533,71 +561,40 @@ abstract class StringOptionInternallyTaggedCopyWith<
           Then<StringOptionInternallyTagged, $Out2> t, Then<$Out2, $R2> t2);
 }
 
-class _StringNoneMapper extends SubClassMapperBase<_StringNone> {
-  _StringNoneMapper._();
-  static _StringNoneMapper? _instance;
-  static _StringNoneMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(_instance = _StringNoneMapper._());
-      StringOptionInternallyTaggedMapper.ensureInitialized()
-          .addSubMapper(_instance!);
-    }
-    return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
-  }
+class _StringOptionInternallyTaggedCopyWithImpl<$R,
+        $Out extends StringOptionInternallyTagged>
+    extends ClassCopyWithBase<$R, StringOptionInternallyTagged, $Out>
+    implements
+        StringOptionInternallyTaggedCopyWith<$R, StringOptionInternallyTagged,
+            $Out> {
+  _StringOptionInternallyTaggedCopyWithImpl(
+      super.value, super.then, super.then2);
 
   @override
-  final String id = '_StringNone';
-
-  @override
-  final Map<Symbol, Field<_StringNone, dynamic>> fields = const {};
-
-  @override
-  final String discriminatorKey = 'Type';
-  @override
-  final dynamic discriminatorValue = 'None';
-  @override
-  late final ClassMapperBase superMapper =
+  late final ClassMapperBase<StringOptionInternallyTagged> $mapper =
       StringOptionInternallyTaggedMapper.ensureInitialized();
-
-  static _StringNone _instantiate(DecodingData data) {
-    return _StringNone();
-  }
+  @override
+  $R call() => $apply(FieldCopyWithData({}));
+  @override
+  StringOptionInternallyTagged $make(CopyWithData data) =>
+      StringOptionInternallyTagged.none();
 
   @override
-  final Function instantiate = _instantiate;
-
-  static _StringNone fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<_StringNone>(map));
-  }
-
-  static _StringNone fromJson(String json) {
-    return _guard((c) => c.fromJson<_StringNone>(json));
-  }
+  StringOptionInternallyTaggedCopyWith<$R2, StringOptionInternallyTagged, $Out2>
+      $chain<$R2, $Out2 extends StringOptionInternallyTagged>(
+              Then<StringOptionInternallyTagged, $Out2> t,
+              Then<$Out2, $R2> t2) =>
+          _StringOptionInternallyTaggedCopyWithImpl($value, t, t2);
 }
 
-extension _StringNoneMapperExtension on _StringNone {
-  String toJson() {
-    return _StringNoneMapper._guard((c) => c.toJson(this));
-  }
-
-  Map<String, dynamic> toMap() {
-    return _StringNoneMapper._guard((c) => c.toMap(this));
-  }
-}
-
-class _StringSomeMapper extends SubClassMapperBase<_StringSome> {
-  _StringSomeMapper._();
-  static _StringSomeMapper? _instance;
-  static _StringSomeMapper ensureInitialized() {
+class OptionInternallyTaggedMapper
+    extends ClassMapperBase<OptionInternallyTagged> {
+  OptionInternallyTaggedMapper._();
+  static OptionInternallyTaggedMapper? _instance;
+  static OptionInternallyTaggedMapper ensureInitialized() {
     if (_instance == null) {
-      MapperContainer.globals.use(_instance = _StringSomeMapper._());
-      StringOptionInternallyTaggedMapper.ensureInitialized()
-          .addSubMapper(_instance!);
+      MapperContainer.globals.use(_instance = OptionInternallyTaggedMapper._());
+      OptionInternallyTaggedTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -608,47 +605,51 @@ class _StringSomeMapper extends SubClassMapperBase<_StringSome> {
   }
 
   @override
-  final String id = '_StringSome';
+  final String id = 'OptionInternallyTagged';
+  @override
+  Function get typeFactory => <T>(f) => f<OptionInternallyTagged<T>>();
 
-  static String _$data(_StringSome v) => v.data;
-  static const Field<_StringSome, String> _f$data = Field('data', _$data);
+  static dynamic _$_data(OptionInternallyTagged v) => v._data;
+  static dynamic _arg$_data<T>(f) => f<T?>();
+  static const Field<OptionInternallyTagged, dynamic> _f$_data =
+      Field('_data', _$_data, key: 'data', arg: _arg$_data);
+  static OptionInternallyTaggedType _$_updateType(OptionInternallyTagged v) =>
+      v._updateType;
+  static const Field<OptionInternallyTagged, OptionInternallyTaggedType>
+      _f$_updateType = Field('_updateType', _$_updateType, key: 'type');
 
   @override
-  final Map<Symbol, Field<_StringSome, dynamic>> fields = const {
-    #data: _f$data,
+  final Map<Symbol, Field<OptionInternallyTagged, dynamic>> fields = const {
+    #_data: _f$_data,
+    #_updateType: _f$_updateType,
   };
 
-  @override
-  final String discriminatorKey = 'Type';
-  @override
-  final dynamic discriminatorValue = 'Some';
-  @override
-  late final ClassMapperBase superMapper =
-      StringOptionInternallyTaggedMapper.ensureInitialized();
-
-  static _StringSome _instantiate(DecodingData data) {
-    return _StringSome(data.dec(_f$data));
+  static OptionInternallyTagged<T> _instantiate<T>(DecodingData data) {
+    return OptionInternallyTagged.map(
+        data.dec(_f$_data), data.dec(_f$_updateType));
   }
 
   @override
   final Function instantiate = _instantiate;
 
-  static _StringSome fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<_StringSome>(map));
+  static OptionInternallyTagged<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<OptionInternallyTagged<T>>(map));
   }
 
-  static _StringSome fromJson(String json) {
-    return _guard((c) => c.fromJson<_StringSome>(json));
+  static OptionInternallyTagged<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<OptionInternallyTagged<T>>(json));
   }
 }
 
-extension _StringSomeMapperExtension on _StringSome {
+mixin OptionInternallyTaggedMappable<T> {
   String toJson() {
-    return _StringSomeMapper._guard((c) => c.toJson(this));
+    return OptionInternallyTaggedMapper._guard(
+        (c) => c.toJson(this as OptionInternallyTagged<T>));
   }
 
   Map<String, dynamic> toMap() {
-    return _StringSomeMapper._guard((c) => c.toMap(this));
+    return OptionInternallyTaggedMapper._guard(
+        (c) => c.toMap(this as OptionInternallyTagged<T>));
   }
 }
 
@@ -708,6 +709,65 @@ mixin UpdateTypeMappable<T> {
 
   Map<String, dynamic> toMap() {
     return UpdateTypeMapper._guard((c) => c.toMap(this as UpdateType<T>));
+  }
+}
+
+class ItemCountMapper extends ClassMapperBase<ItemCount> {
+  ItemCountMapper._();
+  static ItemCountMapper? _instance;
+  static ItemCountMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = ItemCountMapper._());
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = 'ItemCount';
+  @override
+  Function get typeFactory => <T>(f) => f<ItemCount<T>>();
+
+  static dynamic _$item(ItemCount v) => v.item;
+  static dynamic _arg$item<T>(f) => f<T>();
+  static const Field<ItemCount, dynamic> _f$item =
+      Field('item', _$item, arg: _arg$item);
+  static int _$count(ItemCount v) => v.count;
+  static const Field<ItemCount, int> _f$count = Field('count', _$count);
+
+  @override
+  final Map<Symbol, Field<ItemCount, dynamic>> fields = const {
+    #item: _f$item,
+    #count: _f$count,
+  };
+
+  static ItemCount<T> _instantiate<T>(DecodingData data) {
+    return ItemCount(data.dec(_f$item), data.dec(_f$count));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static ItemCount<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<ItemCount<T>>(map));
+  }
+
+  static ItemCount<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<ItemCount<T>>(json));
+  }
+}
+
+mixin ItemCountMappable<T> {
+  String toJson() {
+    return ItemCountMapper._guard((c) => c.toJson(this as ItemCount<T>));
+  }
+
+  Map<String, dynamic> toMap() {
+    return ItemCountMapper._guard((c) => c.toMap(this as ItemCount<T>));
   }
 }
 
@@ -960,6 +1020,54 @@ class _DataWithIdCopyWithImpl<$R, $Out extends DataWithId, T>
       $chain<$R2, $Out2 extends DataWithId>(
               Then<DataWithId<T>, $Out2> t, Then<$Out2, $R2> t2) =>
           _DataWithIdCopyWithImpl($value, t, t2);
+}
+
+class OptionInternallyTaggedTypeMapper
+    extends EnumMapper<OptionInternallyTaggedType> {
+  OptionInternallyTaggedTypeMapper._();
+  static OptionInternallyTaggedTypeMapper? _instance;
+  static OptionInternallyTaggedTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals
+          .use(_instance = OptionInternallyTaggedTypeMapper._());
+    }
+    return _instance!;
+  }
+
+  static OptionInternallyTaggedType fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
+
+  @override
+  OptionInternallyTaggedType decode(dynamic value) {
+    switch (value) {
+      case 'some':
+        return OptionInternallyTaggedType.some;
+      case 'none':
+        return OptionInternallyTaggedType.none;
+      default:
+        throw MapperException.unknownEnumValue(value);
+    }
+  }
+
+  @override
+  dynamic encode(OptionInternallyTaggedType self) {
+    switch (self) {
+      case OptionInternallyTaggedType.some:
+        return 'some';
+      case OptionInternallyTaggedType.none:
+        return 'none';
+    }
+  }
+}
+
+extension OptionInternallyTaggedTypeMapperExtension
+    on OptionInternallyTaggedType {
+  String toValue() {
+    OptionInternallyTaggedTypeMapper.ensureInitialized();
+    return MapperContainer.globals.toValue(this) as String;
+  }
 }
 
 class UpdateTypeTypeMapper extends EnumMapper<UpdateTypeType> {

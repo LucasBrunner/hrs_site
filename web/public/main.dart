@@ -2,7 +2,6 @@ import 'dart:html';
 
 import '../script/authentication/signin.dart' as signin;
 import '../script/authentication/signup.dart' as signup;
-import '../script/data/phone.dart';
 import '../script/employee/warehouses.dart' as warehouses;
 import '../script/employee/warehouse.dart' as warehouse;
 import '../script/header_footer.dart' as header_footer;
@@ -22,14 +21,12 @@ const scriptElements = {
 };
 
 void main(List<String> args) {
-  print(Phone.defaultPhone().toJson());
   final scriptElementsToLoad = querySelector('#script-elements');
   if (scriptElementsToLoad == null) return;
 
   for (var scriptElement in scriptElementsToLoad.children) {
     try {
       final value = (scriptElement as OptionElement).value;
-      print(value);
       scriptElements[value]?.call();
     } finally {}
   }

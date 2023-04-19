@@ -63,7 +63,7 @@ class Address with AddressMappable {
               ..className = 'address-street'
               ..type = 'text'
               ..value = street),
-          Element.td()..className = 'address-street-message',
+          Element.td()..classes.addAll(['address-street-message', 'error-message']),
         ]),
       TableRowElement()
         ..children.addAll([
@@ -73,13 +73,13 @@ class Address with AddressMappable {
               ..className = 'address-city'
               ..type = 'text'
               ..value = city),
-          Element.td()..className = 'address-city-message',
+          Element.td()..classes.addAll(['address-city-message', 'error-message']),
         ]),
       TableRowElement()
         ..children.addAll([
           Element.th()..innerText = 'State:',
           Element.td()..children.add(stateInput(selected: state)..className = 'address-state'),
-          Element.td()..className = 'address-state-message',
+          Element.td()..classes.addAll(['address-state-message', 'error-message']),
         ]),
       TableRowElement()
         ..children.addAll([
@@ -89,7 +89,7 @@ class Address with AddressMappable {
               ..className = 'address-zip'
               ..type = 'text'
               ..value = zip),
-          Element.td()..className = 'address-zip-message',
+          Element.td()..classes.addAll(['address-zip-message', 'error-message']),
         ]),
     ];
   }

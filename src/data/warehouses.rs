@@ -1,18 +1,18 @@
-use rocket::serde::json::Json;
+use rocket::http::Status;
 use rocket_db_pools::Connection;
 use serde::Serialize;
+use sqlx::FromRow;
 
 use crate::{
-  authentication::{AuthSession, empoyee::AuthAccountEmployee},
+  authentication::{empoyee::AuthAccountEmployee, AuthSession},
   database::Db,
 };
 
-use super::DataError;
+use super::{ApiResponse, DataWithId, IdColumnName};
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Warehouse {
-  pub id: u64,
   pub name: String,
   pub phone_type: String,
   pub phone_number: String,
@@ -22,26 +22,20 @@ pub struct Warehouse {
   pub address_zip: String,
 }
 
-#[derive(Serialize)]
-#[serde(tag = "Type")]
-pub enum WarehouseResult {
-  #[serde(rename_all = "camelCase")]
-  Err { err: DataError },
-  #[serde(rename_all = "camelCase")]
-  Ok { warehouses: Vec<Warehouse> },
+impl IdColumnName for Warehouse {
+  const ID_COLUMN_NAME: &'static str = "warehouse_id";
 }
 
 #[get("/warehouses", format = "json")]
-pub async fn warehouses(
+pub async fn get_warehouses(
   mut db: Connection<Db>,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> Json<WarehouseResult> {
-  let query = sqlx::query_as!(
-    Warehouse,
+) -> ApiResponse {
+  let query = sqlx::query_as::<_, DataWithId<Warehouse>>(
     r#"
       SELECT
-        `Warehouse`.`warehouse_id` as "id",
+        `Warehouse`.`warehouse_id`,
         `Warehouse`.`name`,
         `Phone`.`number` as "phone_number",
         `PhoneType`.`name` AS "phone_type",
@@ -59,9 +53,22 @@ pub async fn warehouses(
   .fetch_all(&mut **db)
   .await;
 
-  let Ok(warehouses) = query else {
-    return Json(WarehouseResult::Err { err: DataError::DatabaseFailure });
+  let warehouses = match query {
+    Err(_) => {
+      return ApiResponse::WithoutBody {
+        status: Status::InternalServerError,
+      }
+    }
+    Ok(warehouses) => warehouses,
   };
 
-  Json(WarehouseResult::Ok { warehouses })
+  match serde_json::to_string(&warehouses) {
+    Err(_) => ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    },
+    Ok(json) => ApiResponse::WithBody {
+      status: Status::Ok,
+      json,
+    },
+  }
 }

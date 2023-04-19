@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
 import '../data.dart';
@@ -9,29 +8,35 @@ import '../data/warehouse.dart';
 import '../html_utility.dart';
 
 part 'warehouse.mapper.dart';
-part 'warehouse.freezed.dart';
 
-Future<WarehouseInventoryResult> fetchWarehouseInventory(int warehouseId) async {
+Future<List<ItemCount<DataWithId<InventoryItem>>>?> fetchWarehouseInventory(int warehouseId) async {
   final response = await http.get(
     Uri.http(window.location.host, '/data/employee/warehouse/$warehouseId/inventory'),
   );
 
   print(response.body);
-  try {
-    return WarehouseInventoryResultMapper.fromJson(response.body);
-  } catch (e) {
-    print(e.toString());
+  if (response.statusCode != 200) {
     querySelector('body')?.children.add(HeadingElement.h2()..text = 'Bad data recived');
-    return WarehouseInventoryResult.err(DataError.badData());
+    return null;
+  }
+
+  try {
+    ItemCountMapper.ensureInitialized();
+    DataWithIdMapper.ensureInitialized();
+    InventoryItemMapper.ensureInitialized();
+    return MapperContainer.globals.fromJson<List<ItemCount<DataWithId<InventoryItem>>>>(response.body);
+  } catch (e) {
+    print(e);
+    return null;
   }
 }
 
-saveWarehouseLocally(Warehouse warehouse) {
+saveWarehouseLocally(DataWithId<Warehouse> warehouse) {
   window.sessionStorage['warehouse'] = warehouse.toJson();
   window.location.pathname = '/employee/warehouse.html';
 }
 
-_setWarehousesInventory(List<WarehouseInventoryItem> inventory) {
+_setWarehousesInventory(List<ItemCount<DataWithId<InventoryItem>>> inventory) {
   final table = querySelector('#inventory');
   if (table == null) {
     return;
@@ -45,25 +50,29 @@ _setWarehousesInventory(List<WarehouseInventoryItem> inventory) {
 
   table.querySelector('#inventory-table-header')?.style.display = 'table-row';
 
-  for (var item in inventory) {
-    final warehouseRow = TableRowElement();
-    table.children.add(item.appendToTableRow(warehouseRow));
+  for (var itemCount in inventory) {
+    table.children.add(TableRowElement()
+      ..children.addAll([
+        TableCellElement()..innerText = itemCount.item.data.model,
+        TableCellElement()..innerText = itemCount.item.data.description.when(none: () => "N/A", some: (value) => value),
+        TableCellElement()..innerText = itemCount.count.toString(),
+      ]));
   }
 }
 
-void _appendAdjustInventoryItems(List<ToOptionElement> items) {
-  print(items);
+void _clearWarehouseInventory() {
+  querySelector('#inventory')?.children.clear();
+}
+
+void _appendAdjustInventoryItems(List<DataWithId<InventoryItem>> items) {
   var optionItems = items.map((e) => e.toOptionElement()).toList();
-  print(optionItems);
   final children = querySelector('#item-update-select')?.children.toElements<OptionElement>();
-  print(children);
   if (children == null) {
     print('Cannot find #item-update-select');
     return;
   }
 
   optionItems = optionItems.where((item) => children.where((option) => option.value == item.value).isEmpty).toList();
-  print(optionItems.length);
   querySelector('#item-update-select')?.children.addAll(optionItems);
 }
 
@@ -73,7 +82,9 @@ void _resetSelectedAdjustInventoryItem([String selected = 'default']) {
     return;
   }
 
-  children.forEach((element) => element.selected = false);
+  for (var element in children) {
+    element.selected = false;
+  }
   children
       .firstWhere(
         (option) => option.value == selected,
@@ -82,13 +93,13 @@ void _resetSelectedAdjustInventoryItem([String selected = 'default']) {
       .selected = true;
 }
 
-void _displayWarehouseInventory(Warehouse warehouse) async {
-  (await fetchWarehouseInventory(warehouse.id)).when(
-      ok: (inventory) {
-        _setWarehousesInventory(inventory);
-        _appendAdjustInventoryItems(inventory);
-      },
-      err: (err) => {});
+void _displayWarehouseInventory(DataWithId<Warehouse> warehouse) async {
+  final warehouseItems = await fetchWarehouseInventory(warehouse.id);
+  if (warehouseItems == null) {
+    return;
+  }
+  _setWarehousesInventory(warehouseItems);
+  _appendAdjustInventoryItems(warehouseItems.itemList());
 }
 
 void _setSearchResult(String text) {
@@ -107,23 +118,22 @@ void _searchItems(KeyboardEvent event) async {
     );
 
     print(response.body);
-    final result = InventoryItemResultMapper.fromJson(response.body);
-    result.when(
-      ok: (items) {
-        if (items.isEmpty) {
-          _setSearchResult('No items found');
-          return;
-        }
-        _appendAdjustInventoryItems(items);
-        if (items.length == 1) {
-          _resetSelectedAdjustInventoryItem(items.single.inventoryItemId.toString());
-          _setSearchResult('Item found');
-          return;
-        }
-        _setSearchResult('Many items found');
-      },
-      err: (err) => {},
-    );
+    if (response.statusCode == 200) {
+      DataWithIdMapper.ensureInitialized();
+      InventoryItemMapper.ensureInitialized();
+      final items = MapperContainer.globals.fromJson<List<DataWithId<InventoryItem>>>(response.body);
+      if (items.isEmpty) {
+        _setSearchResult('No items found');
+        return;
+      }
+      _appendAdjustInventoryItems(items);
+      if (items.length == 1) {
+        _resetSelectedAdjustInventoryItem(items.single.id.toString());
+        _setSearchResult('Item found');
+        return;
+      }
+      _setSearchResult('Many items found');
+    }
   }
 }
 
@@ -138,16 +148,7 @@ class WarehouseInventoryManualUpdate with WarehouseInventoryManualUpdateMappable
   );
 }
 
-@freezed
-@MappableClass(discriminatorKey: 'Type')
-class WarehouseInventoryManualUpdateResult with _$WarehouseInventoryManualUpdateResult {
-  @MappableClass(discriminatorValue: 'Ok')
-  const factory WarehouseInventoryManualUpdateResult.ok(List<WarehouseInventoryItem> items) = _InventoryUpdateOk;
-  @MappableClass(discriminatorValue: 'Err')
-  const factory WarehouseInventoryManualUpdateResult.err(DataError err) = _InventoryUpdateErr;
-}
-
-void _updateItemCount(Warehouse warehouse) async {
+void _updateItemCount(DataWithId<Warehouse> warehouse) async {
   final List<OptionElement> options = querySelector('#item-update-select')?.children.toElements() ?? List.empty();
   final selected = options.firstWhere((option) => option.selected == true, orElse: () => OptionElement()..value = 'default');
   if (selected.value == 'default') {
@@ -176,9 +177,14 @@ void _updateItemCount(Warehouse warehouse) async {
     },
     body: update.toJson(),
   );
+
+  if (response.statusCode == 200) {
+    _clearWarehouseInventory();
+    _displayWarehouseInventory(warehouse);
+  }
 }
 
-void _setupInventorySearchButton(Warehouse warehouse) {
+void _setupInventorySearchButton(DataWithId<Warehouse> warehouse) {
   querySelector('#item-update-search')?.toElement<InputElement>()?.onKeyPress.listen((event) => _searchItems(event));
 
   querySelector('#item-update-submit')?.toElement<ButtonElement>()?.onClick.listen((event) => _updateItemCount(warehouse));
@@ -195,9 +201,11 @@ void setup() {
   _resetSelectedAdjustInventoryItem();
 }
 
-Warehouse? _getWarehouseFromLocalStorage() {
+DataWithId<Warehouse>? _getWarehouseFromLocalStorage() {
   try {
-    return WarehouseMapper.fromJson(window.sessionStorage['warehouse'] ?? "");
+    DataWithIdMapper.ensureInitialized();
+    WarehouseMapper.ensureInitialized();
+    return MapperContainer.globals.fromJson<DataWithId<Warehouse>>(window.sessionStorage['warehouse'] ?? "");
   } catch (e) {
     return null;
   }

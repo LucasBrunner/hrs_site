@@ -11,7 +11,7 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
   static InventoryItemMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = InventoryItemMapper._());
-      StringOptionInternallyTaggedMapper.ensureInitialized();
+      OptionInternallyTaggedMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,9 +24,6 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
   @override
   final String id = 'InventoryItem';
 
-  static int _$inventoryItemId(InventoryItem v) => v.inventoryItemId;
-  static const Field<InventoryItem, int> _f$inventoryItemId =
-      Field('inventoryItemId', _$inventoryItemId);
   static double _$cost(InventoryItem v) => v.cost;
   static const Field<InventoryItem, double> _f$cost = Field('cost', _$cost);
   static double _$listPrice(InventoryItem v) => v.listPrice;
@@ -40,35 +37,28 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
       Field('brandName', _$brandName);
   static String _$model(InventoryItem v) => v.model;
   static const Field<InventoryItem, String> _f$model = Field('model', _$model);
-  static StringOptionInternallyTagged _$serial(InventoryItem v) => v.serial;
-  static const Field<InventoryItem, StringOptionInternallyTagged> _f$serial =
-      Field('serial', _$serial);
-  static StringOptionInternallyTagged _$description(InventoryItem v) =>
+  static OptionInternallyTagged<String> _$description(InventoryItem v) =>
       v.description;
-  static const Field<InventoryItem, StringOptionInternallyTagged>
+  static const Field<InventoryItem, OptionInternallyTagged<String>>
       _f$description = Field('description', _$description);
 
   @override
   final Map<Symbol, Field<InventoryItem, dynamic>> fields = const {
-    #inventoryItemId: _f$inventoryItemId,
     #cost: _f$cost,
     #listPrice: _f$listPrice,
     #brandId: _f$brandId,
     #brandName: _f$brandName,
     #model: _f$model,
-    #serial: _f$serial,
     #description: _f$description,
   };
 
   static InventoryItem _instantiate(DecodingData data) {
     return InventoryItem(
-        data.dec(_f$inventoryItemId),
         data.dec(_f$cost),
         data.dec(_f$listPrice),
         data.dec(_f$brandId),
         data.dec(_f$brandName),
         data.dec(_f$model),
-        data.dec(_f$serial),
         data.dec(_f$description));
   }
 
@@ -92,96 +82,6 @@ mixin InventoryItemMappable {
   Map<String, dynamic> toMap() {
     return InventoryItemMapper._guard((c) => c.toMap(this as InventoryItem));
   }
-
-  InventoryItemCopyWith<InventoryItem, InventoryItem, InventoryItem>
-      get copyWith => _InventoryItemCopyWithImpl(
-          this as InventoryItem, $identity, $identity);
-  @override
-  String toString() {
-    return InventoryItemMapper._guard((c) => c.asString(this));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (runtimeType == other.runtimeType &&
-            InventoryItemMapper._guard((c) => c.isEqual(this, other)));
-  }
-
-  @override
-  int get hashCode {
-    return InventoryItemMapper._guard((c) => c.hash(this));
-  }
-}
-
-extension InventoryItemValueCopy<$R, $Out extends InventoryItem>
-    on ObjectCopyWith<$R, InventoryItem, $Out> {
-  InventoryItemCopyWith<$R, InventoryItem, $Out> get $asInventoryItem =>
-      $base.as((v, t, t2) => _InventoryItemCopyWithImpl(v, t, t2));
-}
-
-typedef InventoryItemCopyWithBound = InventoryItem;
-
-abstract class InventoryItemCopyWith<$R, $In extends InventoryItem,
-    $Out extends InventoryItem> implements ClassCopyWith<$R, $In, $Out> {
-  $R call(
-      {int? inventoryItemId,
-      double? cost,
-      double? listPrice,
-      int? brandId,
-      String? brandName,
-      String? model,
-      StringOptionInternallyTagged? serial,
-      StringOptionInternallyTagged? description});
-  InventoryItemCopyWith<$R2, $In, $Out2>
-      $chain<$R2, $Out2 extends InventoryItem>(
-          Then<InventoryItem, $Out2> t, Then<$Out2, $R2> t2);
-}
-
-class _InventoryItemCopyWithImpl<$R, $Out extends InventoryItem>
-    extends ClassCopyWithBase<$R, InventoryItem, $Out>
-    implements InventoryItemCopyWith<$R, InventoryItem, $Out> {
-  _InventoryItemCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<InventoryItem> $mapper =
-      InventoryItemMapper.ensureInitialized();
-  @override
-  $R call(
-          {int? inventoryItemId,
-          double? cost,
-          double? listPrice,
-          int? brandId,
-          String? brandName,
-          String? model,
-          StringOptionInternallyTagged? serial,
-          StringOptionInternallyTagged? description}) =>
-      $apply(FieldCopyWithData({
-        if (inventoryItemId != null) #inventoryItemId: inventoryItemId,
-        if (cost != null) #cost: cost,
-        if (listPrice != null) #listPrice: listPrice,
-        if (brandId != null) #brandId: brandId,
-        if (brandName != null) #brandName: brandName,
-        if (model != null) #model: model,
-        if (serial != null) #serial: serial,
-        if (description != null) #description: description
-      }));
-  @override
-  InventoryItem $make(CopyWithData data) => InventoryItem(
-      data.get(#inventoryItemId, or: $value.inventoryItemId),
-      data.get(#cost, or: $value.cost),
-      data.get(#listPrice, or: $value.listPrice),
-      data.get(#brandId, or: $value.brandId),
-      data.get(#brandName, or: $value.brandName),
-      data.get(#model, or: $value.model),
-      data.get(#serial, or: $value.serial),
-      data.get(#description, or: $value.description));
-
-  @override
-  InventoryItemCopyWith<$R2, InventoryItem, $Out2>
-      $chain<$R2, $Out2 extends InventoryItem>(
-              Then<InventoryItem, $Out2> t, Then<$Out2, $R2> t2) =>
-          _InventoryItemCopyWithImpl($value, t, t2);
 }
 
 class InventoryItemResultMapper extends ClassMapperBase<InventoryItemResult> {
@@ -376,7 +276,7 @@ class WarehouseInventoryItemMapper
   static WarehouseInventoryItemMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = WarehouseInventoryItemMapper._());
-      StringOptionInternallyTaggedMapper.ensureInitialized();
+      OptionInternallyTaggedMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -389,12 +289,6 @@ class WarehouseInventoryItemMapper
   @override
   final String id = 'WarehouseInventoryItem';
 
-  static int _$warehouseId(WarehouseInventoryItem v) => v.warehouseId;
-  static const Field<WarehouseInventoryItem, int> _f$warehouseId =
-      Field('warehouseId', _$warehouseId);
-  static int _$inventoryItemId(WarehouseInventoryItem v) => v.inventoryItemId;
-  static const Field<WarehouseInventoryItem, int> _f$inventoryItemId =
-      Field('inventoryItemId', _$inventoryItemId);
   static double _$cost(WarehouseInventoryItem v) => v.cost;
   static const Field<WarehouseInventoryItem, double> _f$cost =
       Field('cost', _$cost);
@@ -410,13 +304,10 @@ class WarehouseInventoryItemMapper
   static String _$model(WarehouseInventoryItem v) => v.model;
   static const Field<WarehouseInventoryItem, String> _f$model =
       Field('model', _$model);
-  static StringOptionInternallyTagged _$serial(WarehouseInventoryItem v) =>
-      v.serial;
-  static const Field<WarehouseInventoryItem, StringOptionInternallyTagged>
-      _f$serial = Field('serial', _$serial);
-  static StringOptionInternallyTagged _$description(WarehouseInventoryItem v) =>
+  static OptionInternallyTagged<String> _$description(
+          WarehouseInventoryItem v) =>
       v.description;
-  static const Field<WarehouseInventoryItem, StringOptionInternallyTagged>
+  static const Field<WarehouseInventoryItem, OptionInternallyTagged<String>>
       _f$description = Field('description', _$description);
   static int _$amount(WarehouseInventoryItem v) => v.amount;
   static const Field<WarehouseInventoryItem, int> _f$amount =
@@ -424,28 +315,22 @@ class WarehouseInventoryItemMapper
 
   @override
   final Map<Symbol, Field<WarehouseInventoryItem, dynamic>> fields = const {
-    #warehouseId: _f$warehouseId,
-    #inventoryItemId: _f$inventoryItemId,
     #cost: _f$cost,
     #listPrice: _f$listPrice,
     #brandId: _f$brandId,
     #brandName: _f$brandName,
     #model: _f$model,
-    #serial: _f$serial,
     #description: _f$description,
     #amount: _f$amount,
   };
 
   static WarehouseInventoryItem _instantiate(DecodingData data) {
     return WarehouseInventoryItem(
-        data.dec(_f$warehouseId),
-        data.dec(_f$inventoryItemId),
         data.dec(_f$cost),
         data.dec(_f$listPrice),
         data.dec(_f$brandId),
         data.dec(_f$brandName),
         data.dec(_f$model),
-        data.dec(_f$serial),
         data.dec(_f$description),
         data.dec(_f$amount));
   }
@@ -472,110 +357,6 @@ mixin WarehouseInventoryItemMappable {
     return WarehouseInventoryItemMapper._guard(
         (c) => c.toMap(this as WarehouseInventoryItem));
   }
-
-  WarehouseInventoryItemCopyWith<WarehouseInventoryItem, WarehouseInventoryItem,
-          WarehouseInventoryItem>
-      get copyWith => _WarehouseInventoryItemCopyWithImpl(
-          this as WarehouseInventoryItem, $identity, $identity);
-  @override
-  String toString() {
-    return WarehouseInventoryItemMapper._guard((c) => c.asString(this));
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (runtimeType == other.runtimeType &&
-            WarehouseInventoryItemMapper._guard((c) => c.isEqual(this, other)));
-  }
-
-  @override
-  int get hashCode {
-    return WarehouseInventoryItemMapper._guard((c) => c.hash(this));
-  }
-}
-
-extension WarehouseInventoryItemValueCopy<$R,
-        $Out extends WarehouseInventoryItem>
-    on ObjectCopyWith<$R, WarehouseInventoryItem, $Out> {
-  WarehouseInventoryItemCopyWith<$R, WarehouseInventoryItem, $Out>
-      get $asWarehouseInventoryItem =>
-          $base.as((v, t, t2) => _WarehouseInventoryItemCopyWithImpl(v, t, t2));
-}
-
-typedef WarehouseInventoryItemCopyWithBound = WarehouseInventoryItem;
-
-abstract class WarehouseInventoryItemCopyWith<$R,
-        $In extends WarehouseInventoryItem, $Out extends WarehouseInventoryItem>
-    implements ClassCopyWith<$R, $In, $Out> {
-  $R call(
-      {int? warehouseId,
-      int? inventoryItemId,
-      double? cost,
-      double? listPrice,
-      int? brandId,
-      String? brandName,
-      String? model,
-      StringOptionInternallyTagged? serial,
-      StringOptionInternallyTagged? description,
-      int? amount});
-  WarehouseInventoryItemCopyWith<$R2, $In, $Out2>
-      $chain<$R2, $Out2 extends WarehouseInventoryItem>(
-          Then<WarehouseInventoryItem, $Out2> t, Then<$Out2, $R2> t2);
-}
-
-class _WarehouseInventoryItemCopyWithImpl<$R,
-        $Out extends WarehouseInventoryItem>
-    extends ClassCopyWithBase<$R, WarehouseInventoryItem, $Out>
-    implements
-        WarehouseInventoryItemCopyWith<$R, WarehouseInventoryItem, $Out> {
-  _WarehouseInventoryItemCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<WarehouseInventoryItem> $mapper =
-      WarehouseInventoryItemMapper.ensureInitialized();
-  @override
-  $R call(
-          {int? warehouseId,
-          int? inventoryItemId,
-          double? cost,
-          double? listPrice,
-          int? brandId,
-          String? brandName,
-          String? model,
-          StringOptionInternallyTagged? serial,
-          StringOptionInternallyTagged? description,
-          int? amount}) =>
-      $apply(FieldCopyWithData({
-        if (warehouseId != null) #warehouseId: warehouseId,
-        if (inventoryItemId != null) #inventoryItemId: inventoryItemId,
-        if (cost != null) #cost: cost,
-        if (listPrice != null) #listPrice: listPrice,
-        if (brandId != null) #brandId: brandId,
-        if (brandName != null) #brandName: brandName,
-        if (model != null) #model: model,
-        if (serial != null) #serial: serial,
-        if (description != null) #description: description,
-        if (amount != null) #amount: amount
-      }));
-  @override
-  WarehouseInventoryItem $make(CopyWithData data) => WarehouseInventoryItem(
-      data.get(#warehouseId, or: $value.warehouseId),
-      data.get(#inventoryItemId, or: $value.inventoryItemId),
-      data.get(#cost, or: $value.cost),
-      data.get(#listPrice, or: $value.listPrice),
-      data.get(#brandId, or: $value.brandId),
-      data.get(#brandName, or: $value.brandName),
-      data.get(#model, or: $value.model),
-      data.get(#serial, or: $value.serial),
-      data.get(#description, or: $value.description),
-      data.get(#amount, or: $value.amount));
-
-  @override
-  WarehouseInventoryItemCopyWith<$R2, WarehouseInventoryItem, $Out2>
-      $chain<$R2, $Out2 extends WarehouseInventoryItem>(
-              Then<WarehouseInventoryItem, $Out2> t, Then<$Out2, $R2> t2) =>
-          _WarehouseInventoryItemCopyWithImpl($value, t, t2);
 }
 
 class WarehouseInventoryResultMapper

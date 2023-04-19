@@ -1,19 +1,14 @@
-use std::io::Cursor;
-
 use rocket::{
-  http::{ContentType, Status},
-  response::{self, Responder},
-  Response,
+  http::Status,
 };
 use rocket_db_pools::Connection;
 use serde::{Deserialize, Serialize};
 use sqlx::{Acquire, MySql, Transaction};
 
-use crate::{authentication::AuthSession, database::Db};
+use crate::{authentication::AuthSession, database::Db, data::ApiResponse};
 
 use super::{
-  basic_data::{address::Address, phone::Phone},
-  DataError, DataMaybeId, DataWithId, UpdateType,
+  basic_data::{address::Address, phone::Phone}, DataMaybeId, DataWithId, UpdateType,
 };
 
 #[derive(Serialize, Clone)]
@@ -30,47 +25,6 @@ pub struct Account {
   pub data: AccountPublicData,
   pub phones: Vec<DataWithId<Phone>>,
   pub addresses: Vec<DataWithId<Address>>,
-}
-
-#[derive(Serialize)]
-#[serde(tag = "Type")]
-pub enum AccountResult {
-  #[serde(rename_all = "camelCase")]
-  Err { err: DataError },
-  #[serde(rename_all = "camelCase")]
-  Ok { account: Account },
-}
-
-pub enum ApiResponse {
-  WithBody { json: String, status: Status },
-  WithoutBody { status: Status },
-}
-
-impl ApiResponse {
-  fn status(&self) -> Status {
-    match self {
-      ApiResponse::WithBody { json: _, status } => *status,
-      ApiResponse::WithoutBody { status } => *status,
-    }
-  }
-
-  fn json(&self) -> String {
-    match self {
-      ApiResponse::WithBody { json, status: _ } => json.to_owned(),
-      ApiResponse::WithoutBody { status: _ } => "".to_owned(),
-    }
-  }
-}
-
-impl<'r> Responder<'r, 'static> for ApiResponse {
-  fn respond_to(self, _: &'r rocket::Request<'_>) -> response::Result<'static> {
-    let json = self.json();
-    Response::build()
-      .status(self.status())
-      .header(ContentType::JSON)
-      .sized_body(json.len(), Cursor::new(json))
-      .ok()
-  }
 }
 
 #[get("/")]
@@ -322,7 +276,7 @@ async fn put_address(
 }
 
 #[put("/", format = "json", data = "<account_update>")]
-pub async fn update_account_info(
+pub async fn put_account_info(
   mut db: Connection<Db>,
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,

@@ -1,16 +1,11 @@
 import 'dart:html';
 
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../data.dart';
 
 part 'warehouse.mapper.dart';
-part 'warehouse.freezed.dart';
 
 @MappableClass()
 class Warehouse with WarehouseMappable {
-  int id;
   String name;
   String phoneType;
   String phoneNumber;
@@ -20,7 +15,6 @@ class Warehouse with WarehouseMappable {
   String addressZip;
 
   Warehouse(
-    this.id,
     this.name,
     this.phoneType,
     this.phoneNumber,
@@ -42,13 +36,4 @@ class Warehouse with WarehouseMappable {
   TableRowElement toTableRow() {
     return appendToTableRow(TableRowElement());
   }
-}
-
-@freezed
-@MappableClass(discriminatorKey: 'Type')
-class WarehouseResult with _$WarehouseResult {
-  @MappableClass(discriminatorValue: 'Ok')
-  const factory WarehouseResult.ok(List<Warehouse> warehouses) = _WarehouseOk;
-  @MappableClass(discriminatorValue: 'Err')
-  const factory WarehouseResult.err(DataError err) = _WarehouseErr;
 }

@@ -1,79 +1,90 @@
-use rocket::serde::json::Json;
+use rocket::http::Status;
 use rocket_db_pools::Connection;
-use serde::{Serialize, Deserialize};
-use sqlx::{types::Decimal, Acquire};
+use serde::{Deserialize, Serialize};
+use sqlx::{types::Decimal, Acquire, FromRow};
 use time::OffsetDateTime;
 
 use crate::{
-  authentication::{AuthSession, empoyee::AuthAccountEmployee},
+  authentication::{empoyee::AuthAccountEmployee, AuthSession},
   database::Db,
 };
 
-use super::{DataError, string_option_internally_tagged};
+use super::{
+  inventory::InventoryItem, option_internally_tagged, ApiResponse, DataWithId,
+  IdColumnName, ItemCount,
+};
 
-#[derive(Serialize)]
+#[derive(Serialize, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct WarehouseInventoryItem {
-  warehouse_id: u64,
-  inventory_item_id: u64,
   cost: Decimal,
   list_price: Decimal,
   brand_id: u64,
   brand_name: String,
   model: String,
-  #[serde(serialize_with = "string_option_internally_tagged")]
-  serial: Option<String>,
-  #[serde(serialize_with = "string_option_internally_tagged")]
+  #[serde(serialize_with = "option_internally_tagged")]
   description: Option<String>,
   amount: u32,
 }
 
-#[derive(Serialize)]
-#[serde(tag = "Type")]
-pub enum WarehouseInventoryResult {
-  #[serde(rename_all = "camelCase")]
-  Err { err: DataError },
-  #[serde(rename_all = "camelCase")]
-  Ok { items: Vec<WarehouseInventoryItem> },
+impl IdColumnName for WarehouseInventoryItem {
+  const ID_COLUMN_NAME: &'static str = "inventory_item_id";
 }
 
 #[get("/warehouse/<warehouse_id>/inventory", format = "json")]
-pub async fn warehouse_inventory(
+pub async fn get_warehouse_inventory(
   mut db: Connection<Db>,
   warehouse_id: u64,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> Json<WarehouseInventoryResult> {
-  let query = sqlx::query_as!(
-    WarehouseInventoryItem,
+) -> ApiResponse {
+  let query = sqlx::query_as::<_, ItemCount<DataWithId<InventoryItem>>>(&format!(
     r#"
       SELECT
-        `warehouse_id`,
         `inventory_item_id`,
+        `WarehouseItem`.`amount` AS "count",
         `cost`,
         `list_price`,
         `brand_id`,
         `Brand`.`name` AS "brand_name",
         `model`,
-        `serial`,
-        `description`,
-        `amount`
+        `description`
       FROM 
         `WarehouseItem`
         INNER JOIN `InventoryItem` USING(`inventory_item_id`)
         INNER JOIN `Brand` USING(`brand_id`)
-      WHERE `WarehouseItem`.`warehouse_id` = ?;
+      WHERE `WarehouseItem`.`warehouse_id` = {};
     "#,
     warehouse_id,
-  )
+  ))
   .fetch_all(&mut **db)
   .await;
 
-  let Ok(items) = query else {
-    return Json(WarehouseInventoryResult::Err { err: DataError::DatabaseFailure });
+  let items = match query {
+    Err(err) => {
+      println!("{}", err);
+      return ApiResponse::WithoutBody {
+        status: Status::InternalServerError,
+      };
+    }
+    Ok(items) => items,
   };
 
-  Json(WarehouseInventoryResult::Ok { items })
+  match serde_json::to_string(&items) {
+    Ok(items) => {
+      println!("items: {}", items);
+      ApiResponse::WithBody {
+        json: items,
+        status: Status::Ok,
+      }
+    }
+    Err(err) => {
+      println!("{}", err);
+      ApiResponse::WithoutBody {
+        status: Status::InternalServerError,
+      }
+    }
+  }
 }
 
 #[derive(Deserialize)]
@@ -83,25 +94,22 @@ pub struct WarehouseItemManulUpdate {
   amount: i32,
 }
 
-#[derive(Serialize)]
-#[serde(tag = "Type")]
-pub enum WarehouseInventoryManulUpdateResult {
-  #[serde(rename_all = "camelCase")]
-  Err { err: DataError },
-  #[serde(rename_all = "camelCase")]
-  Ok {},
-}
-
-#[post("/warehouse/<warehouse_id>/inventory/manual_update", format = "json", data = "<item_update>")]
-pub async fn warehouse_inventory_manual_update(
+#[post(
+  "/warehouse/<warehouse_id>/inventory/manual_update",
+  format = "json",
+  data = "<item_update>"
+)]
+pub async fn post_warehouse_inventory(
   mut db: Connection<Db>,
   warehouse_id: u64,
   item_update: rocket::serde::json::Json<WarehouseItemManulUpdate>,
   auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> Json<WarehouseInventoryManulUpdateResult> {
+) -> ApiResponse {
   let Ok(mut tx) = db.begin().await else {
-    return Json(WarehouseInventoryManulUpdateResult::Err { err:DataError::DatabaseFailure });
+    return ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    };
   };
   let order_result = sqlx::query!(
     r#"
@@ -129,7 +137,9 @@ pub async fn warehouse_inventory_manual_update(
 
   let Ok(order) = order_result else {
     _ = tx.rollback().await;
-    return Json(WarehouseInventoryManulUpdateResult::Err { err: DataError::DatabaseFailure });
+    return ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    };
   };
 
   _ = sqlx::query!(
@@ -180,8 +190,13 @@ pub async fn warehouse_inventory_manual_update(
   let update = tx.commit().await;
 
   if update.is_err() {
-    return Json(WarehouseInventoryManulUpdateResult::Err { err: DataError::DatabaseFailure });
+    return ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    };
   }
 
-  Json(WarehouseInventoryManulUpdateResult::Ok {})
+  ApiResponse::WithBody {
+    status: Status::Ok,
+    json: String::new(),
+  }
 }

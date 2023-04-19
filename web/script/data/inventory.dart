@@ -6,33 +6,27 @@ import '../data.dart';
 part 'inventory.mapper.dart';
 part 'inventory.freezed.dart';
 
-@MappableClass()
-class InventoryItem with InventoryItemMappable implements ToOptionElement, ToDisplayRow {
-  int inventoryItemId;
+@MappableClass(generateMethods: GenerateMethods.encode | GenerateMethods.decode)
+class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow {
   double cost;
   double listPrice;
   int brandId;
   String brandName;
   String model;
-  StringOptionInternallyTagged serial;
-  StringOptionInternallyTagged description;
+  OptionInternallyTagged<String> description;
 
   InventoryItem(
-    this.inventoryItemId,
     this.cost,
     this.listPrice,
     this.brandId,
     this.brandName,
     this.model,
-    this.serial,
     this.description,
   );
 
   @override
-  OptionElement toOptionElement() {
-    return OptionElement()
-      ..innerText = model
-      ..value = inventoryItemId.toString();
+  String title() {
+    return model;
   }
 
   String descriptionString() {
@@ -110,51 +104,29 @@ class InventoryItemResult with _$InventoryItemResult {
   const factory InventoryItemResult.err(DataError err) = _InventoryItemErr;
 }
 
-@MappableClass()
-class WarehouseInventoryItem with WarehouseInventoryItemMappable implements ToOptionElement {
-  int warehouseId;
-  int inventoryItemId;
+@MappableClass(generateMethods: GenerateMethods.encode | GenerateMethods.decode)
+class WarehouseInventoryItem with WarehouseInventoryItemMappable implements HasTitle {
   double cost;
   double listPrice;
   int brandId;
   String brandName;
   String model;
-  StringOptionInternallyTagged serial;
-  StringOptionInternallyTagged description;
+  OptionInternallyTagged<String> description;
   int amount;
 
   WarehouseInventoryItem(
-    this.warehouseId,
-    this.inventoryItemId,
     this.cost,
     this.listPrice,
     this.brandId,
     this.brandName,
     this.model,
-    this.serial,
     this.description,
     this.amount,
   );
 
-  TableRowElement appendToTableRow(TableRowElement row) {
-    row.children
-      ..add(TableCellElement()..innerText = model)
-      ..add(TableCellElement()..innerText = serial.when(none: () => "N/A", some: (value) => value))
-      ..add(TableCellElement()..innerText = description.when(none: () => "N/A", some: (value) => value))
-      ..add(TableCellElement()..innerText = amount.toString());
-
-    return row;
-  }
-
-  TableRowElement toTableRow() {
-    return appendToTableRow(TableRowElement());
-  }
-
   @override
-  OptionElement toOptionElement() {
-    return OptionElement()
-      ..innerText = model
-      ..value = inventoryItemId.toString();
+  String title() {
+    return model;
   }
 }
 

@@ -9,6 +9,10 @@
         "match": ".dart",
         "cmd": "webdev build -o web:static"
       },
+      {
+        "match": ".dart",
+        "cmd": "dart compile js -o static/public/main.dart.js -O1 web/public/main.dart"
+      },
     ]
   },
   "dart.lineLength": 160,
