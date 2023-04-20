@@ -14,7 +14,7 @@ extern crate rocket_db_pools;
 use std::path::{PathBuf, Path};
 
 use authentication::{AuthSession, empoyee::AuthAccountEmployee};
-use data::{account::{get_account_info, put_account_info}, inventory};
+use data::{account::{get_account_implicit, put_account_implicit}, inventory};
 use database::Db;
 use rocket::fs::NamedFile;
 use rocket_db_pools::Database;
@@ -66,7 +66,7 @@ fn launch() -> _ {
   rocket::build()
     .attach(Db::init())
     .mount("/data", authentication::empoyee::employee_crud_routes())
-    .mount("/data", routes![get_account_info, put_account_info])
+    .mount("/data", routes![get_account_implicit, put_account_implicit])
     .mount("/data", routes![inventory::get_product_range])
     .mount("/", authentication::authentication_routes())
     .mount("/employee", routes![employee_fs])

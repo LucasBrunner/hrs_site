@@ -189,7 +189,7 @@ Future<bool> _saveData(Account account) async {
 
   if (dataValid) {
     querySelector('#general-error-message')?.innerText = '';
-    final response = await accountUpdate.httpPut();
+    final response = await accountUpdate.httpPutImplicit();
     switch (response.statusCode) {
       case 201:
         return true;

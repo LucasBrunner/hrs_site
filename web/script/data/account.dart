@@ -103,7 +103,7 @@ class Account with AccountMappable {
 
   static Future<Account?> httpGetId(int id) async {
     final response = await http.get(
-      Uri.http(window.location.host, '/data/account/$id'),
+      Uri.http(window.location.host, '/data/accounts/$id'),
     );
     switch (response.statusCode) {
       case 200:
@@ -131,7 +131,7 @@ class AccountUpdate with AccountUpdateMappable {
     this.addresses,
   );
 
-  Future<Response> httpPut() async {
+  Future<Response> httpPutImplicit() async {
     return await http.put(
       Uri.http(window.location.host, '/data/account'),
       body: toJson(),

@@ -26,3 +26,17 @@
   width: fit-content;
   color: white;
 }
+
+.edit-button-container, .edit-button-container * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.edit-button-container {
+  margin-bottom: 5px;
+}
+
+.edit-button-container > * {
+  margin: 2px;
+}

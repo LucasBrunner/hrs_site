@@ -31,7 +31,7 @@ impl IdColumnName for WarehouseInventoryItem {
   const ID_COLUMN_NAME: &'static str = "inventory_item_id";
 }
 
-#[get("/warehouse/<warehouse_id>/inventory", format = "json")]
+#[get("/warehouses/<warehouse_id>/inventory", format = "json")]
 pub async fn get_warehouse_inventory(
   mut db: Connection<Db>,
   warehouse_id: u64,
@@ -95,7 +95,7 @@ pub struct WarehouseItemManulUpdate {
 }
 
 #[put(
-  "/warehouse/<warehouse_id>/inventory",
+  "/warehouses/<warehouse_id>/inventory",
   format = "json",
   data = "<item_update>"
 )]

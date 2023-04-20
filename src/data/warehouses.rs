@@ -26,7 +26,7 @@ impl IdColumnName for Warehouse {
   const ID_COLUMN_NAME: &'static str = "warehouse_id";
 }
 
-#[get("/warehouse", format = "json")]
+#[get("/warehouses", format = "json")]
 pub async fn get_warehouses(
   mut db: Connection<Db>,
   _auth_session: AuthSession,

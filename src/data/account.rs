@@ -90,8 +90,8 @@ pub async fn get_account(id: u64, db: &mut Connection<Db>) -> Result<Account, sq
   })
 }
 
-#[get("/")]
-pub async fn get_account_info(mut db: Connection<Db>, auth_session: AuthSession) -> ApiResponse {
+#[get("/account")]
+pub async fn get_account_implicit(mut db: Connection<Db>, auth_session: AuthSession) -> ApiResponse {
   let Ok(account) = get_account(auth_session.session.account_id, &mut db).await else {
     return ApiResponse::WithoutBody { status: Status::InternalServerError };
   };
@@ -103,7 +103,7 @@ pub async fn get_account_info(mut db: Connection<Db>, auth_session: AuthSession)
   }
 }
 
-#[get("/account/<id>")]
+#[get("/accounts/<id>")]
 pub async fn get_account_from_id(
   id: u64,
   mut db: Connection<Db>,
@@ -284,8 +284,8 @@ async fn put_address(
   Ok(())
 }
 
-#[put("/", format = "json", data = "<account_update>")]
-pub async fn put_account_info(
+#[put("/account", format = "json", data = "<account_update>")]
+pub async fn put_account_implicit(
   mut db: Connection<Db>,
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
