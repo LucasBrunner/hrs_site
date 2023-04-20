@@ -8,7 +8,11 @@ use sqlx::{Acquire, MySql, Row, Transaction};
 use std::io::Write;
 use strum_macros::{self, IntoStaticStr};
 
-use crate::{authentication::{AuthSession, empoyee::AuthAccountEmployee}, data::ApiResponse, database::Db};
+use crate::{
+  authentication::{empoyee::AuthAccountEmployee, AuthSession},
+  data::ApiResponse,
+  database::Db,
+};
 
 use super::{
   basic_data::{address::Address, phone::Phone},
@@ -91,12 +95,14 @@ pub async fn get_account(id: u64, db: &mut Connection<Db>) -> Result<Account, sq
 }
 
 #[get("/account")]
-pub async fn get_account_implicit(mut db: Connection<Db>, auth_session: AuthSession) -> ApiResponse {
+pub async fn get_account_implicit(
+  mut db: Connection<Db>,
+  auth_session: AuthSession,
+) -> ApiResponse {
   let Ok(account) = get_account(auth_session.session.account_id, &mut db).await else {
     return ApiResponse::WithoutBody { status: Status::InternalServerError };
   };
 
-  println!("{:?}", serde_json::to_string(&account));
   ApiResponse::WithBody {
     json: serde_json::to_string(&account).unwrap(),
     status: Status::Ok,
@@ -113,7 +119,6 @@ pub async fn get_account_from_id(
     return ApiResponse::WithoutBody { status: Status::InternalServerError };
   };
 
-  println!("{:?}", serde_json::to_string(&account));
   ApiResponse::WithBody {
     json: serde_json::to_string(&account).unwrap(),
     status: Status::Ok,
@@ -290,27 +295,23 @@ pub async fn put_account_implicit(
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
 ) -> ApiResponse {
-  println!("{}", serde_json::to_string(&account_update.0).unwrap());
   let Ok(mut tx) = db.begin().await else {
     return ApiResponse::WithoutBody { status: Status::InternalServerError };
   };
 
   let account_update_result = match &account_update.preferred_name {
-    UpdateType::Put { item } => {
-      println!("{}, {}", item, auth_session.session.account_id);
-      sqlx::query!(
-        r#"
+    UpdateType::Put { item } => sqlx::query!(
+      r#"
         UPDATE `Account`
         SET `preferred_name` = ?
         WHERE `account_id` = ?;
       "#,
-        item,
-        auth_session.session.account_id,
-      )
-      .execute(&mut tx)
-      .await
-      .err()
-    }
+      item,
+      auth_session.session.account_id,
+    )
+    .execute(&mut tx)
+    .await
+    .err(),
     UpdateType::Delete { id: _ } => {
       _ = tx.rollback().await;
       return ApiResponse::WithoutBody {
@@ -491,8 +492,7 @@ pub async fn search_account(
   .await;
 
   let account_id_query = match account_id_query {
-    Err(err) => {
-      println!("{:?}", err);
+    Err(_) => {
       return ApiResponse::WithBody {
         status: Status::NoContent,
         json: "No content which matches search".to_owned(),

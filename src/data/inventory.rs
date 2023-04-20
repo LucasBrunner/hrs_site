@@ -119,13 +119,11 @@ pub async fn get_product_range(mut db: Connection<Db>, range: RangeHeader<u64>) 
   };
 
   match serde_json::to_string(&items) {
-    Ok(json) => {
-      println!("{}", json);
+    Ok(json) => 
       ApiResponse::WithBody {
         json,
         status: Status::Ok,
-      }
-    },
+      },
     Err(_) => ApiResponse::WithoutBody {
       status: Status::InternalServerError,
     },
@@ -179,13 +177,12 @@ pub async fn get_inventory_item_data(
   };
 
   match serde_json::to_string(&items) {
-    Ok(json) => {
-      println!("{}", json);
+    Ok(json) => 
       ApiResponse::WithBody {
         json,
         status: Status::Ok,
       }
-    },
+    ,
     Err(_) => ApiResponse::WithoutBody {
       status: Status::InternalServerError,
     },

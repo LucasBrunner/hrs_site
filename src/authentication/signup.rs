@@ -233,7 +233,6 @@ pub async fn signup(
     let err = SignupResult::Err {
       signup_failure: err,
     };
-    println!("{}", serde_json::to_string(&err).unwrap());
     return Json(err);
   };
 
