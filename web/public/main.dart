@@ -8,7 +8,8 @@ import '../script/header_footer.dart' as header_footer;
 import '../script/public/products.dart' as products;
 import '../script/account/view_account.dart' as view_account;
 import '../script/account/edit_account.dart' as edit_account;
-import '../script/employee/edit_account.dart' as account_search;
+import '../script/employee/accounts.dart' as account_search;
+import '../script/employee/account.dart' as account_view;
 
 const scriptElements = {
   'signin': signin.setup,
@@ -20,6 +21,7 @@ const scriptElements = {
   'view_account': view_account.setup,
   'edit_account': edit_account.setup,
   'account-search': account_search.setup,
+  'employee-account-view': account_view.setup,
 };
 
 void main(List<String> args) {

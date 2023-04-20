@@ -49,7 +49,7 @@ class Account with AccountMappable {
     } else {
       row.children.add(Element.th()..innerText = 'Addresses:');
     }
-    row.children.addAll(addresses.map((address) => TableElement()..children.addAll(address.data.toTableViewRows())));
+    row.children.add(TableCellElement()..children.addAll(addresses.map((address) => TableElement()..children.addAll(address.data.toTableViewRows()))));
     return row;
   }
 
@@ -67,7 +67,7 @@ class Account with AccountMappable {
     } else {
       row.children.add(Element.th()..innerText = 'Phones:');
     }
-    row.children.addAll(phones.map((phone) => TableElement()..children.addAll(phone.data.toTableViewRows())));
+    row.children.add(TableCellElement()..children.addAll(phones.map((phone) => TableElement()..children.addAll(phone.data.toTableViewRows()))));
     return row;
   }
 
@@ -103,7 +103,7 @@ class Account with AccountMappable {
 
   static Future<Account?> httpGetId(int id) async {
     final response = await http.get(
-      Uri.http(window.location.host, '/data/accounts/$id'),
+      Uri.http(window.location.host, '/data/employee/account/$id'),
     );
     switch (response.statusCode) {
       case 200:

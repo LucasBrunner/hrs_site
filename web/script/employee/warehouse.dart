@@ -33,7 +33,7 @@ Future<List<ItemCount<DataWithId<InventoryItem>>>?> fetchWarehouseInventory(int 
 
 saveWarehouseLocally(DataWithId<Warehouse> warehouse) {
   window.sessionStorage['warehouse'] = warehouse.toJson();
-  window.location.pathname = '/employee/warehouse.html';
+  window.location.pathname = '/employee/warehouse';
 }
 
 _setWarehousesInventory(List<ItemCount<DataWithId<InventoryItem>>> inventory) {

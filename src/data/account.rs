@@ -8,7 +8,7 @@ use sqlx::{Acquire, MySql, Row, Transaction};
 use std::io::Write;
 use strum_macros::{self, IntoStaticStr};
 
-use crate::{authentication::AuthSession, data::ApiResponse, database::Db};
+use crate::{authentication::{AuthSession, empoyee::AuthAccountEmployee}, data::ApiResponse, database::Db};
 
 use super::{
   basic_data::{address::Address, phone::Phone},
@@ -93,6 +93,23 @@ pub async fn get_account(id: u64, db: &mut Connection<Db>) -> Result<Account, sq
 #[get("/")]
 pub async fn get_account_info(mut db: Connection<Db>, auth_session: AuthSession) -> ApiResponse {
   let Ok(account) = get_account(auth_session.session.account_id, &mut db).await else {
+    return ApiResponse::WithoutBody { status: Status::InternalServerError };
+  };
+
+  println!("{:?}", serde_json::to_string(&account));
+  ApiResponse::WithBody {
+    json: serde_json::to_string(&account).unwrap(),
+    status: Status::Ok,
+  }
+}
+
+#[get("/account/<id>")]
+pub async fn get_account_from_id(
+  id: u64,
+  mut db: Connection<Db>,
+  _auth_session: AuthAccountEmployee,
+) -> ApiResponse {
+  let Ok(account) = get_account(id, &mut db).await else {
     return ApiResponse::WithoutBody { status: Status::InternalServerError };
   };
 
@@ -485,15 +502,15 @@ pub async fn search_account(
   };
 
   let mut accounts = Vec::new();
-  for id in account_id_query.into_iter().filter_map(|row| row.try_get("account_id").ok()) {
+  for id in account_id_query
+    .into_iter()
+    .filter_map(|row| row.try_get("account_id").ok())
+  {
     let Ok(account) = get_account(id, &mut db).await else {
       println!("no account with id \"{}\"", id);
       continue;
     };
-    accounts.push(DataWithId {
-      data: account,
-      id,
-    });
+    accounts.push(DataWithId { data: account, id });
   }
 
   match serde_json::to_string(&accounts) {

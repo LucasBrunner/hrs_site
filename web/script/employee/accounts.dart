@@ -33,7 +33,10 @@ void displayAccountSearchResults(List<DataWithId<Account>> accounts) {
     ]));
   querySelector('#search-results')?.children.addAll(accounts.map((account) => TableRowElement()
     ..children.addAll([
-      TableCellElement()..children.add(ButtonElement()..innerText = 'View account'),
+      TableCellElement()
+        ..children.add(ButtonElement()
+          ..innerText = 'View account'
+          ..onClick.listen((event) => window.location.replace(Uri.http(window.location.host, '/employee/account', {'id': "${account.id}"}).toString()))),
       TableCellElement()..innerText = account.data.data.legalName,
       TableCellElement()..innerText = account.data.data.preferredName,
       TableCellElement()..innerText = account.data.data.email,
@@ -100,10 +103,58 @@ void search() async {
   }
 }
 
+void setUrlParam(String key, String data) {
+  final location = Uri.dataFromString(window.location.href);
+  final params = location.queryParameters.map((key, value) => MapEntry(key, value));
+  params[key] = data;
+  window.history.pushState('', 'accounts', location.replace(queryParameters: params).toString().substring(6));
+}
+
 void setup() {
-  querySelector('#search-type-selector')?.children.addAll(AccountSearchType.values.map((e) => OptionElement()
-    ..innerText = e.formalName
-    ..value = e.name));
+  final queryParameters = Uri.dataFromString(window.location.href).queryParameters;
+  final selector = querySelector('#search-type-selector')?.toElement<SelectElement>();
+  if (selector != null) {
+    final urlValue = queryParameters['searchtype'] ?? '';
+    selector.children.addAll(AccountSearchType.values.map((e) => OptionElement()
+      ..innerText = e.formalName
+      ..value = e.name));
+
+    selector.onInput.listen((event) {
+      final value = selector.value;
+      if (value != null && value.isNotEmpty) {
+        setUrlParam('searchtype', value);
+      }
+    });
+
+    if (urlValue.trim().isNotEmpty) {
+      for (final option in selector.children.toElements<OptionElement>() ?? <OptionElement>[]) {
+        option.selected = false;
+        if (option.value == urlValue) {
+          option.selected = true;
+        }
+      }
+    }
+  }
+
+  final searchBox = querySelector('#search-box')?.toElement<InputElement>();
+  if (searchBox != null) {
+    searchBox.onChange.listen((event) {
+      final value = searchBox.value;
+      if (value != null && value.isNotEmpty) {
+        setUrlParam('searchvalue', value);
+      }
+    });
+
+    searchBox.onKeyPress.listen((event) {
+      if (event.key == 'Enter') {
+        search();
+      }
+    });
+
+    searchBox.value = queryParameters['searchvalue'] ?? '';
+  }
 
   querySelector('#search-button')?.onClick.listen((event) => search());
+
+  window.history.pushState('', 'accounts', Uri.dataFromString(window.location.href).toString().substring(6));
 }
