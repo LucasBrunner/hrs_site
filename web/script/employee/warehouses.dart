@@ -24,7 +24,7 @@ displayWarehouses(List<DataWithId<Warehouse>> warehouses) {
 
 showWarehouses() async {
   final response = await http.get(
-    Uri.http(window.location.host, '/data/warehouses'),
+    Uri.http(window.location.host, '/data/warehouse'),
   );
 
   print(response.body);
