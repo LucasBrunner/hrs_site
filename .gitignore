@@ -5,3 +5,4 @@ rocket.toml
 .env
 .dart_tool/
 /static
+*.png

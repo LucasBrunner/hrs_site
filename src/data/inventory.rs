@@ -27,7 +27,7 @@ impl IdColumnName for InventoryItem {
   const ID_COLUMN_NAME: &'static str = "inventory_item_id";
 }
 
-#[get("/product", format = "json")]
+#[get("/products", format = "json")]
 pub async fn get_product_range(mut db: Connection<Db>, range: RangeHeader<u64>) -> ApiResponse {
   let range = range.get_first();
   let query = match range {

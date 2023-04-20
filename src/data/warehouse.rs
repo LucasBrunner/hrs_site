@@ -10,8 +10,8 @@ use crate::{
 };
 
 use super::{
-  inventory::InventoryItem, option_internally_tagged, ApiResponse, DataWithId,
-  IdColumnName, ItemCount,
+  inventory::InventoryItem, option_internally_tagged, ApiResponse, DataWithId, IdColumnName,
+  ItemCount,
 };
 
 #[derive(Serialize, FromRow)]
@@ -61,29 +61,22 @@ pub async fn get_warehouse_inventory(
   .await;
 
   let items = match query {
-    Err(err) => {
-      println!("{}", err);
+    Err(_) => {
       return ApiResponse::WithoutBody {
         status: Status::InternalServerError,
-      };
+      }
     }
     Ok(items) => items,
   };
 
   match serde_json::to_string(&items) {
-    Ok(items) => {
-      println!("items: {}", items);
-      ApiResponse::WithBody {
-        json: items,
-        status: Status::Ok,
-      }
-    }
-    Err(err) => {
-      println!("{}", err);
-      ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      }
-    }
+    Ok(items) => ApiResponse::WithBody {
+      json: items,
+      status: Status::Ok,
+    },
+    Err(_) => ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    },
   }
 }
 
