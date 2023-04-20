@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::database::Db;
 
-pub static DEFAULT_LOGIN_SESSION_DURATION: Duration = Duration::hours(6);
+pub static DEFAULT_LOGIN_SESSION_DURATION: Duration = Duration::hours(10);
 pub static REMEMBER_LOGIN_SESSION_DURATION: Duration = Duration::days(30);
 
 fn session_experation_date(experation_date: Option<OffsetDateTime>) -> OffsetDateTime {
@@ -121,8 +121,7 @@ impl LoginSesion {
     !self.is_not_expired(db).await
   }
 
-  pub async fn get_session_if_valid(
-    db: &mut Connection<Db>,
+  pub async fn get_session(
     cookies: &CookieJar<'_>,
   ) -> Result<LoginSesion, SessionError> {
     let Some(session_cookie) = cookies.get_private("session") else {
@@ -133,6 +132,14 @@ impl LoginSesion {
       return Err(SessionError::InvalidCookie);
     };
 
+    Ok(session)
+  }
+
+  pub async fn get_session_if_valid(
+    db: &mut Connection<Db>,
+    cookies: &CookieJar<'_>,
+  ) -> Result<LoginSesion, SessionError> {
+    let session = LoginSesion::get_session(cookies).await?;
     if session.is_expired(db).await {
       return Err(SessionError::Expired);
     }

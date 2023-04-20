@@ -41,16 +41,19 @@ impl<'r> FromRequest<'r> for AuthAccountEmployee {
       rocket::outcome::Outcome::Forward(_) => return Outcome::Failure((Status::NotFound, ())),
     };
 
-    let Ok(session) = LoginSesion::get_session_if_valid(&mut db, req.cookies()).await else {
+    let Ok(session) = LoginSesion::get_session(req.cookies()).await else {
       print!("invalid session!");
       req.cookies().remove_private(Cookie::named("session"));
-      return Outcome::Failure((Status::Forbidden, ()));
+      return Outcome::Failure((Status::NotFound, ()));
     };
 
     if is_account_employee(session.account_id, &mut db).await {
-      Outcome::Success(AuthAccountEmployee())
+      match session.is_expired(&mut db).await {
+        true => Outcome::Failure((Status::Forbidden, ())),
+        false => Outcome::Success(AuthAccountEmployee()),
+      }
     } else {
-      Outcome::Failure((Status::Forbidden, ()))
+      Outcome::Failure((Status::NotFound, ()))
     }
   }
 }
