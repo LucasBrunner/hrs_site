@@ -16,6 +16,18 @@ use rocket::{
 use serde::{Deserialize, Serialize, Serializer};
 use sqlx::{mysql::MySqlRow, FromRow, Row};
 
+// mod macros {
+//   macro_rules! throwerr {
+//     ($a:expr) => {
+//       match $a {
+//         Ok(ok) => ok,
+//         Err(err) => return Err(err),
+//       }
+//     };
+//   }
+//   pub(crate) use throwerr;
+// }
+
 pub enum ApiResponse {
   WithBody { json: String, status: Status },
   WithoutBody { status: Status },
@@ -252,7 +264,10 @@ where
 {
   fn from_row(row: &'r MySqlRow) -> Result<Self, sqlx::Error> {
     match row.try_get("count") {
-      Ok(count) => Ok(ItemCount { item: T::from_row(row)?, count }),
+      Ok(count) => Ok(ItemCount {
+        item: T::from_row(row)?,
+        count,
+      }),
       Err(_) => Err(sqlx::Error::ColumnNotFound("count".to_owned())),
     }
   }

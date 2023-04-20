@@ -6,8 +6,8 @@ part 'phone.mapper.dart';
 
 @MappableEnum(caseStyle: CaseStyle.camelCase)
 enum PhoneType {
-  landline(id: 1, formalName: "Landline"),
-  mobile(id: 2, formalName: "Mobile");
+  landline(id: 1, formalName: 'Landline'),
+  mobile(id: 2, formalName: 'Mobile');
 
   final int id;
   final String formalName;

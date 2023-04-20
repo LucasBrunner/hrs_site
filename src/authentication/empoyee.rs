@@ -9,7 +9,7 @@ use crate::{
   data::{
     inventory::get_inventory_item_data,
     warehouses::get_warehouses,
-    warehouse::{get_warehouse_inventory, post_warehouse_inventory},
+    warehouse::{get_warehouse_inventory, post_warehouse_inventory}, account::search_account,
   },
   database::Db,
   session::LoginSesion,
@@ -23,6 +23,7 @@ pub fn employee_crud_routes() -> Vec<Route> {
     get_warehouse_inventory,
     get_inventory_item_data,
     post_warehouse_inventory,
+    search_account,
   ]
 }
 

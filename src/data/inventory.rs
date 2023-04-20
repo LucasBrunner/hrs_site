@@ -164,7 +164,7 @@ pub async fn get_inventory_item_data(
         FROM 
           `InventoryItem`
           INNER JOIN `Brand` USING(`brand_id`)
-        WHERE `InventoryItem`.`inventory_item_id` < 0
+        WHERE true = true
           {};
       "#,
     name_conditions,
