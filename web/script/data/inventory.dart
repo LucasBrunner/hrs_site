@@ -1,10 +1,8 @@
 import 'dart:html';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../data.dart';
 
 part 'inventory.mapper.dart';
-part 'inventory.freezed.dart';
 
 @MappableClass(generateMethods: GenerateMethods.encode | GenerateMethods.decode)
 class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow {
@@ -59,7 +57,7 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
     return TableRowElement()
       ..children.addAll([
         Element.th()..innerText = 'Price:',
-        Element.td()..innerText = listPrice.toString(),
+        Element.td()..innerText = '\$${listPrice.toStringAsFixed(2)}',
       ]);
   }
 
@@ -93,48 +91,4 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
     }
     return container;
   }
-}
-
-@freezed
-@MappableClass(discriminatorKey: 'Type')
-class InventoryItemResult with _$InventoryItemResult {
-  @MappableClass(discriminatorValue: 'Ok')
-  const factory InventoryItemResult.ok(List<InventoryItem> items) = _InventoryItemOk;
-  @MappableClass(discriminatorValue: 'Err')
-  const factory InventoryItemResult.err(DataError err) = _InventoryItemErr;
-}
-
-@MappableClass(generateMethods: GenerateMethods.encode | GenerateMethods.decode)
-class WarehouseInventoryItem with WarehouseInventoryItemMappable implements HasTitle {
-  double cost;
-  double listPrice;
-  int brandId;
-  String brandName;
-  String model;
-  OptionInternallyTagged<String> description;
-  int amount;
-
-  WarehouseInventoryItem(
-    this.cost,
-    this.listPrice,
-    this.brandId,
-    this.brandName,
-    this.model,
-    this.description,
-    this.amount,
-  );
-
-  @override
-  String title() {
-    return model;
-  }
-}
-
-@freezed
-@MappableClass(discriminatorKey: 'Type')
-class WarehouseInventoryResult with _$WarehouseInventoryResult {
-  @MappableClass(discriminatorValue: 'Ok')
-  const factory WarehouseInventoryResult.ok(List<WarehouseInventoryItem> items) = _InventoryOk;
-  @MappableClass(discriminatorValue: 'Err')
-  const factory WarehouseInventoryResult.err(DataError err) = _InventoryErr;
 }
