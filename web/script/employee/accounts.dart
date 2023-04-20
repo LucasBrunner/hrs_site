@@ -75,7 +75,7 @@ void search() async {
   final response = await http.get(
     Uri.http(
       window.location.host,
-      '/data/employee/accounts',
+      '/data/accounts',
       {
         searchType.urlName: searchValue,
       },

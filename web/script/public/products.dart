@@ -9,7 +9,7 @@ Future<List<DataWithId<InventoryItem>>?> getProductPage(int pageNubmer, int item
   final startItem = pageNubmer * itemsPerPage;
   final endItem = startItem + itemsPerPage;
   final response = await http.get(
-    Uri.http(window.location.host, '/data/public/products'),
+    Uri.http(window.location.host, '/data/products'),
     headers: {'Range': 'index=$startItem-$endItem'},
   );
 

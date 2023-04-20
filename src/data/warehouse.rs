@@ -94,8 +94,8 @@ pub struct WarehouseItemManulUpdate {
   amount: i32,
 }
 
-#[post(
-  "/warehouse/<warehouse_id>/inventory/manual_update",
+#[put(
+  "/warehouse/<warehouse_id>/inventory",
   format = "json",
   data = "<item_update>"
 )]

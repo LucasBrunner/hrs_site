@@ -11,7 +11,7 @@ part 'warehouse.mapper.dart';
 
 Future<List<ItemCount<DataWithId<InventoryItem>>>?> fetchWarehouseInventory(int warehouseId) async {
   final response = await http.get(
-    Uri.http(window.location.host, '/data/employee/warehouse/$warehouseId/inventory'),
+    Uri.http(window.location.host, '/data/warehouse/$warehouseId/inventory'),
   );
 
   print(response.body);
@@ -114,7 +114,7 @@ void _searchItems(KeyboardEvent event) async {
       return;
     }
     final response = await http.get(
-      Uri.http(window.location.host, '/data/employee/inventory/search/${Uri.encodeComponent(searchWords)}'),
+      Uri.http(window.location.host, '/data/inventory/search/${Uri.encodeComponent(searchWords)}'),
     );
 
     print(response.body);
@@ -170,8 +170,8 @@ void _updateItemCount(DataWithId<Warehouse> warehouse) async {
     adjustCount,
   );
 
-  final response = await http.post(
-    Uri.http(window.location.host, '/data/employee/warehouse/${warehouse.id}/inventory/manual_update'),
+  final response = await http.put(
+    Uri.http(window.location.host, '/data/warehouse/${warehouse.id}/inventory'),
     headers: {
       'Content-type': 'application/json',
     },

@@ -65,9 +65,9 @@ async fn public_fs(path: PathBuf) -> Option<NamedFile> {
 fn launch() -> _ {
   rocket::build()
     .attach(Db::init())
-    .mount("/data/employee", authentication::empoyee::employee_crud_routes())
-    .mount("/data/account", routes![get_account_info, put_account_info])
-    .mount("/data/public", routes![inventory::get_product_range])
+    .mount("/data", authentication::empoyee::employee_crud_routes())
+    .mount("/data", routes![get_account_info, put_account_info])
+    .mount("/data", routes![inventory::get_product_range])
     .mount("/", authentication::authentication_routes())
     .mount("/employee", routes![employee_fs])
     .mount("/account", routes![customer_fs])

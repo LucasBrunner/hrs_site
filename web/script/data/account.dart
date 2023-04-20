@@ -103,7 +103,7 @@ class Account with AccountMappable {
 
   static Future<Account?> httpGetId(int id) async {
     final response = await http.get(
-      Uri.http(window.location.host, '/data/employee/account/$id'),
+      Uri.http(window.location.host, '/data/account/$id'),
     );
     switch (response.statusCode) {
       case 200:
