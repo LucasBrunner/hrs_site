@@ -196,7 +196,7 @@ pub async fn post_warehouse_inventory(
   }
 
   ApiResponse::WithBody {
-    status: Status::Ok,
+    status: Status::Created,
     json: String::new(),
   }
 }

@@ -191,7 +191,7 @@ Future<bool> _saveData(Account account) async {
     querySelector('#general-error-message')?.innerText = '';
     final response = await accountUpdate.httpPut();
     switch (response.statusCode) {
-      case 200:
+      case 201:
         return true;
       case 401:
         querySelector('#general-error-message')?.innerText = 'Login session expired.';

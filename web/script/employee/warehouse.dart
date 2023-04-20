@@ -178,7 +178,7 @@ void _updateItemCount(DataWithId<Warehouse> warehouse) async {
     body: update.toJson(),
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     _clearWarehouseInventory();
     _displayWarehouseInventory(warehouse);
   }

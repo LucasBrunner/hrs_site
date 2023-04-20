@@ -368,7 +368,7 @@ pub async fn put_account_info(
   }
 
   match tx.commit().await {
-    Ok(_) => ApiResponse::WithoutBody { status: Status::Ok },
+    Ok(_) => ApiResponse::WithoutBody { status: Status::Created },
     Err(_) => ApiResponse::WithoutBody {
       status: Status::InternalServerError,
     },

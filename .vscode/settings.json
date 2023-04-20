@@ -20,5 +20,9 @@
     "editor.rulers": [
       160
     ],
+  },
+  "files.exclude": {
+    "**/*.freezed.dart": true,
+    "**/*.mapper.dart": true
   }
 }
