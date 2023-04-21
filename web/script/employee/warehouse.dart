@@ -114,7 +114,7 @@ void _searchItems(KeyboardEvent event) async {
       return;
     }
     final response = await http.get(
-      Uri.http(window.location.host, '/data/products/search/${Uri.encodeComponent(searchWords)}'),
+      Uri.http(window.location.host, '/data/product/search/${Uri.encodeComponent(searchWords)}'),
     );
 
     print(response.body);

@@ -21,6 +21,8 @@ pub struct InventoryItem {
   model: String,
   #[serde(serialize_with = "option_internally_tagged")]
   description: Option<String>,
+  #[serde(serialize_with = "option_internally_tagged")]
+  image_url: Option<String>,
 }
 
 impl IdColumnName for InventoryItem {
@@ -41,7 +43,8 @@ pub async fn get_product_range(mut db: Connection<Db>, range: RangeHeader<u64>) 
         `brand_id`,
         `Brand`.`name` AS "brand_name",
         `model`,
-        `description`
+        `description`,
+        `image_url`
       FROM 
         `InventoryItem`
         INNER JOIN `Brand` USING(`brand_id`)
@@ -65,7 +68,8 @@ pub async fn get_product_range(mut db: Connection<Db>, range: RangeHeader<u64>) 
           `brand_id`,
           `Brand`.`name` AS "brand_name",
           `model`,
-          `description`
+          `description`,
+          `image_url`
         FROM 
           `InventoryItem`
           INNER JOIN `Brand` USING(`brand_id`)
@@ -91,7 +95,8 @@ pub async fn get_product_range(mut db: Connection<Db>, range: RangeHeader<u64>) 
             `brand_id`,
             `Brand`.`name` AS "brand_name",
             `model`,
-            `description`
+            `description`,
+            `image_url`
           FROM 
             `InventoryItem`
             INNER JOIN `Brand` USING(`brand_id`)
@@ -158,11 +163,12 @@ pub async fn get_inventory_item_data(
           `brand_id`,
           `Brand`.`name` AS "brand_name",
           `model`,
-          `description`
+          `description`,
+          `image_url`
         FROM 
           `InventoryItem`
           INNER JOIN `Brand` USING(`brand_id`)
-        WHERE true = true
+        WHERE true = false
           {};
       "#,
     name_conditions,

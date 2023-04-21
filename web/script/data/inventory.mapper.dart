@@ -41,6 +41,10 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
       v.description;
   static const Field<InventoryItem, OptionInternallyTagged<String>>
       _f$description = Field('description', _$description);
+  static OptionInternallyTagged<String> _$imageUrl(InventoryItem v) =>
+      v.imageUrl;
+  static const Field<InventoryItem, OptionInternallyTagged<String>>
+      _f$imageUrl = Field('imageUrl', _$imageUrl);
 
   @override
   final Map<Symbol, Field<InventoryItem, dynamic>> fields = const {
@@ -50,6 +54,7 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
     #brandName: _f$brandName,
     #model: _f$model,
     #description: _f$description,
+    #imageUrl: _f$imageUrl,
   };
 
   static InventoryItem _instantiate(DecodingData data) {
@@ -59,7 +64,8 @@ class InventoryItemMapper extends ClassMapperBase<InventoryItem> {
         data.dec(_f$brandId),
         data.dec(_f$brandName),
         data.dec(_f$model),
-        data.dec(_f$description));
+        data.dec(_f$description),
+        data.dec(_f$imageUrl));
   }
 
   @override

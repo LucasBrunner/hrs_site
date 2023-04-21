@@ -48,7 +48,8 @@ pub async fn get_warehouse_inventory(
         `brand_id`,
         `Brand`.`name` AS "brand_name",
         `model`,
-        `description`
+        `description`,
+        `image_url`
       FROM 
         `WarehouseItem`
         INNER JOIN `InventoryItem` USING(`inventory_item_id`)

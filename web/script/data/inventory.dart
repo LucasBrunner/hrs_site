@@ -12,6 +12,7 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
   String brandName;
   String model;
   OptionInternallyTagged<String> description;
+  OptionInternallyTagged<String> imageUrl;
 
   InventoryItem(
     this.cost,
@@ -20,6 +21,7 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
     this.brandName,
     this.model,
     this.description,
+    this.imageUrl,
   );
 
   @override
@@ -84,7 +86,9 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
   @override
   DivElement toDisplayRow({Element? belowTable}) {
     final container = DivElement()..className = 'product-item';
-    container.children.add(ImageElement()..alt = "model: $model, brand: $brandName, description: ${descriptionString()}");
+    container.children.add(ImageElement()
+      ..src = imageUrl.when(some: (url) => './$url', none: () => '')
+      ..alt = "model: $model, brand: $brandName, description: ${descriptionString()}");
     container.children.add(DivElement()..children.add(TableElement()..children.addAll(_productTableRows())));
     if (belowTable != null) {
       container.children.add(belowTable);
