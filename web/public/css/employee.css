@@ -1,4 +1,4 @@
-.border-table, .border-table > table {
+.border-table, .border-table table {
   border-collapse: collapse;
 }
 
