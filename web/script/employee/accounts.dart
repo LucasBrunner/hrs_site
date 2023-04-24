@@ -110,7 +110,7 @@ void setUrlParam(String key, String data) {
   final location = Uri.dataFromString(window.location.href);
   final params = location.queryParameters.map((key, value) => MapEntry(key, value));
   params[key] = data;
-  window.history.pushState('', 'accounts', location.replace(queryParameters: params).toString().substring(6));
+  window.history.replaceState('', 'accounts', location.replace(queryParameters: params).toString().substring(6));
 }
 
 void setup() {
@@ -159,5 +159,5 @@ void setup() {
 
   querySelector('#search-button')?.onClick.listen((event) => search());
 
-  window.history.pushState('', 'accounts', Uri.dataFromString(window.location.href).toString().substring(6));
+  window.history.replaceState('', 'accounts', Uri.dataFromString(window.location.href).toString().substring(6));
 }
