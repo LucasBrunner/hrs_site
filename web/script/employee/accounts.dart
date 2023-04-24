@@ -39,7 +39,7 @@ void displayAccountSearchResults(List<DataWithId<Account>> accounts) {
       TableCellElement()
         ..children.add(ButtonElement()
           ..innerText = 'View account'
-          ..onClick.listen((event) => window.location.replace(Uri.http(window.location.host, '/employee/account', {'id': "${account.id}"}).toString()))),
+          ..onClick.listen((event) => window.location.assign(Uri.http(window.location.host, '/employee/account', {'id': "${account.id}"}).toString()))),
       TableCellElement()..innerText = account.data.data.legalName,
       TableCellElement()..innerText = account.data.data.preferredName,
       TableCellElement()..innerText = account.data.data.email,
