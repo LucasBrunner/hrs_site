@@ -2,7 +2,6 @@ pub mod account;
 mod basic_data;
 pub mod inventory;
 pub mod warehouse;
-pub mod warehouses;
 
 use std::{io::Cursor, ops::Range, str::FromStr};
 
@@ -16,17 +15,18 @@ use rocket::{
 use serde::{Deserialize, Serialize, Serializer};
 use sqlx::{mysql::MySqlRow, FromRow, Row};
 
-// mod macros {
-//   macro_rules! throwerr {
-//     ($a:expr) => {
-//       match $a {
-//         Ok(ok) => ok,
-//         Err(err) => return Err(err),
-//       }
-//     };
-//   }
-//   pub(crate) use throwerr;
-// }
+pub mod basics {
+  pub use super::ApiResponse;
+  pub use super::IdColumnName;
+  pub use super::DataWithId;
+  pub use super::OptionInternallyTagged;
+}
+
+pub mod update {
+  pub use super::DataMaybeId;
+  pub use super::ItemCount;
+  pub use super::UpdateType;
+}
 
 pub enum ApiResponse {
   WithBody { json: String, status: Status },

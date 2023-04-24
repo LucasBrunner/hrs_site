@@ -1,32 +1,16 @@
 use rocket::{
   http::{Status, Cookie},
   request::{FromRequest, Outcome},
-  Request, Route,
+  Request,
 };
 use rocket_db_pools::Connection;
 
 use crate::{
-  data::{
-    inventory::get_inventory_item_data,
-    warehouses::get_warehouses,
-    warehouse::{get_warehouse_inventory, post_warehouse_inventory}, account::{search_account, get_account_from_id},
-  },
   database::Db,
   session::LoginSesion,
 };
 
 use super::is_account_employee;
-
-pub fn employee_crud_routes() -> Vec<Route> {
-  routes![
-    get_warehouses,
-    get_warehouse_inventory,
-    get_inventory_item_data,
-    post_warehouse_inventory,
-    search_account,
-    get_account_from_id,
-  ]
-}
 
 pub struct AuthAccountEmployee();
 
