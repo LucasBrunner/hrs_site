@@ -3,7 +3,6 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:http/http.dart' as http;
 import '../data.dart';
 import '../html_utility.dart';
-import 'warehouse.dart';
 import '../data/warehouse.dart';
 
 displayWarehouses(List<DataWithId<Warehouse>> warehouses) {
@@ -17,7 +16,7 @@ displayWarehouses(List<DataWithId<Warehouse>> warehouses) {
     warehouseRow.children.add(TableCellElement()
       ..children.add(ButtonElement()
         ..innerText = 'View Inventory'
-        ..onClick.listen((event) => saveWarehouseLocally(warehouse))));
+        ..onClick.listen((event) => window.location.assign(Uri.http(window.location.host, '/employee/warehouse', {'id': "${warehouse.id}"}).toString()))));
     warehouseTable.children.add(warehouse.data.appendToTableRow(warehouseRow));
   }
 }

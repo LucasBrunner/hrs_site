@@ -26,7 +26,7 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
 
   @override
   String title() {
-    return model;
+    return '$model${description.when(some: (some) => ' - $some', none: () => '')}';
   }
 
   String descriptionString() {

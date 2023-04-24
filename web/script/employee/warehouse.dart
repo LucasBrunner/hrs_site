@@ -31,11 +31,6 @@ Future<List<ItemCount<DataWithId<InventoryItem>>>?> fetchWarehouseInventory(int 
   }
 }
 
-saveWarehouseLocally(DataWithId<Warehouse> warehouse) {
-  window.sessionStorage['warehouse'] = warehouse.toJson();
-  window.location.pathname = '/employee/warehouse';
-}
-
 _setWarehousesInventory(List<ItemCount<DataWithId<InventoryItem>>> inventory) {
   final table = querySelector('#inventory');
   if (table == null) {
@@ -190,13 +185,7 @@ void _setupInventorySearchButton(DataWithId<Warehouse> warehouse) {
   querySelector('#item-update-submit')?.toElement<ButtonElement>()?.onClick.listen((event) => _updateItemCount(warehouse));
 }
 
-void setup() {
-  final warehouse = _getWarehouseFromLocalStorage();
-  if (warehouse == null) {
-    querySelector('body')?.children.insert(0, HeadingElement.h2()..text = 'Warehouse not found');
-    return;
-  }
-
+void setupData(DataWithId<Warehouse> warehouse) {
   querySelector('title')?.innerText = 'HRS-Employee: View Warehouse "${warehouse.data.name}"';
 
   _displayWarehouseInventory(warehouse);
@@ -204,12 +193,27 @@ void setup() {
   _resetSelectedAdjustInventoryItem();
 }
 
-DataWithId<Warehouse>? _getWarehouseFromLocalStorage() {
-  try {
-    DataWithIdMapper.ensureInitialized();
-    WarehouseMapper.ensureInitialized();
-    return MapperContainer.globals.fromJson<DataWithId<Warehouse>>(window.sessionStorage['warehouse'] ?? "");
-  } catch (e) {
-    return null;
+void setup() async {
+  final id = int.tryParse(Uri.dataFromString(window.location.href).queryParameters['id'] ?? '');
+  if (id == null) {
+    print('Error: no or invalid id');
+    return;
+  }
+
+  final response = await http.get(
+    Uri.http(window.location.host, '/data/warehouses/$id'),
+  );
+
+  switch (response.statusCode) {
+    case 200:
+      try {
+        setupData(DataWithId(id, WarehouseMapper.fromJson(response.body)));
+      } catch (e) {
+        querySelector('body')?.children.insert(0, HeadingElement.h2()..text = 'Problem deserializing data');
+      }
+      break;
+    default:
+      querySelector('body')?.children.insert(0, HeadingElement.h2()..text = 'Warehouse not found');
+      return;
   }
 }
