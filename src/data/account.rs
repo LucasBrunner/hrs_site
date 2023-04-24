@@ -86,14 +86,14 @@ pub async fn get_account(id: u64, db: &mut Connection<Db>) -> Result<Account, sq
   })
 }
 
-pub async fn get_accounts<T>(account_ids: T, db: &mut Connection<Db>) -> Vec<Account>
+pub async fn get_accounts<T>(account_ids: T, db: &mut Connection<Db>) -> Vec<DataWithId<Account>>
 where
   T: IntoIterator<Item = u64>,
 {
   let mut accounts = Vec::new();
   for id in account_ids {
     if let Ok(account) = get_account(id, db).await {
-      accounts.push(account);
+      accounts.push(DataWithId { data: account, id });
     }
   }
   accounts
