@@ -6,7 +6,10 @@ use std::io::Write;
 use crate::{
   authentication::{empoyee::AuthAccountEmployee, AuthSession},
   data::ApiResponse,
-  data::{account::*, basics::*, update::*},
+  data::{
+    account::{self, *},
+    update::*,
+  },
   database::Db,
 };
 
@@ -236,19 +239,11 @@ pub async fn search_account(
     Ok(ok) => ok,
   };
 
-  let mut accounts = Vec::new();
-  for id in account_id_query
+  let account_ids = account_id_query
     .into_iter()
-    .filter_map(|row| row.try_get("account_id").ok())
-  {
-    let Ok(account) = get_account(id, &mut db).await else {
-      println!("no account with id \"{}\"", id);
-      continue;
-    };
-    accounts.push(DataWithId { data: account, id });
-  }
+    .filter_map(|row| row.try_get("account_id").ok());
 
-  match serde_json::to_string(&accounts) {
+  match serde_json::to_string(&account::get_accounts(account_ids, &mut db).await) {
     Ok(json) => ApiResponse::WithBody {
       status: Status::Ok,
       json,
