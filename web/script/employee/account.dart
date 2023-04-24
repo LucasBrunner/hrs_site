@@ -15,5 +15,7 @@ void setup() async {
     return;
   }
 
+  querySelector('title')?.innerText = 'HRS-Employee: View Account "${account.data.legalName}"';
+
   querySelector('#account-display')?.children.addAll(account.toTableViewRows());
 }

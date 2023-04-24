@@ -196,6 +196,9 @@ void setup() {
     querySelector('body')?.children.insert(0, HeadingElement.h2()..text = 'Warehouse not found');
     return;
   }
+
+  querySelector('title')?.innerText = 'HRS-Employee: View Warehouse "${warehouse.data.name}"';
+
   _displayWarehouseInventory(warehouse);
   _setupInventorySearchButton(warehouse);
   _resetSelectedAdjustInventoryItem();
