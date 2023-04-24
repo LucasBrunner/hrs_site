@@ -10,7 +10,10 @@ enum AccountSearchType {
   id(formalName: 'Id', urlName: "id"),
   email(formalName: 'Email', urlName: "email"),
   name(formalName: 'Name', urlName: "name"),
-  address(formalName: 'Address', urlName: "address"),
+  street(formalName: 'Street', urlName: "street"),
+  state(formalName: 'State', urlName: "state"),
+  city(formalName: 'City', urlName: "city"),
+  zip(formalName: 'Zip', urlName: "zip"),
   phoneNumber(formalName: 'Phone Number', urlName: "phonenumber");
 
   final String formalName;

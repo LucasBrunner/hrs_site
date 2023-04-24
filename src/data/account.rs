@@ -483,7 +483,7 @@ pub async fn search_account(
         INNER JOIN `AccountPhone` USING(account_id) 
         INNER JOIN `Phone` USING(phone_id)
       WHERE
-        true = true
+        true = false
         {};
     "#,
     where_statement,
