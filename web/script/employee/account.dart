@@ -18,4 +18,8 @@ void setup() async {
   querySelector('title')?.innerText = 'HRS-Employee: View Account "${account.data.legalName}"';
 
   querySelector('#account-display')?.children.addAll(account.toTableViewRows());
+
+  querySelector('body')?.children.add(ButtonElement()
+    ..innerText = 'Edit Account'
+    ..onClick.listen((event) => window.location.pathname = '/employee/account_edit'));
 }

@@ -1,15 +1,12 @@
 use rocket::http::Status;
 use rocket_db_pools::Connection;
-use sqlx::{Acquire, Row};
+use sqlx::Row;
 use std::io::Write;
 
 use crate::{
-  authentication::{empoyee::AuthAccountEmployee, AuthSession},
+  authentication::{empoyee::AuthAccountEmployee, AuthSession, is_account_employee},
   data::ApiResponse,
-  data::{
-    account::{self, *},
-    update::*,
-  },
+  data::account::{self, *},
   database::Db,
 };
 
@@ -50,83 +47,21 @@ pub async fn put_account_implicit(
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
 ) -> ApiResponse {
-  let Ok(mut tx) = db.begin().await else {
-    return ApiResponse::WithoutBody { status: Status::InternalServerError };
-  };
+  put_account_update(&mut db, account_update.0, auth_session.session.account_id).await
+}
 
-  let account_update_result = match &account_update.preferred_name {
-    UpdateType::Put { item } => sqlx::query!(
-      r#"
-        UPDATE `Account`
-        SET `preferred_name` = ?
-        WHERE `account_id` = ?;
-      "#,
-      item,
-      auth_session.session.account_id,
-    )
-    .execute(&mut tx)
-    .await
-    .err(),
-    UpdateType::Delete { id: _ } => {
-      _ = tx.rollback().await;
-      return ApiResponse::WithoutBody {
-        status: Status::UnprocessableEntity,
-      };
-    }
-    UpdateType::Ignore => None,
-  };
+#[put("/accounts/<account_id>", format = "json", data = "<account_update>")]
+pub async fn put_account_id(
+  mut db: Connection<Db>,
+  account_id: u64,
+  account_update: rocket::serde::json::Json<AccountUpdate>,
+  auth_session: AuthSession,
+) -> ApiResponse {
+  if account_id != auth_session.session.account_id && !is_account_employee(auth_session.session.account_id, &mut db).await {
+    return ApiResponse::WithoutBody { status: Status::NotFound };
+  } 
 
-  if account_update_result.is_some() {
-    _ = tx.rollback().await;
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
-  }
-
-  for phone_update in account_update.phones.iter() {
-    let phone_update_result = match phone_update {
-      UpdateType::Put { item } => {
-        put_phone(&mut tx, auth_session.session.account_id, item.clone()).await
-      }
-      UpdateType::Delete { id } => {
-        delete_phone_relation(&mut tx, auth_session.session.account_id, *id).await
-      }
-      UpdateType::Ignore => todo!(),
-    };
-    if phone_update_result.is_err() {
-      _ = tx.rollback().await;
-      return ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      };
-    }
-  }
-
-  for address_update in account_update.addresses.iter() {
-    let address_update_result = match address_update {
-      UpdateType::Put { item } => {
-        put_address(&mut tx, auth_session.session.account_id, item.clone()).await
-      }
-      UpdateType::Delete { id } => {
-        delete_address_relation(&mut tx, auth_session.session.account_id, *id).await
-      }
-      UpdateType::Ignore => todo!(),
-    };
-    if address_update_result.is_err() {
-      _ = tx.rollback().await;
-      return ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      };
-    }
-  }
-
-  match tx.commit().await {
-    Ok(_) => ApiResponse::WithoutBody {
-      status: Status::Created,
-    },
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
-  }
+  put_account_update(&mut db, account_update.0, account_id).await
 }
 
 #[get("/accounts?<id>&<email>&<name>&<phonenumber>&<street>&<city>&<state>&<zip>&<matchtype>")]

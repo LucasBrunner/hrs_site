@@ -5,6 +5,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:http/http.dart';
 
 import '../data.dart';
+import '../html_utility.dart';
 import 'address.dart';
 import 'phone.dart';
 
@@ -191,6 +192,178 @@ class Account with AccountMappable {
         return null;
     }
   }
+
+  Future<bool> saveData(
+    String pronoun,
+    Future<Response> Function(AccountUpdate accountUpdate) applyAccountUpdate,
+  ) async {
+    bool dataValid = true;
+    final accountUpdate = AccountUpdate(
+      UpdateType.ignore(),
+      UpdateType.ignore(),
+      UpdateType.ignore(),
+      List.empty(growable: true),
+      List.empty(growable: true),
+    );
+
+    final preferredName = querySelector('#account-preferred-name')?.toElement<InputElement>()?.value;
+    if (preferredName == null || preferredName.isEmpty) {
+      querySelector('.preferred-name-error-message')?.innerText = 'Preferred name cannot be empty';
+    } else if (preferredName != data.preferredName) {
+      querySelector('.preferred-name-error-message')?.innerText = '';
+      accountUpdate.preferredName = UpdateType.put(preferredName);
+    }
+
+    for (var addressInputTable in querySelectorAll('.address-input')) {
+      final id = addressInputTable.getAttribute('data-address-id');
+      if (id == null) {
+        querySelector('#general-error-message')?.innerText = 'There was an error serializing $pronoun account.';
+        dataValid = false;
+        continue;
+      }
+
+      final street = addressInputTable.querySelector('.address-street')?.toElement<InputElement>()?.value;
+      if (street == null || street.isEmpty) {
+        addressInputTable.querySelector('.address-street-message')?.innerText = 'Street is a mandatory field';
+        dataValid = false;
+      } else {
+        addressInputTable.querySelector('.address-street-message')?.innerText = '';
+      }
+
+      final city = addressInputTable.querySelector('.address-city')?.toElement<InputElement>()?.value;
+      if (city == null || city.isEmpty) {
+        addressInputTable.querySelector('.address-city-message')?.innerText = 'City is a mandatory field';
+        dataValid = false;
+      } else {
+        addressInputTable.querySelector('.address-city-message')?.innerText = '';
+      }
+
+      final state = addressInputTable.querySelector('.address-state')?.toElement<SelectElement>()?.value;
+      if (state == null || state.isEmpty || state == '— Select One —') {
+        addressInputTable.querySelector('.address-state-message')?.innerText = 'State is a mandatory field';
+        dataValid = false;
+      } else {
+        addressInputTable.querySelector('.address-state-message')?.innerText = '';
+      }
+
+      final zip = addressInputTable.querySelector('.address-zip')?.toElement<InputElement>()?.value;
+      if (zip == null || zip.isEmpty) {
+        addressInputTable.querySelector('.address-zip-message')?.innerText = 'Zip is a mandatory field';
+        dataValid = false;
+      } else {
+        addressInputTable.querySelector('.address-zip-message')?.innerText = '';
+      }
+
+      if (dataValid) {
+        final address = Address(street!, city!, state!, zip!);
+
+        if (id.startsWith('temp-')) {
+          accountUpdate.addresses.add(UpdateType.put(DataMaybeId.noId(address)));
+          continue;
+        }
+
+        final compareAddress = addresses.firstWhere(
+          (element) => element.id.toString() == id,
+          orElse: () => DataWithId(-1, Address.defaultAddress()),
+        );
+        if (compareAddress.id == -1) {
+          dataValid = false;
+          querySelector('#general-error-message')?.innerText = 'There was an error serializing $pronoun account.';
+          continue;
+        } else if (address == compareAddress.data) {
+          continue;
+        } else {
+          accountUpdate.addresses.add(UpdateType.put(DataMaybeId.id(compareAddress.id, address)));
+        }
+      }
+    }
+
+    for (var phoneInputTable in querySelectorAll('.phone-input')) {
+      final id = phoneInputTable.getAttribute('data-phone-id');
+      if (id == null) {
+        querySelector('#general-error-message')?.innerText = 'There was an error serializing $pronoun account.';
+        dataValid = false;
+        continue;
+      }
+
+      final number = phoneInputTable.querySelector('.phone-number')?.toElement<InputElement>()?.value;
+      if (number == null || number.isEmpty) {
+        phoneInputTable.querySelector('.phone-number-message')?.innerText = 'Phone number is a mandatory field';
+        dataValid = false;
+      } else {
+        phoneInputTable.querySelector('.phone-number-message')?.innerText = '';
+      }
+
+      final type = phoneInputTable.querySelector('.phone-type')?.toElement<SelectElement>()?.value;
+      if (type == null || type.isEmpty || type == '— Select One —') {
+        phoneInputTable.querySelector('.phone-type-message')?.innerText = 'Phone type is a mandatory field';
+        dataValid = false;
+      } else {
+        phoneInputTable.querySelector('.phone-type-message')?.innerText = '';
+      }
+
+      if (dataValid) {
+        Phone? phone;
+        try {
+          phone = Phone(number!, PhoneType.values.firstWhere((element) => element.formalName == type));
+        } finally {}
+
+        if (id.startsWith('temp-')) {
+          accountUpdate.phones.add(UpdateType.put(DataMaybeId.noId(phone)));
+          continue;
+        }
+
+        final comparePhone = phones.firstWhere(
+          (element) => element.id.toString() == id,
+          orElse: () => DataWithId(-1, Phone.defaultPhone()),
+        );
+        if (comparePhone.id == -1) {
+          dataValid = false;
+          querySelector('#general-error-message')?.innerText = 'There was an error serializing $pronoun account.';
+          continue;
+        } else if (phone == comparePhone.data) {
+          continue;
+        } else {
+          accountUpdate.phones.add(UpdateType.put(DataMaybeId.id(comparePhone.id, phone)));
+        }
+      }
+    }
+
+    for (DataWithId<Address> address in addresses) {
+      if (querySelector('.address-input[data-address-id="${address.id}"]') == null) {
+        accountUpdate.addresses.add(UpdateType.delete(address.id));
+      }
+    }
+
+    for (DataWithId<Phone> phone in phones) {
+      if (querySelector('.phone-input[data-phone-id="${phone.id}"]') == null) {
+        accountUpdate.phones.add(UpdateType.delete(phone.id));
+      }
+    }
+
+    if (dataValid) {
+      querySelector('#general-error-message')?.innerText = '';
+      final response = await applyAccountUpdate.call(accountUpdate);
+      switch (response.statusCode) {
+        case 201:
+          return true;
+        case 401:
+          querySelector('#general-error-message')?.innerText = 'Login session expired.';
+          return false;
+        case 422:
+          querySelector('#general-error-message')?.innerText = 'There was an error serializing $pronoun account.';
+          return false;
+        case 500:
+          querySelector('#general-error-message')?.innerText = 'There was a server error.';
+          return false;
+        default:
+          querySelector('#general-error-message')?.innerText = 'There was a client error.';
+          return false;
+      }
+    }
+
+    return false;
+  }
 }
 
 @MappableClass()
@@ -209,10 +382,20 @@ class AccountUpdate with AccountUpdateMappable {
     this.addresses,
   );
 
-  Future<Response> httpPutImplicit() async {
+  static Future<Response> httpPutImplicit(AccountUpdate accountUpdate) async {
     return await http.put(
       Uri.http(window.location.host, '/data/account'),
-      body: toJson(),
+      body: accountUpdate.toJson(),
+      headers: {
+        'Content-type': 'application/json',
+      },
+    );
+  }
+
+  static Future<Response> httpPutId(int id, AccountUpdate accountUpdate) async {
+    return await http.put(
+      Uri.http(window.location.host, '/data/accounts/$id'),
+      body: accountUpdate.toJson(),
       headers: {
         'Content-type': 'application/json',
       },

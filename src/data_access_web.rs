@@ -16,6 +16,7 @@ pub fn data_routes() -> Vec<Route> {
     get_account_implicit,
     get_account_from_id,
     put_account_implicit,
+    put_account_id,
     search_account,
     // products
     get_inventory_item_range,

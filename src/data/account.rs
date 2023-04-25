@@ -1,14 +1,14 @@
-use rocket::form::{Errors, FromFormField};
+use rocket::{form::{Errors, FromFormField}, http::Status};
 use rocket_db_pools::Connection;
 use serde::{Deserialize, Serialize};
-use sqlx::{MySql, Transaction};
+use sqlx::{MySql, Transaction, Acquire};
 use strum_macros::{self, IntoStaticStr};
 
 use crate::database::Db;
 
 use super::{
   basic_data::{address::Address, phone::Phone},
-  DataMaybeId, DataWithId, UpdateType,
+  DataMaybeId, DataWithId, UpdateType, ApiResponse,
 };
 
 #[derive(Serialize, Clone)]
@@ -277,5 +277,85 @@ impl<'v> FromFormField<'v> for MatchType {
       "or" => Ok(MatchType::Or),
       _ => Err(Errors::new()),
     }
+  }
+}
+
+pub async fn put_account_update(db: &mut Connection<Db>, account_update: AccountUpdate, account_id: u64) -> ApiResponse {
+  let Ok(mut tx) = db.begin().await else {
+    return ApiResponse::WithoutBody { status: Status::InternalServerError };
+  };
+
+  let account_update_result = match &account_update.preferred_name {
+    UpdateType::Put { item } => sqlx::query!(
+      r#"
+        UPDATE `Account`
+        SET `preferred_name` = ?
+        WHERE `account_id` = ?;
+      "#,
+      item,
+      account_id,
+    )
+    .execute(&mut tx)
+    .await
+    .err(),
+    UpdateType::Delete { id: _ } => {
+      _ = tx.rollback().await;
+      return ApiResponse::WithoutBody {
+        status: Status::UnprocessableEntity,
+      };
+    }
+    UpdateType::Ignore => None,
+  };
+
+  if account_update_result.is_some() {
+    _ = tx.rollback().await;
+    return ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    };
+  }
+
+  for phone_update in account_update.phones.iter() {
+    let phone_update_result = match phone_update {
+      UpdateType::Put { item } => {
+        put_phone(&mut tx, account_id, item.clone()).await
+      }
+      UpdateType::Delete { id } => {
+        delete_phone_relation(&mut tx, account_id, *id).await
+      }
+      UpdateType::Ignore => todo!(),
+    };
+    if phone_update_result.is_err() {
+      _ = tx.rollback().await;
+      return ApiResponse::WithoutBody {
+        status: Status::InternalServerError,
+      };
+    }
+  }
+
+  for address_update in account_update.addresses.iter() {
+    let address_update_result = match address_update {
+      UpdateType::Put { item } => {
+        put_address(&mut tx, account_id, item.clone()).await
+      }
+      UpdateType::Delete { id } => {
+        delete_address_relation(&mut tx, account_id, *id).await
+      }
+      UpdateType::Ignore => todo!(),
+    };
+    if address_update_result.is_err() {
+      _ = tx.rollback().await;
+      return ApiResponse::WithoutBody {
+        status: Status::InternalServerError,
+      };
+    }
+  }
+
+  match tx.commit().await {
+    Ok(_) => ApiResponse::WithoutBody {
+      status: Status::Created,
+    },
+    Err(_) => ApiResponse::WithoutBody {
+      status: Status::InternalServerError,
+    },
   }
 }
