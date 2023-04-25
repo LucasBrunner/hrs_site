@@ -19,7 +19,7 @@ const scriptElements = {
   'header_footer': header_footer.setup,
   'products': products.setup,
   'view_account': view_account.setup,
-  'edit_account': edit_account.setup,
+  'edit-account': edit_account.setup,
   'account-search': account_search.setup,
   'employee-account-view': account_view.setup,
 };

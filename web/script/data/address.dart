@@ -2,6 +2,8 @@ import 'dart:html';
 
 import 'package:dart_mappable/dart_mappable.dart';
 
+import '../data.dart';
+
 part 'address.mapper.dart';
 
 @MappableClass()
@@ -19,7 +21,6 @@ class Address with AddressMappable {
   );
 
   static Address defaultAddress() {
-    uniqueNegativeId -= 1;
     return Address('', '', 'Arizona', '');
   }
 
@@ -93,9 +94,19 @@ class Address with AddressMappable {
         ]),
     ];
   }
-}
 
-int uniqueNegativeId = -1;
+  static TableElement addressInputTable(String id, Address address) {
+    return TableElement()
+      ..setAttribute('data-address-id', id)
+      ..className = 'address-input'
+      ..children.addAll(address.toTableEditRows()
+        ..addDeleteButton(
+          'Remove address',
+          'deleting address with id of $id',
+          () => querySelector('.address-input[data-address-id="$id"]')?.remove(),
+        ));
+  }
+}
 
 SelectElement stateInput({String selected = ''}) {
   final input = SelectElement();

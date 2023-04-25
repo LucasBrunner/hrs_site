@@ -55,14 +55,14 @@ class Account with AccountMappable {
 
   TableRowElement _phoneRow() {
     final row = TableRowElement();
-    if (addresses.isEmpty) {
+    if (phones.isEmpty) {
       return row
         ..children.addAll([
           Element.th()..innerText = 'Phone:',
           Element.td()..innerText = 'N/A',
         ]);
     }
-    if (addresses.length == 1) {
+    if (phones.length == 1) {
       row.children.add(Element.th()..innerText = 'Phone:');
     } else {
       row.children.add(Element.th()..innerText = 'Phones:');
@@ -86,6 +86,84 @@ class Account with AccountMappable {
     rows.add(_addressRow());
     rows.add(_phoneRow());
     return rows;
+  }
+
+  List<Element> legalNameEditRow() {
+    return [
+      Element.th()..innerText = 'Legal Name:',
+      Element.td()..children.add(InputElement()..defaultValue = data.legalName),
+    ];
+  }
+
+  List<Element> legalNameUneditableRow() {
+    return [
+      Element.th()..innerText = 'Legal Name:',
+      Element.td()..innerHtml = '${data.legalName} <small><i>Please contact support to change your legal name.</i></small>',
+    ];
+  }
+
+  List<Element> emailAddressEditRow() {
+    return [
+      Element.th()..innerText = 'Email Address:',
+      Element.td()
+        ..children.add(InputElement()
+          ..defaultValue = data.email
+          ..type = 'email'),
+    ];
+  }
+
+  List<Element> emailAddressUneditableRow() {
+    return [
+      Element.th()..innerText = 'Email Address:',
+      Element.td()..innerHtml = '${data.email} <small><i>Please contact support to change your email.</i></small>',
+    ];
+  }
+
+  List<Element> preferredNameEditRow() {
+    return [
+      Element.th()..innerText = 'Preferred Name:',
+      Element.td()..children.add(InputElement()..defaultValue = data.preferredName),
+    ];
+  }
+
+  List<Element> addressEditRow(
+    String Function() uniqueId,
+  ) {
+    return [
+      Element.th()..innerText = 'Addresses:',
+      Element.td()
+        ..children.addAll([
+          DivElement()
+            ..id = 'addresses'
+            ..children.addAll(addresses.map((address) => Address.addressInputTable(address.id.toString(), address.data))),
+          DivElement()
+            ..children.add(ButtonElement()
+              ..innerText = 'Add address to account'
+              ..onClick.listen(
+                (event) => querySelector('#addresses')?.children.add(Address.addressInputTable(uniqueId.call(), Address.defaultAddress())),
+              )),
+        ]),
+    ];
+  }
+
+  List<Element> phoneEditRow(
+    String Function() uniqueId,
+  ) {
+    return [
+      Element.th()..innerText = 'Phones:',
+      Element.td()
+        ..children.addAll([
+          DivElement()
+            ..id = 'phones'
+            ..children.addAll(phones.map((phone) => Phone.phoneInputTable(phone.id.toString(), phone.data))),
+          DivElement()
+            ..children.add(ButtonElement()
+              ..innerText = 'Add phone to account'
+              ..onClick.listen(
+                (event) => querySelector('#phones')?.children.add(Phone.phoneInputTable(uniqueId.call(), Phone.defaultPhone())),
+              )),
+        ]),
+    ];
   }
 
   static Future<Account?> httpGetImplicit() async {

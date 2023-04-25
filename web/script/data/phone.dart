@@ -2,6 +2,8 @@ import 'dart:html';
 
 import 'package:dart_mappable/dart_mappable.dart';
 
+import '../data.dart';
+
 part 'phone.mapper.dart';
 
 @MappableEnum(caseStyle: CaseStyle.camelCase)
@@ -70,6 +72,18 @@ class Phone with PhoneMappable {
           Element.td()..classes.addAll(['phone-type-message', 'error-message']),
         ]),
     ]);
+  }
+
+  static TableElement phoneInputTable(String id, Phone phone) {
+    return TableElement()
+      ..setAttribute('data-phone-id', id)
+      ..className = 'phone-input'
+      ..children.addAll(phone.toTableEditRows()
+        ..addDeleteButton(
+          'Remove phone',
+          'deleting phone with id of $id',
+          () => querySelector('.phone-input[data-phone-id="$id"]')?.remove(),
+        ));
   }
 }
 

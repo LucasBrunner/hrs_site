@@ -25,3 +25,9 @@ extension ToSpecificElementList on List<Element> {
     }
   }
 }
+
+extension ToTableRow on List<Element> {
+  TableRowElement toTableRow() {
+    return TableRowElement()..children.addAll(this);
+  }
+}
