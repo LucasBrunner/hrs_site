@@ -3,7 +3,7 @@ import 'dart:html';
 import 'authentication/authentication.dart';
 
 const headerHtml = '''
-    <h1>Home Renovation Systems</h1>
+    <h1 class="text-button" onclick="window.location.pathname = '/'">Home Renovation Systems</h1>
     <div id="header-left-content">
       <span class="div-button" onclick="window.location.pathname = '/products'">
         Products
@@ -49,6 +49,10 @@ const profileIcon = '''
 ''';
 
 final onclickValidator = NodeValidatorBuilder.common()
+  ..allowElement(
+    'h1',
+    attributes: ['onclick'],
+  )
   ..allowElement(
     'span',
     attributes: ['onclick'],
