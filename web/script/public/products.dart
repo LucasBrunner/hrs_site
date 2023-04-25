@@ -27,7 +27,15 @@ Future<List<DataWithId<InventoryItem>>?> getProductPage(int pageNubmer, int item
 void displayProductPage(List<DataWithId<InventoryItem>> items) {
   querySelector('#products')?.children
     ?..clear()
-    ..addAll(items.map((item) => item.data.toDisplayRow()));
+    ..addAll(items.map((item) {
+      final row = item.data.toDisplayRow();
+      if (document.cookie?.contains('session') ?? false) {
+        row.children.add(DivElement()
+          ..innerText = 'Add to order'
+          ..classes.addAll(['div-button', 'order-button']));
+      }
+      return row;
+    }));
 }
 
 void displayError(DataError err) {}

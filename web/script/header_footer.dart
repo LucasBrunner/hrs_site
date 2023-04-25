@@ -4,7 +4,7 @@ import 'authentication/authentication.dart';
 
 const headerHtml = '''
     <h1 class="text-button" onclick="window.location.pathname = '/'">Home Renovation Systems</h1>
-    <div id="header-left-content">
+    <div id="header-right-content">
       <span class="div-button" onclick="window.location.pathname = '/products'">
         Products
       </span>

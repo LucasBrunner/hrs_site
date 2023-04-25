@@ -40,3 +40,11 @@
   width: fit-content;
   color: white;
 }
+
+.order-button {
+  height: fit-content;
+  margin-top: auto;
+  margin-left: auto;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+}
