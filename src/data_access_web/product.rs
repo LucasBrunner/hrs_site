@@ -2,12 +2,11 @@ use rocket::http::Status;
 use rocket_db_pools::Connection;
 
 use crate::{
-  authentication::{empoyee::AuthAccountEmployee, AuthSession},
   data::{inventory::InventoryItem, ApiResponse, DataWithId, RangeHeader},
   database::Db,
 };
 
-#[get("/products", format = "json")]
+#[get("/products")]
 pub async fn get_inventory_item_range<'a>(
   mut db: Connection<Db>,
   range: RangeHeader<u64>,
@@ -106,12 +105,46 @@ pub async fn get_inventory_item_range<'a>(
   }
 }
 
-#[get("/product/search/<item_name>", format = "json")]
-pub async fn get_inventory_item_data<'a>(
+#[get("/products/<product_id>")]
+pub async fn get_inventory_item_data_id<'a>(
+  mut db: Connection<Db>,
+  product_id: u64,
+) -> ApiResponse<'a> {
+  let query = sqlx::query_as::<_, InventoryItem>(&format!(
+    r#"
+        SELECT
+          `InventoryItem`.`cost`,
+          `InventoryItem`.`list_price`,
+          `InventoryItem`.`brand_id`,
+          `InventoryItem`.`model`,
+          `InventoryItem`.`description`,
+          `InventoryItem`.`image_url`,
+          `Brand`.`name` AS "brand_name"
+        FROM 
+          `InventoryItem`
+          INNER JOIN `Brand` USING(`brand_id`)
+        WHERE 
+        `InventoryItem`.`inventory_item_id` = {};
+      "#,
+    product_id,
+  ))
+  .fetch_one(&mut **db)
+  .await;
+
+  let Ok(item) = query else {
+    return ApiResponse::status(Status::InternalServerError);
+  };
+
+  match serde_json::to_string(&item) {
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
+  }
+}
+
+#[get("/product/search/<item_name>")]
+pub async fn get_inventory_item_search_data<'a>(
   mut db: Connection<Db>,
   item_name: String,
-  _auth_session: AuthSession,
-  _auth_employee: AuthAccountEmployee,
 ) -> ApiResponse<'a> {
   let Ok(item_name) = urlencoding::decode(&item_name) else {
     return ApiResponse::status(Status::InternalServerError);

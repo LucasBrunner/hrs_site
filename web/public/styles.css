@@ -119,3 +119,7 @@ footer > p {
 .text-button:hover {
   cursor: pointer;
 }
+.error-message {
+  color: red;
+  font-style: italic;
+}

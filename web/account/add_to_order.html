@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+  <title>Your HRS Account</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/css/products.css">
+  <link rel="stylesheet" href="/css/add_to_order.css">
+  <link rel="stylesheet" href="/css/center_main_fit_content.css">
+
+  <script defer src="/main.dart.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@800&display=swap" rel="stylesheet">
+
+  <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
+</head>
+
+<datalist id="script-elements">
+  <option value="header_footer"></option>
+  <option value="add-to-order"></option>
+</datalist>
+
+<body>
+  <div id="main">
+    <h2>Add item to order</h2>
+    <div id="item" class="product-item"></div>
+    <table id="selectors">
+      <tr>
+        <th>Order:</th>
+        <td>
+          <select id="order-selector">
+            <option value="" selected="selected" disabled="true">— Select An Order —</option>
+          </select>
+        </td>
+        <td>
+          Create new order: 
+          <input type="text" id="new-order-name">
+          <button id="new-order-create">Create</button>
+        </td>
+        <td class="error-message" id="new-order-error-message"></td>
+      </tr>
+      <tr>
+        <th>Shipping From:</th>
+        <td>
+          <select id="warehouse-selector">
+            <option value="" selected="selected" disabled="true">— Select A Shipping Origin —</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Count:</th>
+        <td>
+          <input type="number" id="count-selector" value="1">
+        </td>
+      </tr>
+    </table>
+  <button id="order-update-submit">Add to order</button>
+  </div>
+</body>
+
+</html>

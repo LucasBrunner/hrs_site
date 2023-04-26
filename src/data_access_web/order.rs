@@ -5,8 +5,8 @@ use sqlx::FromRow;
 use crate::{
   authentication::{empoyee::AuthAccountEmployee, is_account_employee, AuthSession},
   data::{
-    order::{self, put_order, OrderState, OrderUpdate},
-    ApiResponse, RangeEnd, RangeHeader, UpdateType,
+    order::{self, put_order, OrderState, OrderUpdate, SaleOrderSortType, create_order},
+    ApiResponse, RangeEnd, RangeHeader, UpdateType, SortOrderDirection, SortOrder
   },
   database::Db,
 };
@@ -26,6 +26,39 @@ pub async fn get_order_summaries_implicit<'a>(
     None,
     vec![],
     vec![],
+    Some(range),
+    &mut db,
+  )
+  .await
+  {
+    Ok(result) => match serde_json::to_string(&result) {
+      Ok(json) => return ApiResponse::json_success(json),
+      Err(_) => return ApiResponse::status(Status::InternalServerError),
+    },
+    Err(_) => return ApiResponse::status(Status::InternalServerError),
+  }
+}
+
+#[get("/account/orders/<order_state>")]
+pub async fn get_order_summaries_with_state_implicit<'a>(
+  mut db: Connection<Db>,
+  order_state: String,
+  auth_session: AuthSession,
+  range: RangeHeader<u64>,
+) -> ApiResponse<'a> {
+  let RangeEnd::Range(range) = range.get_first() else {
+    return ApiResponse::status(Status::RangeNotSatisfiable);
+  };
+  let Ok(order_state) = OrderState::match_str(&order_state) else {
+    return ApiResponse::status(Status::BadRequest);
+  };
+
+  match order::get_sale_order_summary_page(
+    vec![auth_session.session.account_id],
+    None,
+    None,
+    vec![order_state],
+    vec![SortOrder{direction: SortOrderDirection::Decending, column: SaleOrderSortType::Date}],
     Some(range),
     &mut db,
   )
@@ -107,7 +140,9 @@ pub async fn put_order_implicit<'a>(
 ) -> ApiResponse<'a> {
   let order_owner = sqlx::query_as::<_, AccountCheck>(&format!(
     r#"
-      SELECT `SaleOrder`.`account_id`, `SaleOrder`.`state`
+      SELECT 
+        `SaleOrder`.`account_id`, 
+        `SaleOrder`.`order_state_id` AS "state"
       FROM `SaleOrder`
       WHERE `SaleOrder`.`sale_order_id` = {};
     "#,
@@ -116,20 +151,21 @@ pub async fn put_order_implicit<'a>(
   .fetch_one(&mut **db)
   .await;
 
-  let order_owner_id = match order_owner {
+  let current_order_data = match order_owner {
     Ok(id) => id,
-    Err(_) => {
+    Err(err) => {
+      println!("{:?}", err);
       return ApiResponse::status(Status::NotFound);
     }
   };
 
-  if auth_session.session.account_id != order_owner_id.account_id {
+  if auth_session.session.account_id != current_order_data.account_id {
     return ApiResponse::status(Status::Forbidden);
   }
 
   let mut order_update = order_update.0;
   order_update.state_update = match order_update.state_update {
-    UpdateType::Put { item: new_state } => match (order_owner_id.state, new_state) {
+    UpdateType::Put { item: new_state } => match (current_order_data.state, new_state) {
       (OrderState::Pending, OrderState::Commited) => UpdateType::Put {
         item: OrderState::Commited,
       },
@@ -154,7 +190,9 @@ pub async fn put_order_employee<'a>(
 ) -> ApiResponse<'a> {
   let order_owner = sqlx::query_as::<_, AccountCheck>(&format!(
     r#"
-      SELECT `SaleOrder`.`account_id`, `SaleOrder`.`state`
+      SELECT 
+        `SaleOrder`.`account_id`, 
+        `SaleOrder`.`order_state_id` AS "state"
       FROM `SaleOrder`
       WHERE `SaleOrder`.`sale_order_id` = {};
     "#,
@@ -193,3 +231,22 @@ pub async fn put_order_employee<'a>(
 
   put_order(order_id, order_update, db).await
 }
+
+#[post("/account/orders/<order_name>")]
+pub async fn post_order_implicit<'a>(
+  db: Connection<Db>,
+  order_name: String,
+  auth_session: AuthSession,
+) -> ApiResponse<'a> {
+  create_order(auth_session.session.account_id, order_name, db).await
+} 
+
+#[post("/accounts/<account_id>/orders/<order_name>")]
+pub async fn post_order_employee<'a>(
+  db: Connection<Db>,
+  order_name: String,
+  account_id: u64,
+  _auth_employee_session: AuthAccountEmployee,
+) -> ApiResponse<'a> {
+  create_order(account_id, order_name, db).await
+} 

@@ -1,0 +1,9 @@
+
+.product-item {
+  max-width: 1400px;
+}
+
+#order-update-submit {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}

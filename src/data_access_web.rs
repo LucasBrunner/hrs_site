@@ -22,17 +22,22 @@ pub fn data_routes() -> Vec<Route> {
     search_account,
     // products
     get_inventory_item_range,
-    get_inventory_item_data,
+    get_inventory_item_search_data,
+    get_inventory_item_data_id,
     // warehouses
     get_warehouses,
     get_warehouse,
     get_warehouse_inventory,
     post_warehouse_inventory,
+    get_warehouse_stocked_with_item,
     // orders
     get_order_summaries_implicit,
+    get_order_summaries_with_state_implicit,
     get_order_summaries_id,
     get_order,
     put_order_implicit,
     put_order_employee,
+    post_order_implicit,
+    post_order_employee,
   ]
 }

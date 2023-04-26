@@ -13,7 +13,7 @@ Future<List<DataWithId<InventoryItem>>?> getProductPage(int pageNubmer, int item
     headers: {'Range': 'index=$startItem-$endItem'},
   );
 
-  print(response.body);
+  // print(response.body);
   switch (response.statusCode) {
     case 200:
       DataWithIdMapper.ensureInitialized();
@@ -31,8 +31,13 @@ void displayProductPage(List<DataWithId<InventoryItem>> items) {
       final row = item.data.toDisplayRow();
       if (document.cookie?.contains('session') ?? false) {
         row.children.add(DivElement()
+          ..classes.addAll(['div-button', 'order-button'])
           ..innerText = 'Add to order'
-          ..classes.addAll(['div-button', 'order-button']));
+          ..onClick.listen((event) => window.location.href = Uri.http(
+                window.location.host,
+                'account/add_to_order',
+                {'product_id': item.id.toString()},
+              ).toString()));
       }
       return row;
     }));

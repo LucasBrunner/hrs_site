@@ -8,6 +8,7 @@ import '../script/header_footer.dart' as header_footer;
 import '../script/public/products.dart' as products;
 import '../script/account/view_account.dart' as view_account;
 import '../script/account/edit_account.dart' as edit_account;
+import '../script/account/add_to_order.dart' as add_to_order;
 import '../script/employee/accounts.dart' as account_search;
 import '../script/employee/account.dart' as account_view;
 import '../script/employee/edit_account.dart' as employee_edit_account;
@@ -24,6 +25,7 @@ const scriptElements = {
   'account-search': account_search.setup,
   'employee-account-view': account_view.setup,
   'employee-account-edit': employee_edit_account.setup,
+  'add-to-order': add_to_order.setup,
 };
 
 void main(List<String> args) {

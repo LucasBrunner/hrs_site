@@ -152,6 +152,14 @@ extension ConvertItemCount<T> on List<ItemCount<T>> {
   }
 }
 
+@MappableClass(generateMethods: GenerateMethods.decode | GenerateMethods.encode)
+class UpdateItemCount<T> with UpdateItemCountMappable {
+  T item;
+  int count;
+
+  UpdateItemCount(this.item, this.count);
+}
+
 @MappableEnum(caseStyle: CaseStyle.camelCase)
 enum DataResultType {
   ok,

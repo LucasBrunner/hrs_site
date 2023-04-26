@@ -235,3 +235,45 @@ pub async fn post_warehouse_inventory<'a>(
 
   ApiResponse::status(Status::Created)
 }
+
+#[get("/inventory/<inventory_item_id>/warehouses")]
+pub async fn get_warehouse_stocked_with_item<'a>(
+  mut db: Connection<Db>,
+  inventory_item_id: u64,
+) -> ApiResponse<'a> {
+  let query = sqlx::query_as::<_, DataWithId<Warehouse>>(&format!(
+    r#"
+      SELECT
+        `Warehouse`.`warehouse_id`,
+        `Warehouse`.`name`,
+        `Address`.`street` AS "address_street",
+        `Address`.`city` AS "address_city",
+        `Address`.`state` AS "address_state",
+        `Address`.`zip` AS "address_zip",
+        `PhoneType`.`name` AS "phone_type",
+        `Phone`.`number` AS "phone_number"
+      FROM 
+        `Warehouse`
+        INNER JOIN `WarehouseItem` USING(`warehouse_id`)
+        INNER JOIN `Address` USING(`address_id`)
+        INNER JOIN `Phone` USING(`phone_id`)
+        INNER JOIN `PhoneType` USING(`phone_type_id`)
+      WHERE `WarehouseItem`.`inventory_item_id` = {};
+    "#,
+    inventory_item_id,
+  ))
+  .fetch_all(&mut **db)
+  .await;
+
+  let items = match query {
+    Err(_) => {
+      return ApiResponse::status(Status::InternalServerError)
+    }
+    Ok(items) => items,
+  };
+
+  match serde_json::to_string(&items) {
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
+  }
+}

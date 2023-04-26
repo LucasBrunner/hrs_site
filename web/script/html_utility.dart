@@ -31,3 +31,14 @@ extension ToTableRow on List<Element> {
     return TableRowElement()..children.addAll(this);
   }
 }
+
+extension ClearOptions on Element {
+  void clearOptions([List<String>? removeIds]) {
+    for (Element option in children) {
+      option.toElement<OptionElement>()?.selected = false;
+      if (removeIds != null && removeIds.contains(option.id)) {
+        option.remove();
+      }
+    }
+  }
+}

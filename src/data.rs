@@ -323,8 +323,8 @@ pub struct SortOrder<T>
 where
   T: SortColumn,
 {
-  direction: SortOrderDirection,
-  column: T,
+  pub direction: SortOrderDirection,
+  pub column: T,
 }
 
 impl<T> SortOrder<T>

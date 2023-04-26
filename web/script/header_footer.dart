@@ -69,12 +69,12 @@ void _placeHeader() {
         ));
 
   if (document.cookie?.contains('session') ?? false) {
-    querySelector('#header-left-content')?.children.add(ImageElement()
+    querySelector('#header-right-content')?.children.add(ImageElement()
       ..id = 'profile-icon'
       ..src = '/icons/profile-icon.svg'
       ..onClick.listen((event) => window.location.pathname = '/account'));
   } else {
-    querySelector('#header-left-content')?.children.addAll([
+    querySelector('#header-right-content')?.children.addAll([
       SpanElement()
         ..className = 'text-button'
         ..innerText = "Sign in"

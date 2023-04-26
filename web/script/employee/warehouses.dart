@@ -16,7 +16,8 @@ displayWarehouses(List<DataWithId<Warehouse>> warehouses) {
     warehouseRow.children.add(TableCellElement()
       ..children.add(ButtonElement()
         ..innerText = 'View Inventory'
-        ..onClick.listen((event) => window.location.assign(Uri.http(window.location.host, '/employee/warehouse', {'id': "${warehouse.id}"}).toString()))));
+        ..onClick
+            .listen((event) => window.location.assign(Uri.http(window.location.host, '/employee/warehouse', {'id': warehouse.id.toString()}).toString()))));
     warehouseTable.children.add(warehouse.data.appendToTableRow(warehouseRow));
   }
 }

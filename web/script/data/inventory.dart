@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:dart_mappable/dart_mappable.dart';
 import '../data.dart';
+import 'package:http/http.dart' as http;
 
 part 'inventory.mapper.dart';
 
@@ -83,16 +84,36 @@ class InventoryItem with InventoryItemMappable implements HasTitle, ToDisplayRow
     return rows;
   }
 
+  List<Element> toDisplayElements({Element? belowTable}) {
+    return [
+      ImageElement()
+        ..src = imageUrl.when(some: (url) => '/$url', none: () => '')
+        ..alt = "model: $model, brand: $brandName, description: ${descriptionString()}",
+      DivElement()..children.add(TableElement()..children.addAll(_productTableRows())),
+    ];
+  }
+
   @override
-  DivElement toDisplayRow({Element? belowTable}) {
+  DivElement toDisplayRow() {
     final container = DivElement()..className = 'product-item';
     container.children.add(ImageElement()
-      ..src = imageUrl.when(some: (url) => './$url', none: () => '')
+      ..src = imageUrl.when(some: (url) => '/$url', none: () => '')
       ..alt = "model: $model, brand: $brandName, description: ${descriptionString()}");
     container.children.add(DivElement()..children.add(TableElement()..children.addAll(_productTableRows())));
-    if (belowTable != null) {
-      container.children.add(belowTable);
-    }
     return container;
+  }
+
+  static Future<InventoryItem?> httpGetId(int id) async {
+    final response = await http.get(
+      Uri.http(window.location.host, '/data/products/$id'),
+    );
+
+    // print(response.body);
+    switch (response.statusCode) {
+      case 200:
+        return InventoryItemMapper.fromJson(response.body);
+      default:
+        return null;
+    }
   }
 }

@@ -1,6 +1,9 @@
 import 'dart:html';
+import 'package:http/http.dart' as http;
 
 import 'package:dart_mappable/dart_mappable.dart';
+
+import '../data.dart';
 
 part 'warehouse.mapper.dart';
 
@@ -35,5 +38,24 @@ class Warehouse with WarehouseMappable {
 
   TableRowElement toTableRow() {
     return appendToTableRow(TableRowElement());
+  }
+
+  static Future<List<DataWithId<Warehouse>>?> httpGetWarehousesStockedWithItem(int itemId) async {
+    final response = await http.get(
+      Uri.http(window.location.host, '/data/inventory/$itemId/warehouses'),
+    );
+
+    print(response.body);
+    switch (response.statusCode) {
+      case 200:
+        if (response.body.isEmpty) {
+          return null;
+        }
+        WarehouseMapper.ensureInitialized();
+        DataWithIdMapper.ensureInitialized();
+        return MapperContainer.globals.fromJson<List<DataWithId<Warehouse>>>(response.body);
+      default:
+        return null;
+    }
   }
 }

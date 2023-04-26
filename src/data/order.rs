@@ -16,11 +16,13 @@ use time::OffsetDateTime;
 use crate::database::Db;
 
 use super::{
-  basic_data::address::Address, inventory::InventoryItem, ApiResponse, DataWithId, IdColumnName,
-  ItemCount, SortColumn, SortOrder, ToSqlxError, UpdateItemCount, UpdateType,
+  basic_data::address::Address, inventory::InventoryItem, option_internally_tagged, ApiResponse,
+  DataWithId, IdColumnName, ItemCount, OptionInternallyTagged, SortColumn, SortOrder, ToSqlxError,
+  UpdateType,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[serde(rename_all = "camelCase")]
 pub enum OrderState {
   Pending = 1,
   Commited = 2,
@@ -30,13 +32,24 @@ pub enum OrderState {
 }
 
 impl OrderState {
-  fn value(&self) -> u64 {
+  pub fn value(&self) -> u64 {
     match self {
       OrderState::Pending => 1,
       OrderState::Commited => 2,
       OrderState::InProgress => 3,
       OrderState::Completed => 4,
       OrderState::Canceled => 5,
+    }
+  }
+
+  pub fn match_str(string: &str) -> Result<OrderState, ()> {
+    match string {
+      "pending" => Ok(OrderState::Pending),
+      "commited" => Ok(OrderState::Commited),
+      "in_progress" => Ok(OrderState::InProgress),
+      "completed" => Ok(OrderState::Completed),
+      "canceled" => Ok(OrderState::Canceled),
+      _ => Err(()),
     }
   }
 }
@@ -115,15 +128,21 @@ impl FromRow<'_, MySqlRow> for OrderState {
   }
 }
 
-#[derive(Serialize, Clone, FromRow)]
+#[derive(Serialize, Clone, FromRow, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SaleOrderSummary {
   pub account_id: u64,
+  pub order_name: String,
   pub account_legal_name: String,
   pub account_preferred_name: String,
-  pub date_created: Option<i64>,
-  pub address_id: u64,
+  pub date_created: i64,
+  #[serde(serialize_with = "option_internally_tagged")]
+  pub address_id: Option<u64>,
   pub state: OrderState,
+}
+
+impl IdColumnName for SaleOrderSummary {
+  const ID_COLUMN_NAME: &'static str = "sale_order_id";
 }
 
 pub async fn get_sale_order_summary(
@@ -134,11 +153,12 @@ pub async fn get_sale_order_summary(
     r#"
       SELECT 
         `SaleOrder`.`account_id`,
-        `Account`.`legal_name`,
-        `Account`.`preferred_name`,
+        `Account`.`legal_name` AS "account_legal_name",
+        `Account`.`preferred_name` AS "account_preferred_name",
         `SaleOrder`.`date_created`,
+        `SaleOrder`.`order_name`,
         `SaleOrder`.`address_id`,
-        `SaleOrder`.`state_id` AS "state"
+        `SaleOrder`.`order_state_id` AS "state"
       FROM 
         `SaleOrder`
         INNER JOIN `Account` USING(`account_id`)
@@ -170,15 +190,17 @@ pub async fn get_sale_order_summary_page(
   sort_order: Vec<SortOrder<SaleOrderSortType>>,
   item_range: Option<Range<u64>>,
   db: &mut Connection<Db>,
-) -> Result<Vec<SaleOrderSummary>, sqlx::Error> {
+) -> Result<Vec<DataWithId<SaleOrderSummary>>, sqlx::Error> {
   let mut query_string = r#"
       SELECT 
+        `SaleOrder`.`sale_order_id`,
         `SaleOrder`.`account_id`,
-        `Account`.`legal_name`,
-        `Account`.`preferred_name`,
+        `Account`.`legal_name` AS "account_legal_name",
+        `Account`.`preferred_name` AS "account_preferred_name",
         `SaleOrder`.`date_created`,
+        `SaleOrder`.`order_name`,
         `SaleOrder`.`address_id`,
-        `SaleOrder`.`state_id` AS "state"
+        `SaleOrder`.`order_state_id` AS "state"
       FROM 
         `SaleOrder`
         INNER JOIN `Account` USING(`account_id`)
@@ -209,11 +231,18 @@ pub async fn get_sale_order_summary_page(
 
   if !state_filters.is_empty() {
     let mut state_filters = state_filters.into_iter();
-    let first = format!("`SaleOrder`.`state_id` = {}", state_filters.next().unwrap());
+    let first = format!(
+      "`SaleOrder`.`order_state_id` = {}",
+      state_filters.next().unwrap()
+    );
     where_clauses.push(format!(
       "(\n{}\n)",
       state_filters.fold(first, |mut acc, state_filter| {
-        _ = write!(&mut acc, "\n`SaleOrder`.`state_id` = {}", state_filter);
+        _ = write!(
+          &mut acc,
+          "\n`SaleOrder`.`order_state_id` = {}",
+          state_filter
+        );
         acc
       })
     ))
@@ -249,11 +278,14 @@ pub async fn get_sale_order_summary_page(
     _ = write!(
       &mut query_string,
       "\nLIMIT {}\nOFFSET {}",
-      item_numbers.start, item_numbers.end
+      item_numbers.end - item_numbers.start,
+      item_numbers.start
     );
   }
 
-  sqlx::query_as::<_, SaleOrderSummary>(&query_string)
+  // println!("{}", query_string);
+
+  sqlx::query_as::<_, DataWithId<SaleOrderSummary>>(&query_string)
     .fetch_all(&mut **db)
     .await
 }
@@ -286,11 +318,11 @@ where
   }
 }
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, FromRow, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SaleOrder {
   pub summary: SaleOrderSummary,
-  pub address: DataWithId<Address>,
+  pub address: OptionInternallyTagged<DataWithId<Address>>,
   pub items: Vec<ItemCount<SaleOrderItem<InventoryItem>>>,
 }
 
@@ -299,11 +331,12 @@ pub async fn get_sale_order(order_id: u64, db: &mut Connection<Db>) -> Result<Sa
     r#"
       SELECT 
         `SaleOrder`.`account_id`,
-        `Account`.`legal_name`,
-        `Account`.`preferred_name`,
+        `Account`.`legal_name` AS "account_legal_name",
+        `Account`.`preferred_name` AS "account_preferred_name",
         `SaleOrder`.`date_created`,
+        `SaleOrder`.`order_name`,
         `SaleOrder`.`address_id`,
-        `SaleOrder`.`state_id` AS "state"
+        `SaleOrder`.`order_state_id` AS "state"
       FROM 
         `SaleOrder`
         INNER JOIN `Account` USING(`account_id`)
@@ -338,9 +371,14 @@ pub async fn get_sale_order(order_id: u64, db: &mut Connection<Db>) -> Result<Sa
     return Err(());
   };
 
-  let address = DataWithId {
-    data: address,
-    id: summary.address_id,
+  let address = match summary.address_id {
+    Some(address_id) => OptionInternallyTagged::Some {
+      data: DataWithId {
+        data: address,
+        id: address_id,
+      },
+    },
+    None => OptionInternallyTagged::None,
   };
 
   let items = sqlx::query_as::<_, ItemCount<SaleOrderItem<InventoryItem>>>(&format!(
@@ -370,13 +408,23 @@ pub async fn get_sale_order(order_id: u64, db: &mut Connection<Db>) -> Result<Sa
   })
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OrderItemUpdate {
+  item_id: u64,
+  new_item_amount: u64,
+  warehouse_id: u64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct OrderUpdate {
   pub address_update: UpdateType<Address>,
   pub state_update: UpdateType<OrderState>,
-  pub items: Vec<UpdateType<UpdateItemCount<u64>>>,
+  pub items: Vec<UpdateType<OrderItemUpdate>>,
 }
 
+#[derive(Debug)]
 struct ItemAmount {
   amount: u32,
 }
@@ -425,9 +473,52 @@ async fn put_order_address<'a>(
   Ok(())
 }
 
+async fn post_order_item<'a>(
+  order_id: u64,
+  order_item_update: &OrderItemUpdate,
+  tx: &mut Transaction<'a, MySql>,
+) -> Result<(), ()> {
+  let insert_result = sqlx::query!(
+    r#"
+      INSERT INTO `SaleOrderItem`(
+        `sale_order_id`,
+        `inventory_item_id`,
+        `warehouse_id`,
+        `amount`,
+        `current_cost`
+      )
+      VALUES (
+        ?,
+        ?,
+        ?,
+        ?,
+        (
+          SELECT `InventoryItem`.`list_price`
+          FROM `InventoryItem`
+          WHERE `InventoryItem`.`inventory_item_id` = ?
+        )
+      );
+    "#,
+    order_id,
+    order_item_update.item_id,
+    order_item_update.warehouse_id,
+    order_item_update.new_item_amount,
+    order_item_update.item_id,
+  )
+  .execute(&mut **tx)
+  .await;
+
+  println!("{:?}", insert_result);
+
+  match insert_result {
+    Ok(_) => Ok(()),
+    Err(_) => Err(()),
+  }
+}
+
 async fn put_order_item<'a>(
   order_id: u64,
-  order_item_update: &UpdateItemCount<u64>,
+  order_item_update: &OrderItemUpdate,
   tx: &mut Transaction<'a, MySql>,
 ) -> Result<(), ()> {
   let current_item_count = sqlx::query_as!(
@@ -437,22 +528,32 @@ async fn put_order_item<'a>(
       FROM `SaleOrderItem`
       WHERE 
         `SaleOrderItem`.`inventory_item_id` = ?
-        AND `SaleOrderItem`.`sale_order_id` = ?;
+        AND `SaleOrderItem`.`sale_order_id` = ?
+        AND `SaleOrderItem`.`warehouse_id` = ?;
     "#,
-    order_item_update.item,
+    order_item_update.item_id,
     order_id,
+    order_item_update.warehouse_id,
   )
   .fetch_one(&mut **tx)
   .await;
 
-  let current_item_count = match current_item_count {
-    Ok(count) => count,
-    Err(_) => return Err(()),
+  println!("row: {:?}", current_item_count);
+  println!("update: {:?}", order_item_update);
+
+  match current_item_count {
+    Ok(_) => (),
+    Err(err) => {
+      println!("{:?}", err);
+      return match err {
+        sqlx::Error::RowNotFound => post_order_item(order_id, order_item_update, tx).await,
+        _ => Err(()),
+      };
+    }
   };
 
-  let new_amount = current_item_count.amount as i64 - order_item_update.count;
-  if new_amount <= 0 {
-    return delete_order_item(order_id, order_item_update.item, tx).await;
+  if order_item_update.new_item_amount == 0 {
+    return delete_order_item(order_id, order_item_update.item_id, tx).await;
   }
 
   let update_result = sqlx::query!(
@@ -461,14 +562,18 @@ async fn put_order_item<'a>(
       SET `SaleOrderItem`.`amount` = ?
       WHERE 
         `SaleOrderItem`.`sale_order_id` = ?
-        AND `SaleOrderItem`.`inventory_item_id` = ?;
+        AND `SaleOrderItem`.`inventory_item_id` = ?
+        AND `SaleOrderItem`.`warehouse_id` = ?;
     "#,
-    new_amount,
+    order_item_update.new_item_amount,
     order_id,
-    order_item_update.item,
+    order_item_update.item_id,
+    order_item_update.warehouse_id,
   )
   .execute(&mut **tx)
   .await;
+
+  println!("update: {:?}", update_result);
 
   match update_result {
     Ok(_) => Ok(()),
@@ -484,7 +589,7 @@ async fn put_order_state<'a>(
   let update_result = sqlx::query!(
     r#"
     UPDATE `SaleOrder`
-    SET `SaleOrder`.`state_id` = ?
+    SET `SaleOrder`.`order_state_id` = ?
     WHERE 
       `SaleOrder`.`sale_order_id` = ?;
     "#,
@@ -579,19 +684,28 @@ pub async fn put_order<'a>(
       return ApiResponse::status(Status::InternalServerError);
     }
   }
-
-  ApiResponse::status(Status::Ok)
+  
+  match tx.commit().await {
+    Ok(_) => ApiResponse::status(Status::Ok),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
+  }
 }
 
-pub async fn create_order<'a>(account_id: u64, mut db: Connection<Db>) -> ApiResponse<'a> {
+pub async fn create_order<'a>(
+  account_id: u64,
+  order_name: String,
+  mut db: Connection<Db>,
+) -> ApiResponse<'a> {
   let creation_result = sqlx::query!(
     r#"
     INSERT INTO `SaleOrder` (
       `account_id`,
       `date_created`,
-      `state_id`
+      `order_name`,
+      `order_state_id`
     )
     VALUES (
+      ?,
       ?,
       ?,
       ?
@@ -599,13 +713,33 @@ pub async fn create_order<'a>(account_id: u64, mut db: Connection<Db>) -> ApiRes
     "#,
     account_id,
     OffsetDateTime::now_utc().unix_timestamp(),
+    order_name,
     OrderState::Pending.value(),
   )
   .execute(&mut **db)
   .await;
 
   match creation_result {
-    Ok(creation_result) => ApiResponse::status_with_body(Status::Ok, creation_result.last_insert_id().to_string()),
+    Ok(creation_result) => {
+      let order = get_sale_order_summary(creation_result.last_insert_id(), &mut db).await;
+      match order {
+        Ok(order) => {
+          println!("{}, {:?}", creation_result.last_insert_id(), order);
+          let json = serde_json::to_string(&DataWithId {
+            data: order,
+            id: creation_result.last_insert_id(),
+          });
+          if let Ok(json) = json {
+            return ApiResponse::json_success(json);
+          };
+          ApiResponse::status(Status::Ok)
+        }
+        Err(err) => {
+          println!("{:?}", err);
+          ApiResponse::status(Status::Ok)
+        }
+      }
+    }
     Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }

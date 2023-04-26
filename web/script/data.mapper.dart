@@ -771,6 +771,67 @@ mixin ItemCountMappable<T> {
   }
 }
 
+class UpdateItemCountMapper extends ClassMapperBase<UpdateItemCount> {
+  UpdateItemCountMapper._();
+  static UpdateItemCountMapper? _instance;
+  static UpdateItemCountMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = UpdateItemCountMapper._());
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
+  }
+
+  @override
+  final String id = 'UpdateItemCount';
+  @override
+  Function get typeFactory => <T>(f) => f<UpdateItemCount<T>>();
+
+  static dynamic _$item(UpdateItemCount v) => v.item;
+  static dynamic _arg$item<T>(f) => f<T>();
+  static const Field<UpdateItemCount, dynamic> _f$item =
+      Field('item', _$item, arg: _arg$item);
+  static int _$count(UpdateItemCount v) => v.count;
+  static const Field<UpdateItemCount, int> _f$count = Field('count', _$count);
+
+  @override
+  final Map<Symbol, Field<UpdateItemCount, dynamic>> fields = const {
+    #item: _f$item,
+    #count: _f$count,
+  };
+
+  static UpdateItemCount<T> _instantiate<T>(DecodingData data) {
+    return UpdateItemCount(data.dec(_f$item), data.dec(_f$count));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static UpdateItemCount<T> fromMap<T>(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<UpdateItemCount<T>>(map));
+  }
+
+  static UpdateItemCount<T> fromJson<T>(String json) {
+    return _guard((c) => c.fromJson<UpdateItemCount<T>>(json));
+  }
+}
+
+mixin UpdateItemCountMappable<T> {
+  String toJson() {
+    return UpdateItemCountMapper._guard(
+        (c) => c.toJson(this as UpdateItemCount<T>));
+  }
+
+  Map<String, dynamic> toMap() {
+    return UpdateItemCountMapper._guard(
+        (c) => c.toMap(this as UpdateItemCount<T>));
+  }
+}
+
 class DataResultMapper extends ClassMapperBase<DataResult> {
   DataResultMapper._();
   static DataResultMapper? _instance;

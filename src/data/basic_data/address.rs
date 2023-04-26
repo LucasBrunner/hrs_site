@@ -3,7 +3,7 @@ use sqlx::FromRow;
 
 use crate::data::IdColumnName;
 
-#[derive(Serialize, Deserialize, Clone, FromRow)]
+#[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Address {
   pub street: String,
