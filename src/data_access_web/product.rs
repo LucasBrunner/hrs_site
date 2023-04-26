@@ -3,12 +3,15 @@ use rocket_db_pools::Connection;
 
 use crate::{
   authentication::{empoyee::AuthAccountEmployee, AuthSession},
-  data::{ApiResponse, RangeHeader, DataWithId, inventory::InventoryItem},
+  data::{inventory::InventoryItem, ApiResponse, DataWithId, RangeHeader},
   database::Db,
 };
 
 #[get("/products", format = "json")]
-pub async fn get_inventory_item_range(mut db: Connection<Db>, range: RangeHeader<u64>) -> ApiResponse {
+pub async fn get_inventory_item_range<'a>(
+  mut db: Connection<Db>,
+  range: RangeHeader<u64>,
+) -> ApiResponse<'a> {
   let range = range.get_first();
   let query = match range {
     crate::data::RangeEnd::Range(range) => {
@@ -89,39 +92,29 @@ pub async fn get_inventory_item_range(mut db: Connection<Db>, range: RangeHeader
       .await
     }
     crate::data::RangeEnd::None => {
-      return ApiResponse::WithoutBody {
-        status: Status::RangeNotSatisfiable,
-      }
+      return ApiResponse::status(Status::RangeNotSatisfiable)
     }
   };
 
   let Ok(items) = query else {
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
+    return ApiResponse::status(Status::InternalServerError);
   };
 
   match serde_json::to_string(&items) {
-    Ok(json) => 
-      ApiResponse::WithBody {
-        json,
-        status: Status::Ok,
-      },
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }
 
 #[get("/product/search/<item_name>", format = "json")]
-pub async fn get_inventory_item_data(
+pub async fn get_inventory_item_data<'a>(
   mut db: Connection<Db>,
   item_name: String,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let Ok(item_name) = urlencoding::decode(&item_name) else {
-    return ApiResponse::WithoutBody { status: Status::InternalServerError };
+    return ApiResponse::status(Status::InternalServerError);
   };
   let name_conditions = item_name
     .split_whitespace()
@@ -155,20 +148,11 @@ pub async fn get_inventory_item_data(
   .await;
 
   let Ok(items) = query else {
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
+    return ApiResponse::status(Status::InternalServerError);
   };
 
   match serde_json::to_string(&items) {
-    Ok(json) => 
-      ApiResponse::WithBody {
-        json,
-        status: Status::Ok,
-      }
-    ,
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }

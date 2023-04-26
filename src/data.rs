@@ -1,13 +1,14 @@
 pub mod account;
 mod basic_data;
 pub mod inventory;
+pub mod order;
 pub mod warehouse;
 
 use std::{io::Cursor, ops::Range, str::FromStr};
 
 use rocket::{
   async_trait,
-  http::{ContentType, Status},
+  http::{ContentType, Header, Status},
   request::{FromRequest, Outcome},
   response::{self, Responder},
   Request, Response,
@@ -17,8 +18,8 @@ use sqlx::{mysql::MySqlRow, FromRow, Row};
 
 pub mod basics {
   pub use super::ApiResponse;
-  pub use super::IdColumnName;
   pub use super::DataWithId;
+  pub use super::IdColumnName;
   pub use super::OptionInternallyTagged;
 }
 
@@ -28,35 +29,55 @@ pub mod update {
   pub use super::UpdateType;
 }
 
-pub enum ApiResponse {
-  WithBody { json: String, status: Status },
-  WithoutBody { status: Status },
+pub struct ApiResponse<'a> {
+  body: String,
+  content_type: Option<ContentType>,
+  status: Status,
+  headers: Vec<Header<'a>>,
 }
 
-impl ApiResponse {
-  fn status(&self) -> Status {
-    match self {
-      ApiResponse::WithBody { json: _, status } => *status,
-      ApiResponse::WithoutBody { status } => *status,
+impl<'a> ApiResponse<'a> {
+  pub fn json_success(json: String) -> ApiResponse<'a> {
+    ApiResponse {
+      body: json,
+      content_type: Some(ContentType::JSON),
+      status: Status::Ok,
+      headers: vec![],
     }
   }
 
-  fn json(&self) -> String {
-    match self {
-      ApiResponse::WithBody { json, status: _ } => json.to_owned(),
-      ApiResponse::WithoutBody { status: _ } => "".to_owned(),
+  pub fn status(status: Status) -> ApiResponse<'a> {
+    ApiResponse {
+      body: String::new(),
+      content_type: None,
+      status,
+      headers: vec![],
+    }
+  }
+
+  pub fn status_with_body(status: Status, body: String) -> ApiResponse<'a> {
+    ApiResponse {
+      body,
+      content_type: None,
+      status,
+      headers: vec![],
     }
   }
 }
 
-impl<'r> Responder<'r, 'static> for ApiResponse {
+impl<'r> Responder<'r, 'static> for ApiResponse<'static> {
   fn respond_to(self, _: &'r rocket::Request<'_>) -> response::Result<'static> {
-    let json = self.json();
-    Response::build()
-      .status(self.status())
-      .header(ContentType::JSON)
-      .sized_body(json.len(), Cursor::new(json))
-      .ok()
+    let mut response = Response::build();
+    response
+      .status(self.status)
+      .sized_body(self.body.len(), Cursor::new(self.body));
+    if let Some(content_type) = self.content_type {
+      response.header(content_type);
+    }
+    for header in self.headers {
+      response.header(header);
+    }
+    response.ok()
   }
 }
 
@@ -252,9 +273,16 @@ where
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(tag = "type", rename_all = "camelCase")]
+pub struct UpdateItemCount<T> {
+  pub item: T,
+  pub count: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub struct ItemCount<T> {
-  item: T,
-  count: u32,
+  pub item: T,
+  pub count: u32,
 }
 
 impl<'a, 'r, T> FromRow<'r, MySqlRow> for ItemCount<T>
@@ -270,5 +298,44 @@ where
       }),
       Err(_) => Err(sqlx::Error::ColumnNotFound("count".to_owned())),
     }
+  }
+}
+
+pub trait SortColumn {
+  fn sort_column(&self) -> &'static str;
+}
+
+pub enum SortOrderDirection {
+  Ascending,
+  Decending,
+}
+
+impl SortOrderDirection {
+  fn direction(&self) -> &'static str {
+    match self {
+      SortOrderDirection::Ascending => "ASC",
+      SortOrderDirection::Decending => "DESC",
+    }
+  }
+}
+
+pub struct SortOrder<T>
+where
+  T: SortColumn,
+{
+  direction: SortOrderDirection,
+  column: T,
+}
+
+impl<T> SortOrder<T>
+where
+  T: SortColumn,
+{
+  pub fn get_clause(&self) -> String {
+    format!(
+      "{} {}",
+      self.column.sort_column(),
+      self.direction.direction()
+    )
   }
 }

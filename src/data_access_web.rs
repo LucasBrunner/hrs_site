@@ -5,10 +5,12 @@ use crate::data_access_web::account::get_account_implicit;
 pub mod account;
 pub mod product;
 pub mod warehouse;
+pub mod order;
 
 use account::*;
 use product::*;
 use warehouse::*;
+use order::*;
 
 pub fn data_routes() -> Vec<Route> {
   routes![
@@ -26,5 +28,11 @@ pub fn data_routes() -> Vec<Route> {
     get_warehouse,
     get_warehouse_inventory,
     post_warehouse_inventory,
+    // orders
+    get_order_summaries_implicit,
+    get_order_summaries_id,
+    get_order,
+    put_order_implicit,
+    put_order_employee,
   ]
 }

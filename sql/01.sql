@@ -163,8 +163,8 @@ CREATE TABLE `WarehouseItem`(
 CREATE TABLE `SaleOrder`(
   `sale_order_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `account_id` BIGINT UNSIGNED NOT NULL,
-  `date` BIGINT NOT NULL,
-  `address_id` BIGINT UNSIGNED NOT NULL,
+  `date_created` BIGINT NOT NULL,
+  `address_id` BIGINT UNSIGNED,
   `state_id` BIGINT UNSIGNED NOT NULL,
 
   FOREIGN KEY (`account_id`) REFERENCES `Account` (`account_id`),

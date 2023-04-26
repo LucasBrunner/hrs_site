@@ -21,9 +21,6 @@ const footerHtml = '''
         <li>
           <p class="text-button" onclick="window.location.pathname = '/faq'">Frequently Asked Questions</a>
         </li>
-        <li>
-          <p class="text-button" onclick="window.location.pathname = '/about_us'">About Us</a>
-        </li>
       </ul>
     </span>
     <span>

@@ -15,11 +15,11 @@ use crate::{
 };
 
 #[get("/warehouses", format = "json")]
-pub async fn get_warehouses(
+pub async fn get_warehouses<'a>(
   mut db: Connection<Db>,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let query = sqlx::query_as::<_, DataWithId<Warehouse>>(
     r#"
       SELECT
@@ -42,32 +42,23 @@ pub async fn get_warehouses(
   .await;
 
   let warehouses = match query {
-    Err(_) => {
-      return ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      }
-    }
+    Err(_) => return ApiResponse::status(Status::InternalServerError),
     Ok(warehouses) => warehouses,
   };
 
   match serde_json::to_string(&warehouses) {
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
-    Ok(json) => ApiResponse::WithBody {
-      status: Status::Ok,
-      json,
-    },
+    Err(_) => ApiResponse::status(Status::InternalServerError),
+    Ok(json) => ApiResponse::json_success(json),
   }
 }
 
 #[get("/warehouses/<warehouse_id>", format = "json")]
-pub async fn get_warehouse(
+pub async fn get_warehouse<'a>(
   mut db: Connection<Db>,
   warehouse_id: u64,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let query = sqlx::query_as::<_, Warehouse>(&format!(
     r#"
       SELECT
@@ -93,31 +84,24 @@ pub async fn get_warehouse(
 
   let warehouse = match query {
     Err(_) => {
-      return ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      }
+      return ApiResponse::status(Status::InternalServerError)
     }
     Ok(warehouse) => warehouse,
   };
 
   match serde_json::to_string(&warehouse) {
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
-    Ok(json) => ApiResponse::WithBody {
-      status: Status::Ok,
-      json,
-    },
+    Err(_) => ApiResponse::status(Status::InternalServerError),
+    Ok(json) => ApiResponse::json_success(json),
   }
 }
 
 #[get("/warehouses/<warehouse_id>/inventory", format = "json")]
-pub async fn get_warehouse_inventory(
+pub async fn get_warehouse_inventory<'a>(
   mut db: Connection<Db>,
   warehouse_id: u64,
   _auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let query = sqlx::query_as::<_, ItemCount<DataWithId<InventoryItem>>>(&format!(
     r#"
       SELECT
@@ -143,21 +127,14 @@ pub async fn get_warehouse_inventory(
 
   let items = match query {
     Err(_) => {
-      return ApiResponse::WithoutBody {
-        status: Status::InternalServerError,
-      }
+      return ApiResponse::status(Status::InternalServerError)
     }
     Ok(items) => items,
   };
 
   match serde_json::to_string(&items) {
-    Ok(items) => ApiResponse::WithBody {
-      json: items,
-      status: Status::Ok,
-    },
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }
 
@@ -166,17 +143,15 @@ pub async fn get_warehouse_inventory(
   format = "json",
   data = "<item_update>"
 )]
-pub async fn post_warehouse_inventory(
+pub async fn post_warehouse_inventory<'a>(
   mut db: Connection<Db>,
   warehouse_id: u64,
   item_update: rocket::serde::json::Json<WarehouseItemManulUpdate>,
   auth_session: AuthSession,
   _auth_employee: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let Ok(mut tx) = db.begin().await else {
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
+    return ApiResponse::status(Status::InternalServerError);
   };
   let order_result = sqlx::query!(
     r#"
@@ -204,9 +179,7 @@ pub async fn post_warehouse_inventory(
 
   let Ok(order) = order_result else {
     _ = tx.rollback().await;
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
+    return ApiResponse::status(Status::InternalServerError);
   };
 
   _ = sqlx::query!(
@@ -257,13 +230,8 @@ pub async fn post_warehouse_inventory(
   let update = tx.commit().await;
 
   if update.is_err() {
-    return ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    };
+    return ApiResponse::status(Status::InternalServerError);
   }
 
-  ApiResponse::WithBody {
-    status: Status::Created,
-    json: String::new(),
-  }
+  ApiResponse::status(Status::Created)
 }

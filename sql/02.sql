@@ -14,6 +14,9 @@ VALUES("delivered");
 INSERT INTO `OrderState` (`name`)
 VALUES("arrived");
 
+INSERT INTO `OrderState` (`name`)
+VALUES("canceled");
+
 
 INSERT INTO `JobState` (`name`)
 VALUES("pending");

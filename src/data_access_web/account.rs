@@ -11,61 +11,56 @@ use crate::{
 };
 
 #[get("/account")]
-pub async fn get_account_implicit(
+pub async fn get_account_implicit<'a>(
   mut db: Connection<Db>,
   auth_session: AuthSession,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let Ok(account) = get_account(auth_session.session.account_id, &mut db).await else {
-    return ApiResponse::WithoutBody { status: Status::InternalServerError };
+    return ApiResponse::status(Status::InternalServerError);
   };
 
-  ApiResponse::WithBody {
-    json: serde_json::to_string(&account).unwrap(),
-    status: Status::Ok,
-  }
+  ApiResponse::json_success(serde_json::to_string(&account).unwrap())
 }
 
 #[get("/accounts/<id>")]
-pub async fn get_account_from_id(
+pub async fn get_account_from_id<'a>(
   id: u64,
   mut db: Connection<Db>,
   _auth_session: AuthAccountEmployee,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let Ok(account) = get_account(id, &mut db).await else {
-    return ApiResponse::WithoutBody { status: Status::InternalServerError };
+    return ApiResponse::status(Status::InternalServerError);
   };
 
-  ApiResponse::WithBody {
-    json: serde_json::to_string(&account).unwrap(),
-    status: Status::Ok,
-  }
+  ApiResponse::json_success(serde_json::to_string(&account).unwrap())
 }
 
 #[put("/account", format = "json", data = "<account_update>")]
-pub async fn put_account_implicit(
+pub async fn put_account_implicit<'a>(
   mut db: Connection<Db>,
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
-) -> ApiResponse {
-  put_account_update(&mut db, account_update.0, auth_session.session.account_id).await
+) -> ApiResponse<'a> {
+  put_account_update(&mut db, account_update.0, auth_session.session.account_id, false).await
 }
 
 #[put("/accounts/<account_id>", format = "json", data = "<account_update>")]
-pub async fn put_account_id(
+pub async fn put_account_id<'a>(
   mut db: Connection<Db>,
   account_id: u64,
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
-) -> ApiResponse {
-  if account_id != auth_session.session.account_id && !is_account_employee(auth_session.session.account_id, &mut db).await {
-    return ApiResponse::WithoutBody { status: Status::NotFound };
+) -> ApiResponse<'a> {
+  let is_account_employee = is_account_employee(auth_session.session.account_id, &mut db).await;
+  if account_id != auth_session.session.account_id && !is_account_employee {
+    return ApiResponse::status(Status::NotFound);
   } 
 
-  put_account_update(&mut db, account_update.0, account_id).await
+  put_account_update(&mut db, account_update.0, account_id, is_account_employee).await
 }
 
 #[get("/accounts?<id>&<email>&<name>&<phonenumber>&<street>&<city>&<state>&<zip>&<matchtype>")]
-pub async fn search_account(
+pub async fn search_account<'a>(
   id: Option<u64>,
   email: Option<&str>,
   name: Option<&str>,
@@ -76,7 +71,7 @@ pub async fn search_account(
   zip: Option<&str>,
   matchtype: Option<MatchType>,
   mut db: Connection<Db>,
-) -> ApiResponse {
+) -> ApiResponse<'a> {
   let mut where_conditions = Vec::new();
 
   if let Some(id) = id {
@@ -127,10 +122,7 @@ pub async fn search_account(
   }
 
   if where_conditions.is_empty() {
-    return ApiResponse::WithBody {
-      status: Status::UnprocessableEntity,
-      json: "Empty search".to_owned(),
-    };
+    return ApiResponse::status_with_body(Status::UnprocessableEntity, "Empty search".to_owned());
   }
 
   let match_str = match matchtype {
@@ -139,10 +131,7 @@ pub async fn search_account(
   };
 
   let Ok(where_statement) = String::from_utf8(where_conditions.into_iter().fold(Vec::new(), |mut acc, condition| {_ = write!(acc, "\n{} {}", match_str, condition); acc})) else {
-    return ApiResponse::WithBody {
-      status: Status::InternalServerError,
-      json: "Search condition creation failure".to_owned(),
-    };
+    return ApiResponse::status_with_body(Status::InternalServerError, "Search condition creation failure".to_owned());
   };
 
   let account_id_query = sqlx::query(&format!(
@@ -166,10 +155,7 @@ pub async fn search_account(
 
   let account_id_query = match account_id_query {
     Err(_) => {
-      return ApiResponse::WithBody {
-        status: Status::NoContent,
-        json: "No content which matches search".to_owned(),
-      };
+      return ApiResponse::status_with_body(Status::InternalServerError, "No content which matches search".to_owned());
     }
     Ok(ok) => ok,
   };
@@ -179,12 +165,7 @@ pub async fn search_account(
     .filter_map(|row| row.try_get("account_id").ok());
 
   match serde_json::to_string(&account::get_accounts(account_ids, &mut db).await) {
-    Ok(json) => ApiResponse::WithBody {
-      status: Status::Ok,
-      json,
-    },
-    Err(_) => ApiResponse::WithoutBody {
-      status: Status::InternalServerError,
-    },
+    Ok(json) => ApiResponse::json_success(json),
+    Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }
