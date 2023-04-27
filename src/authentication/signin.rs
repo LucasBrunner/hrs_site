@@ -104,7 +104,7 @@ pub async fn signin(
     return Json(out);
   }
 
-  println!("Account logged in! email: {}", decoded_signin.email);
+  println!("Account logged in! email: {}, remember_login: {}", decoded_signin.email, decoded_signin.remember_login);
   if let Ok(cookie) =
     LoginSesion::new_cookie(&mut db, decoded_signin.remember_login, account.account_id).await
   {

@@ -43,12 +43,13 @@ class SigninRequest with SigninRequestMappable {
 void submit() async {
   final email = querySelector('#email-input')?.toElement<InputElement>()?.value;
   final password = querySelector('#password-input')?.toElement<InputElement>()?.value;
-  if (email == null || email.isEmpty || password == null || password.isEmpty) {
+  final rememberLogin = querySelector('#remember-login-input')?.toElement<InputElement>()?.checked;
+  if (email == null || email.isEmpty || password == null || password.isEmpty || rememberLogin == null) {
     print('null values');
     return;
   }
 
-  final signinRequest = SigninRequest(email, Uri.encodeComponent(password), false);
+  final signinRequest = SigninRequest(email, Uri.encodeComponent(password), rememberLogin);
   print(signinRequest.toJson());
 
   final response = await http.post(

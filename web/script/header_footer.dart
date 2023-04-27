@@ -76,11 +76,11 @@ void _placeHeader() {
   } else {
     querySelector('#header-right-content')?.children.addAll([
       SpanElement()
-        ..className = 'text-button'
+        ..classes.addAll(['text-button', 'div-button'])
         ..innerText = "Sign in"
         ..onClick.listen((event) => window.location.pathname = '/signin'),
       SpanElement()
-        ..className = 'text-button'
+        ..classes.addAll(['text-button', 'div-button'])
         ..innerText = "Sign up"
         ..onClick.listen((event) => window.location.pathname = '/signup'),
     ]);

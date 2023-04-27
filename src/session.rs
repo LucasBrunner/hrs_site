@@ -1,7 +1,9 @@
 use rocket::{
   http::{Cookie, CookieJar, Status},
+  request::{FromRequest, Outcome},
   serde::json::serde_json,
-  time::{Duration, OffsetDateTime}, request::{FromRequest, Outcome}, Request,
+  time::{Duration, OffsetDateTime},
+  Request,
 };
 use rocket_db_pools::{sqlx, Connection};
 use serde::{Deserialize, Serialize};
@@ -29,7 +31,8 @@ pub enum SessionError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LoginSesion {
   pub session_id: u64,
-  pub experation_date: Option<OffsetDateTime>,
+  pub experation_date: OffsetDateTime,
+  pub session: bool,
   pub account_id: u64,
 }
 
@@ -39,11 +42,30 @@ impl LoginSesion {
     remember_login: bool,
     account_id: u64,
   ) -> Result<LoginSesion, ()> {
-    let experation_date = if remember_login {
-      Some(OffsetDateTime::now_utc() + REMEMBER_LOGIN_SESSION_DURATION)
-    } else {
-      None
+    let employee_check_result = sqlx::query!(
+      r#"
+        SELECT `Account`.`account_id`
+        FROM
+          `Account`
+          INNER JOIN `AccountTypeRecord` USING(`account_id`)
+        WHERE `Account`.`account_id` = ?;
+      "#,
+      account_id,
+    )
+    .fetch_all(&mut **db)
+    .await;
+
+    let employee_check = match employee_check_result {
+      Ok(data) => data,
+      Err(_) => return Err(()),
     };
+
+    let (experation_date, session) = match (remember_login, employee_check.is_empty()) {
+        (_, true) => (OffsetDateTime::now_utc() + DEFAULT_LOGIN_SESSION_DURATION, true),
+        (true, false) => (OffsetDateTime::now_utc() + REMEMBER_LOGIN_SESSION_DURATION, false),
+        (false, false) => (OffsetDateTime::now_utc() + DEFAULT_LOGIN_SESSION_DURATION, true),
+    };
+
     let result = sqlx::query!(
       r#"
         INSERT INTO `Session` (
@@ -56,7 +78,7 @@ impl LoginSesion {
         );
         "#,
       account_id,
-      session_experation_date(experation_date).unix_timestamp()
+      experation_date.unix_timestamp()
     )
     .execute(&mut **db)
     .await;
@@ -65,6 +87,7 @@ impl LoginSesion {
       Ok(query_result) => Ok(LoginSesion {
         session_id: query_result.last_insert_id(),
         experation_date,
+        session,
         account_id,
       }),
       Err(err) => {
@@ -121,9 +144,7 @@ impl LoginSesion {
     !self.is_not_expired(db).await
   }
 
-  pub async fn get_session(
-    cookies: &CookieJar<'_>,
-  ) -> Result<LoginSesion, SessionError> {
+  pub async fn get_session(cookies: &CookieJar<'_>) -> Result<LoginSesion, SessionError> {
     let Some(session_cookie) = cookies.get_private("session") else {
       return Err(SessionError::NoCookie);
     };
@@ -152,7 +173,7 @@ impl LoginSesion {
 impl<'r> FromRequest<'r> for LoginSesion {
   type Error = ();
 
-  async fn from_request(req: &'r Request<'_>,) -> Outcome<Self, Self::Error> {
+  async fn from_request(req: &'r Request<'_>) -> Outcome<Self, Self::Error> {
     let mut db = match req.guard::<Connection<Db>>().await {
       rocket::outcome::Outcome::Success(db) => db,
       rocket::outcome::Outcome::Failure(_) => return Outcome::Failure((Status::Forbidden, ())),
