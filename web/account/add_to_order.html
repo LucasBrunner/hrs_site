@@ -39,7 +39,7 @@
         <th>Order:</th>
         <td>
           <select id="order-selector">
-            <option value="" selected="selected" disabled="true">— Select An Order —</option>
+            <option value="" disabled="true">— Select An Order —</option>
           </select>
         </td>
         <td>
@@ -64,7 +64,10 @@
         </td>
       </tr>
     </table>
-  <button id="order-update-submit">Add to order</button>
+    <div>
+      <button id="order-update-submit">Add to order</button>
+      <span class="error-message" id="order-update-submit-message"></span>
+    </div>
   </div>
 </body>
 

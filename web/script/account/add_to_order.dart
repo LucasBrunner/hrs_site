@@ -72,33 +72,36 @@ void asyncSetup(int productId) async {
   querySelector('#item')?.children.addAll(item.toDisplayElements());
 }
 
-void setup() async {
-  querySelector('#new-order-create')?.onClick.listen((event) async {
-    final newOrderName = querySelector('#new-order-name')?.toElement<InputElement>()?.value;
-    if (newOrderName == null || newOrderName.isEmpty) {
-      querySelector('#new-order-error-message')?.innerText = 'Enter a name for the order';
-      return;
-    }
+void createNewOrder() async {
+  final newOrderName = querySelector('#new-order-name')?.toElement<InputElement>()?.value;
+  if (newOrderName == null || newOrderName.isEmpty) {
+    querySelector('#new-order-error-message')?.innerText = 'Enter a name for the order';
+    return;
+  }
 
-    final newOrder = await postNewOrder(newOrderName);
-    final selector = querySelector('#order-selector');
-    selector?.clearOptions(['no-orders-found']);
-    if (newOrder == null) {
-      selector?.children.add(OptionElement()
-        ..selected = true
-        ..disabled = true
-        ..id = 'no-orders-found'
-        ..innerText = '— No Orders Found —');
-      return;
-    }
-
+  final newOrder = await postNewOrder(newOrderName);
+  final selector = querySelector('#order-selector');
+  selector?.clearOptions(['no-orders-found']);
+  if (newOrder == null) {
     selector?.children.add(OptionElement()
       ..selected = true
-      ..id = newOrder.id.toString()
-      ..innerText = newOrder.data.orderName);
+      ..disabled = true
+      ..id = 'no-orders-found'
+      ..innerText = '— No Orders Found —');
+    return;
+  }
 
-    querySelector('#new-order-error-message')?.innerText = '';
-  });
+  selector?.children.add(OptionElement()
+    ..selected = true
+    ..id = newOrder.id.toString()
+    ..value = newOrder.id.toString()
+    ..innerText = newOrder.data.orderName);
+
+  querySelector('#new-order-error-message')?.innerText = '';
+}
+
+void setup() async {
+  querySelector('#new-order-create')?.onClick.listen((event) => createNewOrder());
 
   final productIdString = Uri.dataFromString(window.location.href).queryParameters['product_id'];
   if (productIdString == null) {
@@ -116,10 +119,19 @@ void setup() async {
     final orderId = int.tryParse(querySelector('#order-selector')?.toElement<SelectElement>()?.value ?? '');
     final itemCount = int.tryParse(querySelector('#count-selector')?.toElement<InputElement>()?.value ?? '');
     final warehouseId = int.tryParse(querySelector('#warehouse-selector')?.toElement<SelectElement>()?.value ?? '');
-    print('$orderId, $itemCount');
-    if (itemCount == null || orderId == null || warehouseId == null) {
+    print('$orderId, $itemCount, $warehouseId');
+    if (orderId == null) {
+      querySelector('#order-update-submit-message')?.innerText = 'Select an order.';
       return;
     }
+    if (itemCount == null) {
+      return;
+    }
+    if (warehouseId == null) {
+      querySelector('#order-update-submit-message')?.innerText = 'Select shipping origin.';
+      return;
+    }
+    querySelector('#order-update-submit-message')?.innerText = '';
     final updateResult = await OrderUpdate(UpdateType.ignore(), UpdateType.ignore(), [
       UpdateType.put(OrderItemUpdate(
         productId,
