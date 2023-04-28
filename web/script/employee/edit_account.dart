@@ -76,7 +76,9 @@ Future<List<Element>?> accountEditTableRows(
 }
 
 void setupData(DataWithId<Account> account) async {
-  querySelector('#account-title')?.innerText = 'Currently Editing ${account.data.data.preferredName}\'s account';
+  querySelector('title')?.innerText = 'HRS-Employee: View Account "${account.data.data.legalName}"';
+
+  querySelector('#account-title')?.innerText = 'Currently Editing ${account.data.data.legalName}\'s account';
   final accountData = await accountEditTableRows(account);
   if (accountData == null) {
     return;

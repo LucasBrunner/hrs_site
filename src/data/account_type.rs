@@ -63,7 +63,7 @@ pub async fn post_account_type<'a>(
   .await;
 
   match account_types {
-    Ok(result) => ApiResponse::status(Status::Ok),
+    Ok(_) => ApiResponse::status(Status::Ok),
     Err(_) => ApiResponse::status(Status::InternalServerError),
   }
 }
