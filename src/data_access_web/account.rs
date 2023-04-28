@@ -1,13 +1,14 @@
 use rocket::http::Status;
 use rocket_db_pools::Connection;
 use sqlx::Row;
-use std::io::Write;
+use std::fmt::Write;
 
 use crate::{
   authentication::{empoyee::AuthAccountEmployee, is_account_employee, AuthSession},
   data::ApiResponse,
   data::{
-    account::{self, *}, account_type,
+    account::{self, *},
+    account_type,
   },
   database::Db,
 };
@@ -117,15 +118,12 @@ pub async fn search_account<'a>(
     ));
   }
   if let Some(zip) = zip {
-    where_conditions.push(format!(
-      "UPPER(`Address`.`zip`) LIKE \"%{}%\"",
-      zip.to_uppercase(),
-    ));
+    where_conditions.push(format!("`Address`.`zip` LIKE \"%{}%\"", zip,));
   }
   if let Some(phonenumber) = phonenumber {
     where_conditions.push(format!(
-      "UPPER(`Phone`.`number`) LIKE \"%{}%\"",
-      phonenumber.to_uppercase(),
+      "`Phone`.`number` LIKE \"%{}%\"",
+      phonenumber,
     ));
   }
 
@@ -138,28 +136,31 @@ pub async fn search_account<'a>(
     None => "OR",
   };
 
-  let Ok(where_statement) = String::from_utf8(where_conditions.into_iter().fold(Vec::new(), |mut acc, condition| {_ = write!(acc, "\n{} {}", match_str, condition); acc})) else {
-    return ApiResponse::status_with_body(Status::InternalServerError, "Search condition creation failure".to_owned());
-  };
+  let mut where_conditions = where_conditions.into_iter();
+  let first_condition = where_conditions.next().unwrap();
 
-  let account_id_query = sqlx::query(&format!(
+  let where_statement = &format!(
     r#"
       SELECT
         DISTINCT `Account`.`account_id`
       FROM
         `Account`
-        INNER JOIN `AccountAddress` USING(account_id) 
-        INNER JOIN `Address` USING(address_id) 
-        INNER JOIN `AccountPhone` USING(account_id) 
-        INNER JOIN `Phone` USING(phone_id)
+        LEFT OUTER JOIN `AccountAddress` USING(account_id) 
+        LEFT OUTER JOIN `Address` USING(address_id) 
+        LEFT OUTER JOIN `AccountPhone` USING(account_id) 
+        LEFT OUTER JOIN `Phone` USING(phone_id)
       WHERE
-        true = false
         {};
     "#,
-    where_statement,
-  ))
-  .fetch_all(&mut **db)
-  .await;
+    where_conditions
+      .fold(first_condition, |mut acc, condition| {
+        _ = write!(acc, "\n{} {}", match_str, condition);
+        acc
+      })
+  );
+
+  println!("{}", where_statement);
+  let account_id_query = sqlx::query(where_statement).fetch_all(&mut **db).await;
 
   let account_id_query = match account_id_query {
     Err(_) => {
