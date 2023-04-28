@@ -6,11 +6,13 @@ pub mod account;
 pub mod product;
 pub mod warehouse;
 pub mod order;
+pub mod account_type;
 
 use account::*;
 use product::*;
 use warehouse::*;
 use order::*;
+use account_type::*;
 
 pub fn data_routes() -> Vec<Route> {
   routes![
@@ -20,6 +22,9 @@ pub fn data_routes() -> Vec<Route> {
     put_account_implicit,
     put_account_id,
     search_account,
+    get_types_for_account,
+    account::post_account_type,
+    account::delete_account_type,
     // products
     get_inventory_item_range,
     get_inventory_item_search_data,
@@ -39,5 +44,9 @@ pub fn data_routes() -> Vec<Route> {
     put_order_employee,
     post_order_implicit,
     post_order_employee,
+    // account type
+    get_account_types,
+    account_type::post_account_type,
+    account_type::delete_account_type,
   ]
 }

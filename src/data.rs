@@ -1,8 +1,9 @@
 pub mod account;
-mod basic_data;
+pub mod basic_data;
 pub mod inventory;
 pub mod order;
 pub mod warehouse;
+pub mod account_type;
 
 use std::{io::Cursor, ops::Range, str::FromStr};
 

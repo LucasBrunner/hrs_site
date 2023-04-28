@@ -4,9 +4,11 @@ use sqlx::Row;
 use std::io::Write;
 
 use crate::{
-  authentication::{empoyee::AuthAccountEmployee, AuthSession, is_account_employee},
+  authentication::{empoyee::AuthAccountEmployee, is_account_employee, AuthSession},
   data::ApiResponse,
-  data::account::{self, *},
+  data::{
+    account::{self, *}, account_type,
+  },
   database::Db,
 };
 
@@ -41,7 +43,13 @@ pub async fn put_account_implicit<'a>(
   account_update: rocket::serde::json::Json<AccountUpdate>,
   auth_session: AuthSession,
 ) -> ApiResponse<'a> {
-  put_account_update(&mut db, account_update.0, auth_session.session.account_id, false).await
+  put_account_update(
+    &mut db,
+    account_update.0,
+    auth_session.session.account_id,
+    false,
+  )
+  .await
 }
 
 #[put("/accounts/<account_id>", format = "json", data = "<account_update>")]
@@ -54,7 +62,7 @@ pub async fn put_account_id<'a>(
   let is_account_employee = is_account_employee(auth_session.session.account_id, &mut db).await;
   if account_id != auth_session.session.account_id && !is_account_employee {
     return ApiResponse::status(Status::NotFound);
-  } 
+  }
 
   put_account_update(&mut db, account_update.0, account_id, is_account_employee).await
 }
@@ -155,7 +163,10 @@ pub async fn search_account<'a>(
 
   let account_id_query = match account_id_query {
     Err(_) => {
-      return ApiResponse::status_with_body(Status::InternalServerError, "No content which matches search".to_owned());
+      return ApiResponse::status_with_body(
+        Status::InternalServerError,
+        "No content which matches search".to_owned(),
+      );
     }
     Ok(ok) => ok,
   };
@@ -168,4 +179,33 @@ pub async fn search_account<'a>(
     Ok(json) => ApiResponse::json_success(json),
     Err(_) => ApiResponse::status(Status::InternalServerError),
   }
+}
+
+#[get("/accounts/<account_id>/account_types")]
+pub async fn get_types_for_account<'a>(
+  db: Connection<Db>,
+  account_id: u64,
+  _auth_session: AuthAccountEmployee,
+) -> ApiResponse<'a> {
+  account_type::get_types_for_account(db, account_id).await
+}
+
+#[put("/account/<account_id>/account_types/<account_type_id>")]
+pub async fn post_account_type<'a>(
+  db: Connection<Db>,
+  account_id: u64,
+  account_type_id: u64,
+  _auth_session: AuthAccountEmployee,
+) -> ApiResponse<'a> {
+  account_type::post_account_type(db, account_id, account_type_id).await
+}
+
+#[delete("/account/<account_id>/account_types/<account_type_id>")]
+pub async fn delete_account_type<'a>(
+  db: Connection<Db>,
+  account_id: u64,
+  account_type_id: u64,
+  _auth_session: AuthAccountEmployee,
+) -> ApiResponse<'a> {
+  account_type::delete_account_type(db, account_id, account_type_id).await
 }

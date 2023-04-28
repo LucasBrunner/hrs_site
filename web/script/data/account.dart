@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 
 import '../data.dart';
 import '../html_utility.dart';
+import 'account_type.dart';
 import 'address.dart';
 import 'phone.dart';
 
@@ -363,6 +364,37 @@ class Account with AccountMappable {
     }
 
     return false;
+  }
+}
+
+extension GetAccountTypes on DataWithId<Account> {
+  Future<List<AccountType>?> getAccountTypes() async {
+    final response = await http.get(
+      Uri.http(window.location.host, '/data/accounts/$id/account_types'),
+    );
+    print('Account types on account: ${response.body}');
+    switch (response.statusCode) {
+      case 200:
+        print(response.body);
+        AccountTypeMapper.ensureInitialized();
+        return MapperContainer.globals.fromJson<List<AccountType>>(response.body);
+      default:
+        return null;
+    }
+  }
+
+  Future<List<HasAccountType>?> getHasAccountTypes() async {
+    final awaitAccountTypes = AccountType.httpGetAccountTypes();
+    final awaitAccountTypesOnAccount = getAccountTypes();
+
+    final accountTypes = await awaitAccountTypes;
+    final accountTypesOnAccount = await awaitAccountTypesOnAccount;
+
+    if (accountTypes == null || accountTypesOnAccount == null) {
+      return null;
+    }
+
+    return accountTypes.map((accountType) => HasAccountType(accountType, accountTypesOnAccount.contains(accountType))).toList();
   }
 }
 
